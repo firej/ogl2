@@ -1,0 +1,122 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_FCD DIALOGEX 0, 0, 276, 270
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Locus Engine FontBuilder"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Сохранить",IDC_RENDER,138,228,124,30
+    PUSHBUTTON      "Выход",IDC_EXIT,12,228,124,30
+    EDITTEXT        IDC_EDIT1,12,32,250,12,ES_AUTOHSCROLL
+    LTEXT           "Пожалуйста введите имя шрифта (как в Windows) и его размер",IDC_STATIC1,12,20,250,8
+    GROUPBOX        "Выбор",IDC_STATIC_CHOOSE,7,7,262,256
+    LTEXT           "Выберите размер текстуры",IDC_STATIC2,12,101,250,8
+    COMBOBOX        IDC_COMBOTEXSIZE,12,113,250,29,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Форсировать моноширинность",IDC_CHECKMONO,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,19,142,237,11
+    GROUPBOX        "Дополнительно",IDC_STATIC,12,130,250,66
+    CONTROL         "Курсив",IDC_CHECK_ITALIC,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,158,70,11
+    EDITTEXT        IDC_EDIT2,21,210,210,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "...",IDC_BUTTON_BROUSE,238,210,20,14
+    CONTROL         "Зачёркнутый",IDC_CHECK_SO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,99,158,70,11
+    CONTROL         "Подчёркнутый",IDC_CHECK_L,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,175,158,70,11
+    LTEXT           "Каталог для сохранения:",IDC_STATIC,21,198,138,8
+    COMBOBOX        IDC_COMBO_BOLD,99,176,157,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Толщина:",IDC_STATIC,19,176,36,12
+    CONTROL         "",IDS_PREVIEW,"Static",SS_BLACKFRAME,12,49,250,48
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_FCD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 269
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 263
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "D:\\My Documents\\My Programs\\Visual Studio Projects\\OGL2\\OGL2\\FJ_BURN.ico"
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

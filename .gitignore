@@ -26,3 +26,10 @@
 *.exe
 *.out
 *.app
+
+# Visual studio
+*.old
+*.user
+*.suo
+Debug/*
+Release/*
