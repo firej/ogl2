@@ -10,19 +10,19 @@
 #include "./shared/ASSERT.h"
 #include "./files.h"
 
-extern	LogFile	LF;								// Лог-файл
-extern	CFGFile	CF;								// Файл с настройками
+extern	LogFile	LF;								// Р›РѕРі-С„Р°Р№Р»
+extern	CFGFile	CF;								// Р¤Р°Р№Р» СЃ РЅР°СЃС‚СЂРѕР№РєР°РјРё
 
 #define	FJC_ERROR		true
 #define	FJC_NO_ERROR	false
 
 
-// Мои Define'ы
-	// Различные дополнительные возможности
-#define HALF_SECOND_FPS_REFRESH					// Привязка времени обновления FPS к 0,5 секунды
+// РњРѕРё Define'С‹
+	// Р Р°Р·Р»РёС‡РЅС‹Рµ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё
+#define HALF_SECOND_FPS_REFRESH					// РџСЂРёРІСЏР·РєР° РІСЂРµРјРµРЅРё РѕР±РЅРѕРІР»РµРЅРёСЏ FPS Рє 0,5 СЃРµРєСѓРЅРґС‹
 #define TIME_TO_CALCULATE_CPU_SPEED 200
 // #define DOUBLE_TIME_PRESISION
-// Просто символьные константы
+// РџСЂРѕСЃС‚Рѕ СЃРёРјРІРѕР»СЊРЅС‹Рµ РєРѕРЅСЃС‚Р°РЅС‚С‹
 #define INPUT_MODE_FPS_GAME				0
 #define INPUT_MODE_AUTOSYM_GAME			1
 #define INPUT_MODE_MENU					2
@@ -33,19 +33,19 @@ extern	CFGFile	CF;								// Файл с настройками
 #define FJC_TEX_BILINEAR_FILTERING		2
 #define FJC_TEX_TRILINEAR_FILTERING		3
 
-#define CAM_LOOKTO_MODE_VECTOR			0					// Задание направления через вектор направления
-#define CAM_LOOKTO_MODE_POINT			1					// --//-- точку на которую толжная указывать камера
-#define CAM_LOOKTO_MODE_ANGLES			2					// Задание углов поворота камеры (наибыстрейший метод)
+#define CAM_LOOKTO_MODE_VECTOR			0					// Р—Р°РґР°РЅРёРµ РЅР°РїСЂР°РІР»РµРЅРёСЏ С‡РµСЂРµР· РІРµРєС‚РѕСЂ РЅР°РїСЂР°РІР»РµРЅРёСЏ
+#define CAM_LOOKTO_MODE_POINT			1					// --//-- С‚РѕС‡РєСѓ РЅР° РєРѕС‚РѕСЂСѓСЋ С‚РѕР»Р¶РЅР°СЏ СѓРєР°Р·С‹РІР°С‚СЊ РєР°РјРµСЂР°
+#define CAM_LOOKTO_MODE_ANGLES			2					// Р—Р°РґР°РЅРёРµ СѓРіР»РѕРІ РїРѕРІРѕСЂРѕС‚Р° РєР°РјРµСЂС‹ (РЅР°РёР±С‹СЃС‚СЂРµР№С€РёР№ РјРµС‚РѕРґ)
 #ifndef FJ_INPUT_ENABLED
-#define CAM_MOVE_FORWARD				0					// Камера двигается вперёд
-#define CAM_MOVE_BACKWARD				1					// Камера двигается назад
-#define CAM_MOVE_LEFT					2					// Камера двигается влево
-#define CAM_MOVE_RIGHT					3					// Камера двигается вправо
+#define CAM_MOVE_FORWARD				0					// РљР°РјРµСЂР° РґРІРёРіР°РµС‚СЃСЏ РІРїРµСЂС‘Рґ
+#define CAM_MOVE_BACKWARD				1					// РљР°РјРµСЂР° РґРІРёРіР°РµС‚СЃСЏ РЅР°Р·Р°Рґ
+#define CAM_MOVE_LEFT					2					// РљР°РјРµСЂР° РґРІРёРіР°РµС‚СЃСЏ РІР»РµРІРѕ
+#define CAM_MOVE_RIGHT					3					// РљР°РјРµСЂР° РґРІРёРіР°РµС‚СЃСЏ РІРїСЂР°РІРѕ
 #endif
 
-// Мои типы
+// РњРѕРё С‚РёРїС‹
 typedef void (*SwapBuffersFunction)(void);
-typedef void (*KeyFunc)(void);								// Тип указателя на косольную функцию
+typedef void (*KeyFunc)(void);								// РўРёРї СѓРєР°Р·Р°С‚РµР»СЏ РЅР° РєРѕСЃРѕР»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
 
 #ifndef WIN32
 typedef unsigned int				UINT;
@@ -61,16 +61,16 @@ typedef unsigned long int			DWORD
 #endif
 #endif
 
-struct CameraSet								// Настройки камеры
+struct CameraSet								// РќР°СЃС‚СЂРѕР№РєРё РєР°РјРµСЂС‹
 {
-	double	ForwardSpeed,						// Скорость перемещения вперёд
-			BackwardSpeed,						// Скорость перемещения назад
-			StrafeSpeed;						// Скорость стрейфа
+	double	ForwardSpeed,						// РЎРєРѕСЂРѕСЃС‚СЊ РїРµСЂРµРјРµС‰РµРЅРёСЏ РІРїРµСЂС‘Рґ
+			BackwardSpeed,						// РЎРєРѕСЂРѕСЃС‚СЊ РїРµСЂРµРјРµС‰РµРЅРёСЏ РЅР°Р·Р°Рґ
+			StrafeSpeed;						// РЎРєРѕСЂРѕСЃС‚СЊ СЃС‚СЂРµР№С„Р°
 
-	double	Sensitivity;						// Чувствительность мыши
-	Point3d	CamStartPosition;					// Стартовая позиция камеры
+	double	Sensitivity;						// Р§СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ РјС‹С€Рё
+	Point3d	CamStartPosition;					// РЎС‚Р°СЂС‚РѕРІР°СЏ РїРѕР·РёС†РёСЏ РєР°РјРµСЂС‹
 };
-extern CameraSet	CamS;						// Реальность
+extern CameraSet	CamS;						// Р РµР°Р»СЊРЅРѕСЃС‚СЊ
 
 namespace EStates
 {
@@ -102,36 +102,36 @@ namespace ERS
 		};
 	}
 }
-namespace	AR							// Aspect Ratio  - соотношение сторон экрана
+namespace	AR							// Aspect Ratio  - СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ СЌРєСЂР°РЅР°
 {
 	enum	type
 	{
 		NORMAL		=	0,				// 4:3
 		AR4_3		=	0,
-		WIDE_HDTV	=	1,				// Широкий экран стандарта HTDV или с такимиже пропорциями
+		WIDE_HDTV	=	1,				// РЁРёСЂРѕРєРёР№ СЌРєСЂР°РЅ СЃС‚Р°РЅРґР°СЂС‚Р° HTDV РёР»Рё СЃ С‚Р°РєРёРјРёР¶Рµ РїСЂРѕРїРѕСЂС†РёСЏРјРё
 		AR16_9		=	1,
-		NORMAL_LCD	=	2,				// Стандарт для LCD панелей с азрешением 1280x1024
+		NORMAL_LCD	=	2,				// РЎС‚Р°РЅРґР°СЂС‚ РґР»СЏ LCD РїР°РЅРµР»РµР№ СЃ Р°Р·СЂРµС€РµРЅРёРµРј 1280x1024
 		AR1280_1024	=	2,
-		WIDE_LDC	=	3,				// Широкий экран LCD (ноутбуки и некоторые мониторы)
-		AR16_10		=	3,				// с соотношением сторон 16:10 или разрешением 1280x800
+		WIDE_LDC	=	3,				// РЁРёСЂРѕРєРёР№ СЌРєСЂР°РЅ LCD (РЅРѕСѓС‚Р±СѓРєРё Рё РЅРµРєРѕС‚РѕСЂС‹Рµ РјРѕРЅРёС‚РѕСЂС‹)
+		AR16_10		=	3,				// СЃ СЃРѕРѕС‚РЅРѕС€РµРЅРёРµРј СЃС‚РѕСЂРѕРЅ 16:10 РёР»Рё СЂР°Р·СЂРµС€РµРЅРёРµРј 1280x800
 		AR1280_800	=	3
 	};
 }
-struct GlobalsStruct								// Глобальные настройки и переменные
+struct GlobalsStruct								// Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё Рё РїРµСЂРµРјРµРЅРЅС‹Рµ
 {
 	struct
 	{
-		bool		IsFullScreen;					// Индикатор полноэкранного режима
-		int			Width,Height;					// Ширина и высота окна
-		int			Bits,Hzs;						// Глубина цвета и развёртка экрана
-		int			Vsync;							// Состояние вертикальной синхронизации (1 - включено)
-		UINT		ScreenStrings;					// Количество строк на экране
-		AR::type	AR;								// соотношение сторон области вывода
+		bool		IsFullScreen;					// РРЅРґРёРєР°С‚РѕСЂ РїРѕР»РЅРѕСЌРєСЂР°РЅРЅРѕРіРѕ СЂРµР¶РёРјР°
+		int			Width,Height;					// РЁРёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° РѕРєРЅР°
+		int			Bits,Hzs;						// Р“Р»СѓР±РёРЅР° С†РІРµС‚Р° Рё СЂР°Р·РІС‘СЂС‚РєР° СЌРєСЂР°РЅР°
+		int			Vsync;							// РЎРѕСЃС‚РѕСЏРЅРёРµ РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё (1 - РІРєР»СЋС‡РµРЅРѕ)
+		UINT		ScreenStrings;					// РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РЅР° СЌРєСЂР°РЅРµ
+		AR::type	AR;								// СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ РѕР±Р»Р°СЃС‚Рё РІС‹РІРѕРґР°
 	}	VP;
-	unsigned char	TextureFiltering;				// Тип фильтрации текстур
-//	unsigned int	lists;							// Количество задействованых списков (попутно и номер последнего)
+	unsigned char	TextureFiltering;				// РўРёРї С„РёР»СЊС‚СЂР°С†РёРё С‚РµРєСЃС‚СѓСЂ
+//	unsigned int	lists;							// РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РґРµР№СЃС‚РІРѕРІР°РЅС‹С… СЃРїРёСЃРєРѕРІ (РїРѕРїСѓС‚РЅРѕ Рё РЅРѕРјРµСЂ РїРѕСЃР»РµРґРЅРµРіРѕ)
 	struct	tagRESstruct{
-		char	TEXTURE_DIR	[128];					// Имена директорий, где расположены ресурсы
+		char	TEXTURE_DIR	[128];					// РРјРµРЅР° РґРёСЂРµРєС‚РѕСЂРёР№, РіРґРµ СЂР°СЃРїРѕР»РѕР¶РµРЅС‹ СЂРµСЃСѓСЂСЃС‹
 		char	FONT_DIR	[128];
 		char	MESH_DIR	[128];
 	}	RES;
@@ -145,30 +145,30 @@ struct GlobalsStruct								// Глобальные настройки и переменные
 	{
 		bool	show_stat;
 		bool	show_gui;
-		bool	LWOCullFace;					// Удаление оборотных граней LWO моделей
+		bool	LWOCullFace;					// РЈРґР°Р»РµРЅРёРµ РѕР±РѕСЂРѕС‚РЅС‹С… РіСЂР°РЅРµР№ LWO РјРѕРґРµР»РµР№
 	}			EFl;
 	bool	Exiting;
 };
-extern GlobalsStruct			Globals;		// Глобальные настройки и переменные
+extern GlobalsStruct			Globals;		// Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё Рё РїРµСЂРµРјРµРЅРЅС‹Рµ
 
-struct KeySettings								// Структура содержащая информацию о функциональных клавишах
+struct KeySettings								// РЎС‚СЂСѓРєС‚СѓСЂР° СЃРѕРґРµСЂР¶Р°С‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅС‹С… РєР»Р°РІРёС€Р°С…
 {
-	// Клавиши управления камерой
-	WPARAM CamMoveForward;						// Перемещение вперёд
-	WPARAM CamMoveBackward;						// Перемещение назад
-	WPARAM CamMoveLeft;							// Перемещение влево
-	WPARAM CamMoveRight;						// Перемещение вправо
-	WPARAM CamBackToCenter;						// Перемещение в начальную точку
-	WPARAM MoreFastMove;						// Ускорение
+	// РљР»Р°РІРёС€Рё СѓРїСЂР°РІР»РµРЅРёСЏ РєР°РјРµСЂРѕР№
+	WPARAM CamMoveForward;						// РџРµСЂРµРјРµС‰РµРЅРёРµ РІРїРµСЂС‘Рґ
+	WPARAM CamMoveBackward;						// РџРµСЂРµРјРµС‰РµРЅРёРµ РЅР°Р·Р°Рґ
+	WPARAM CamMoveLeft;							// РџРµСЂРµРјРµС‰РµРЅРёРµ РІР»РµРІРѕ
+	WPARAM CamMoveRight;						// РџРµСЂРµРјРµС‰РµРЅРёРµ РІРїСЂР°РІРѕ
+	WPARAM CamBackToCenter;						// РџРµСЂРµРјРµС‰РµРЅРёРµ РІ РЅР°С‡Р°Р»СЊРЅСѓСЋ С‚РѕС‡РєСѓ
+	WPARAM MoreFastMove;						// РЈСЃРєРѕСЂРµРЅРёРµ
 
 };
-extern KeySettings				KeySet;			// Структура содержащая информацию о функциональных клавишах
+extern KeySettings				KeySet;			// РЎС‚СЂСѓРєС‚СѓСЂР° СЃРѕРґРµСЂР¶Р°С‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅС‹С… РєР»Р°РІРёС€Р°С…
 
-// Структура с информацией о видеокарте
-struct VCInfo									// Информация о видео подсистеме
+// РЎС‚СЂСѓРєС‚СѓСЂР° СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ Рѕ РІРёРґРµРѕРєР°СЂС‚Рµ
+struct VCInfo									// РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РІРёРґРµРѕ РїРѕРґСЃРёСЃС‚РµРјРµ
 {
-	int		MaxAnisotropy;						// Максимально поддерживаемя анизотропная фильтрация
-	char	*SupportedGlExtentions;				// Поддерживаемые OpenGL разширения видеокарты
+	int		MaxAnisotropy;						// РњР°РєСЃРёРјР°Р»СЊРЅРѕ РїРѕРґРґРµСЂР¶РёРІР°РµРјСЏ Р°РЅРёР·РѕС‚СЂРѕРїРЅР°СЏ С„РёР»СЊС‚СЂР°С†РёСЏ
+	char	*SupportedGlExtentions;				// РџРѕРґРґРµСЂР¶РёРІР°РµРјС‹Рµ OpenGL СЂР°Р·С€РёСЂРµРЅРёСЏ РІРёРґРµРѕРєР°СЂС‚С‹
 	char	*RendererName;
 	char	*VendorName;
 	char	*OpenGL_Version;
@@ -179,7 +179,7 @@ struct CPUInfo
 	{
 		memset(this,0,sizeof(CPUInfo));
 	}
-	int	speed;								// Скорость процессора в МГц
+	int	speed;								// РЎРєРѕСЂРѕСЃС‚СЊ РїСЂРѕС†РµСЃСЃРѕСЂР° РІ РњР“С†
 	char	vendor_id	[13];
 	char	id			[64];
 	char	name		[64];
@@ -191,11 +191,11 @@ struct CPUInfo
 	char	MMX;
 
 };
-// Структура содержащая информацию о системе в которой запускается приложение
+// РЎС‚СЂСѓРєС‚СѓСЂР° СЃРѕРґРµСЂР¶Р°С‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃРёСЃС‚РµРјРµ РІ РєРѕС‚РѕСЂРѕР№ Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ РїСЂРёР»РѕР¶РµРЅРёРµ
 struct SysInformationData
 {
-	VCInfo	video;								// Информация о видео подсистеме
-	CPUInfo	cpu;								// Инфа о процессоре
+	VCInfo	video;								// РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РІРёРґРµРѕ РїРѕРґСЃРёСЃС‚РµРјРµ
+	CPUInfo	cpu;								// РРЅС„Р° Рѕ РїСЂРѕС†РµСЃСЃРѕСЂРµ
 };
 
-extern SysInformationData		SysInfo;		// Инцормация о системе
+extern SysInformationData		SysInfo;		// РРЅС†РѕСЂРјР°С†РёСЏ Рѕ СЃРёСЃС‚РµРјРµ

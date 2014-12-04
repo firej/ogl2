@@ -33,3 +33,6 @@
 *.suo
 Debug/*
 Release/*
+
+#idea
+.idea

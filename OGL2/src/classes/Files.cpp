@@ -2,7 +2,7 @@
 #include "./Files.h"
 #include "./shared/ASSERT.h"
 
-// Реализация базового класса File
+// Р РµР°Р»РёР·Р°С†РёСЏ Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР° File
 File::File()
 {
 };
@@ -22,7 +22,7 @@ bool File::Open(	char* Fname,
 {
 	memset (modestr,0,4);
 	modestr [0] = Omode;
-	if (isExtended)	{						// Проверка нужен ли + в fopen
+	if (isExtended)	{						// РџСЂРѕРІРµСЂРєР° РЅСѓР¶РµРЅ Р»Рё + РІ fopen
 						modestr [1] = '+';
 						modestr [2] = Ftype;
 					}
@@ -33,7 +33,7 @@ bool File::Open(	char* Fname,
 	f = fopen(Fname,modestr);
 	FASSERT(f);
 //	return (bool)f;
-	return true;   // не имеет смысла из-за FASSERT'а выше
+	return true;   // РЅРµ РёРјРµРµС‚ СЃРјС‹СЃР»Р° РёР·-Р·Р° FASSERT'Р° РІС‹С€Рµ
 };
 
 void File::Close()
@@ -45,40 +45,40 @@ File::~File()
 {
 	if (f) fclose(f);
 }
-/*=[ Файлы: Реализация: ]=======================================================================\\
-||	1) Лог файл
-||	2) Конфигурационный файл
+/*=[ Р¤Р°Р№Р»С‹: Р РµР°Р»РёР·Р°С†РёСЏ: ]=======================================================================\\
+||	1) Р›РѕРі С„Р°Р№Р»
+||	2) РљРѕРЅС„РёРіСѓСЂР°С†РёРѕРЅРЅС‹Р№ С„Р°Р№Р»
 ||			  
 \\==============================================================================================*/
 
-void FJCGetTD (char mode,char* str)						// Находим время для вывода в файл
-{	// mode = 0 - нужна дата без времени
+void FJCGetTD (char mode,char* str)						// РќР°С…РѕРґРёРј РІСЂРµРјСЏ РґР»СЏ РІС‹РІРѕРґР° РІ С„Р°Р№Р»
+{	// mode = 0 - РЅСѓР¶РЅР° РґР°С‚Р° Р±РµР· РІСЂРµРјРµРЅРё
 	SYSTEMTIME LocalTime;
 	GetLocalTime(&LocalTime);
-    if (mode & FJC_NEED_TIME)	// Нужно время
-			if (mode & FJC_NEED_DATE)	// Нужна дата
+    if (mode & FJC_NEED_TIME)	// РќСѓР¶РЅРѕ РІСЂРµРјСЏ
+			if (mode & FJC_NEED_DATE)	// РќСѓР¶РЅР° РґР°С‚Р°
 					sprintf(	str,
 								"(%02d:%02d:%02d) %02d.%02d.%04d",
-								LocalTime.wHour,		// Часы
-								LocalTime.wMinute,		// Минуты
-								LocalTime.wSecond,		// Секунды
-								LocalTime.wDay,			// День(число)
-								LocalTime.wMonth,		// Месяц
-								LocalTime.wYear			// Год
+								LocalTime.wHour,		// Р§Р°СЃС‹
+								LocalTime.wMinute,		// РњРёРЅСѓС‚С‹
+								LocalTime.wSecond,		// РЎРµРєСѓРЅРґС‹
+								LocalTime.wDay,			// Р”РµРЅСЊ(С‡РёСЃР»Рѕ)
+								LocalTime.wMonth,		// РњРµСЃСЏС†
+								LocalTime.wYear			// Р“РѕРґ
 							);
 			else	// if (mode && FJC_NEED_DATE)
 					sprintf(	str,
 								"(%02d:%02d:%02d)",
-								LocalTime.wHour,		// Часы
-								LocalTime.wMinute,		// Минуты
-								LocalTime.wSecond		// Секунды
+								LocalTime.wHour,		// Р§Р°СЃС‹
+								LocalTime.wMinute,		// РњРёРЅСѓС‚С‹
+								LocalTime.wSecond		// РЎРµРєСѓРЅРґС‹
 							);
 			else	// if (mode && FJC_NEED_TIME)
 					sprintf(	str,
 								"%02d.%02d.%04d",
-								LocalTime.wDay,			// День(число)
-								LocalTime.wMonth,		// Месяц
-								LocalTime.wYear			// Год
+								LocalTime.wDay,			// Р”РµРЅСЊ(С‡РёСЃР»Рѕ)
+								LocalTime.wMonth,		// РњРµСЃСЏС†
+								LocalTime.wYear			// Р“РѕРґ
 							);
 }
 
@@ -100,7 +100,7 @@ bool LogFile::Start(char *message)
 bool LogFile::Msg(char* msg)
 {
 	if (!f) return NULL;
-	fprintf (f,"%s\n",msg);							// Простое запихивание строки в файл
+	fprintf (f,"%s\n",msg);							// РџСЂРѕСЃС‚РѕРµ Р·Р°РїРёС…РёРІР°РЅРёРµ СЃС‚СЂРѕРєРё РІ С„Р°Р№Р»
 	return true;
 }
 bool LogFile::Logf(char *block, char* str, ...)
@@ -113,12 +113,12 @@ bool LogFile::Logf(char *block, char* str, ...)
 				block,
 				str
 			);
-	va_list    ap;									// Указатель на список аргументов
-    va_start(ap, str);								// Разбор строки переменных
+	va_list    ap;									// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРїРёСЃРѕРє Р°СЂРіСѓРјРµРЅС‚РѕРІ
+    va_start(ap, str);								// Р Р°Р·Р±РѕСЂ СЃС‚СЂРѕРєРё РїРµСЂРµРјРµРЅРЅС‹С…
 	static char formatbuf [512];
 	vsprintf(formatbuf,buf2,ap);
-	va_end(ap);										// Результат помещается в строку
-	fprintf(f,"%s", formatbuf);						// И конвертирование символов в реальные коды
+	va_end(ap);										// Р РµР·СѓР»СЊС‚Р°С‚ РїРѕРјРµС‰Р°РµС‚СЃСЏ РІ СЃС‚СЂРѕРєСѓ
+	fprintf(f,"%s", formatbuf);						// Р РєРѕРЅРІРµСЂС‚РёСЂРѕРІР°РЅРёРµ СЃРёРјРІРѕР»РѕРІ РІ СЂРµР°Р»СЊРЅС‹Рµ РєРѕРґС‹
  	return true;
 }
 
@@ -146,7 +146,7 @@ bool LogFile::End(bool is_normal)
 					msg,
 					"Session sucessfully ended at",
 					buf2);
-	else	// Не нормально :=)
+	else	// РќРµ РЅРѕСЂРјР°Р»СЊРЅРѕ :=)
 		sprintf(	buf,
 					"%s: Fatal error at %s",
 					msg,
@@ -174,11 +174,11 @@ char* CFGFile::Gets(char* string)
 
 void CleanString(char *s)
 {
-	static char s2[512];							// Очишеная строка
-	static bool	word;								// Показывает что сейчас копируются символы слова(не пробелы)
+	static char s2[512];							// РћС‡РёС€РµРЅР°СЏ СЃС‚СЂРѕРєР°
+	static bool	word;								// РџРѕРєР°Р·С‹РІР°РµС‚ С‡С‚Рѕ СЃРµР№С‡Р°СЃ РєРѕРїРёСЂСѓСЋС‚СЃСЏ СЃРёРјРІРѕР»С‹ СЃР»РѕРІР°(РЅРµ РїСЂРѕР±РµР»С‹)
 	memset(s2,0,sizeof(s2));
-	int i,j;										// Итераторы по строкам
-	for (i=0,j=0;(s[i]==' ')||(s[i]==9);i++);		// Пропуск пробелов и табо в начале
+	int i,j;										// РС‚РµСЂР°С‚РѕСЂС‹ РїРѕ СЃС‚СЂРѕРєР°Рј
+	for (i=0,j=0;(s[i]==' ')||(s[i]==9);i++);		// РџСЂРѕРїСѓСЃРє РїСЂРѕР±РµР»РѕРІ Рё С‚Р°Р±Рѕ РІ РЅР°С‡Р°Р»Рµ
 	for (;(s[i]!=0)&&(s[i]!=10);)
 	{
 		if ((s[i]==' ')||(s[i]==9))

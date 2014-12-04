@@ -1,27 +1,27 @@
 #pragma once
-//====== Общие файлы
+//====== РћР±С‰РёРµ С„Р°Р№Р»С‹
 #include "./globals.h"
 
 
 class ParticleSystem
 {
-	Point3f		*Poss;		// Позиции
-	Vector3f	*Vels;		// Скорости
-	WORD		Particles;	// Количество частиц
+	Point3f		*Poss;		// РџРѕР·РёС†РёРё
+	Vector3f	*Vels;		// РЎРєРѕСЂРѕСЃС‚Рё
+	WORD		Particles;	// РљРѕР»РёС‡РµСЃС‚РІРѕ С‡Р°СЃС‚РёС†
 public:
-	Point3f		wind;		// Ветер
+	Point3f		wind;		// Р’РµС‚РµСЂ
 	Point3f		windSource;
 	Point3f		grav;
-	bool		windActive;	// Активность ветра
+	bool		windActive;	// РђРєС‚РёРІРЅРѕСЃС‚СЊ РІРµС‚СЂР°
 public:
 	ParticleSystem();
 	~ParticleSystem();
-	void	INIT();			// Инициализация
-	void	DRAW();			// Рисование
-	void	ANIM();			// Анимация
-	void	SetGravity	(Point3f	g)	// Гравитация
+	void	INIT();			// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
+	void	DRAW();			// Р РёСЃРѕРІР°РЅРёРµ
+	void	ANIM();			// РђРЅРёРјР°С†РёСЏ
+	void	SetGravity	(Point3f	g)	// Р“СЂР°РІРёС‚Р°С†РёСЏ
 	{	grav	=	g;	}
-	void	SetWind		(Point3f	w, Point3f source)	// Ветер
+	void	SetWind		(Point3f	w, Point3f source)	// Р’РµС‚РµСЂ
 	{	wind	=	w;	windSource = source;	}
 	void	SetWindStatus	(bool	wA)
 	{	windActive	=	wA;	}

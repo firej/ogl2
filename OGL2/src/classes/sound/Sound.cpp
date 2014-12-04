@@ -6,7 +6,7 @@ SoundBuf		TestBuf;
 soundSource		TestSource;
 
 //=========================================================================================================
-//====[ Управление звуковой подсистемой ]==================================================================
+//====[ РЈРїСЂР°РІР»РµРЅРёРµ Р·РІСѓРєРѕРІРѕР№ РїРѕРґСЃРёСЃС‚РµРјРѕР№ ]==================================================================
 //=========================================================================================================
 SoundController::SoundController()
 {
@@ -14,7 +14,7 @@ SoundController::SoundController()
 SoundController::~SoundController()
 {
 };
-ALboolean SoundController::Init()		// Инициализация звука - открытие устройства и создание контекста
+ALboolean SoundController::Init()		// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·РІСѓРєР° - РѕС‚РєСЂС‹С‚РёРµ СѓСЃС‚СЂРѕР№СЃС‚РІР° Рё СЃРѕР·РґР°РЅРёРµ РєРѕРЅС‚РµРєСЃС‚Р°
 {
 	char deviceName[256];
 		memset(deviceName,0,256);
@@ -30,9 +30,9 @@ ALboolean SoundController::Init()		// Инициализация звука - открытие устройства 
 	LF.Logf("Sound::Init","AL extentions:\n %s",exts);
 
 	if (alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT") == AL_TRUE) { // try out enumeration extension
-		DDeviceName	= (char *)alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);	// Устройство по-умолчанию
-		deviceList	= (char *)alcGetString(NULL, ALC_DEVICE_SPECIFIER);			// Список устройств (в строчку)
-		for (numDevices = 0; numDevices < 12; numDevices++)		// Обнуление массива устройств
+		DDeviceName	= (char *)alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);	// РЈСЃС‚СЂРѕР№СЃС‚РІРѕ РїРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ
+		deviceList	= (char *)alcGetString(NULL, ALC_DEVICE_SPECIFIER);			// РЎРїРёСЃРѕРє СѓСЃС‚СЂРѕР№СЃС‚РІ (РІ СЃС‚СЂРѕС‡РєСѓ)
+		for (numDevices = 0; numDevices < 12; numDevices++)		// РћР±РЅСѓР»РµРЅРёРµ РјР°СЃСЃРёРІР° СѓСЃС‚СЂРѕР№СЃС‚РІ
 		{	devices[numDevices] = NULL;}
 		for (numDevices = 0; numDevices < 12; numDevices++)
 		{
@@ -41,7 +41,7 @@ ALboolean SoundController::Init()		// Инициализация звука - открытие устройства 
 			{
 				numDefaultDevice = numDevices;
 			}
-			deviceList += strlen(deviceList);					// Перемещение указателя дальше на строку
+			deviceList += strlen(deviceList);					// РџРµСЂРµРјРµС‰РµРЅРёРµ СѓРєР°Р·Р°С‚РµР»СЏ РґР°Р»СЊС€Рµ РЅР° СЃС‚СЂРѕРєСѓ
 			if (deviceList[0] == 0)
 			{
 					if (deviceList[1] == 0)
@@ -54,7 +54,7 @@ ALboolean SoundController::Init()		// Инициализация звука - открытие устройства 
 					}
 			}
 		}
-		if (devices[numDevices] != NULL) {						// Логирование найденых звуковых устройств
+		if (devices[numDevices] != NULL) {						// Р›РѕРіРёСЂРѕРІР°РЅРёРµ РЅР°Р№РґРµРЅС‹С… Р·РІСѓРєРѕРІС‹С… СѓСЃС‚СЂРѕР№СЃС‚РІ
 			numDevices++;
 			LF.Logf("Sound :: Init","This sound devices was founded:");
 			for (i = 0; i < numDevices; i++) {
@@ -73,7 +73,7 @@ ALboolean SoundController::Init()		// Инициализация звука - открытие устройства 
 	alcMakeContextCurrent(ALContext);
 
 
-	SetLOrientation	(	Vector3f(0.0f,0.0f,1.0f)	,			// Инит звука
+	SetLOrientation	(	Vector3f(0.0f,0.0f,1.0f)	,			// РРЅРёС‚ Р·РІСѓРєР°
 						Vector3f(0.0f,1.0f,0.0f)	);
 	SetLPosition	(	Vector3f(0.0f,0.0f,0.0f)	);
 	SetLVelocity	(	Vector3f(0.0f,0.0f,0.0f)	);
@@ -81,7 +81,7 @@ ALboolean SoundController::Init()		// Инициализация звука - открытие устройства 
 	return AL_TRUE;
 };
 
-ALboolean SoundController::Suspend()		// Пауза общая для всего контекста (полная остановка обработки)
+ALboolean SoundController::Suspend()		// РџР°СѓР·Р° РѕР±С‰Р°СЏ РґР»СЏ РІСЃРµРіРѕ РєРѕРЅС‚РµРєСЃС‚Р° (РїРѕР»РЅР°СЏ РѕСЃС‚Р°РЅРѕРІРєР° РѕР±СЂР°Р±РѕС‚РєРё)
 {
 	if (inSuspend == AL_FALSE)
 	{
@@ -90,19 +90,19 @@ ALboolean SoundController::Suspend()		// Пауза общая для всего контекста (полная
 	}
 	return AL_FALSE;
 };
-ALboolean SoundController::Process()		// Продолжение проигрывания после паузы
+ALboolean SoundController::Process()		// РџСЂРѕРґРѕР»Р¶РµРЅРёРµ РїСЂРѕРёРіСЂС‹РІР°РЅРёСЏ РїРѕСЃР»Рµ РїР°СѓР·С‹
 {
 	alcProcessContext     ( ALContext );
 	return AL_FALSE;
 };
 
-ALboolean SoundController::DeInit()		// Деинициализация звука
+ALboolean SoundController::DeInit()		// Р”РµРёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·РІСѓРєР°
 {;
-  // Выключаем текущий контекст
+  // Р’С‹РєР»СЋС‡Р°РµРј С‚РµРєСѓС‰РёР№ РєРѕРЅС‚РµРєСЃС‚
   alcMakeContextCurrent(NULL);
-  // Уничтожаем контекст
+  // РЈРЅРёС‡С‚РѕР¶Р°РµРј РєРѕРЅС‚РµРєСЃС‚
   alcDestroyContext(ALContext);
-  // Закрываем звуковое устройство
+  // Р—Р°РєСЂС‹РІР°РµРј Р·РІСѓРєРѕРІРѕРµ СѓСЃС‚СЂРѕР№СЃС‚РІРѕ
   alcCloseDevice(ALDevice);
   return AL_TRUE;
 };
@@ -142,7 +142,7 @@ ALvoid SoundController::SetLVelocity		(Vector3f Vel)
 };
 
 //=========================================================================================================
-//====[ Функции управления файлами ]=======================================================================
+//====[ Р¤СѓРЅРєС†РёРё СѓРїСЂР°РІР»РµРЅРёСЏ С„Р°Р№Р»Р°РјРё ]=======================================================================
 //=========================================================================================================
 SoundBuf::SoundBuf()
 {
@@ -158,32 +158,32 @@ ALvoid SoundBuf::DeInit()
 	if (!id) return;
 	alDeleteBuffers(1,&id);
 };
-ALboolean SoundBuf::LoadWav(const char *FileName)			// Загрузка WAV файла в буфер "Buffer"
+ALboolean SoundBuf::LoadWav(const char *FileName)			// Р—Р°РіСЂСѓР·РєР° WAV С„Р°Р№Р»Р° РІ Р±СѓС„РµСЂ "Buffer"
 {
 	static ALenum err;
 	err = AL_NO_ERROR;
-	ALenum    format;		//Создадим буфер звука
-	ALvoid    *data;		// Указатель на массив данных звука
-	ALsizei    size;		// Размер этого массива
-	ALsizei    freq;		// Частота звука в герцах
-	ALboolean  loop;		// Идентификатор циклического воспроизведения
+	ALenum    format;		//РЎРѕР·РґР°РґРёРј Р±СѓС„РµСЂ Р·РІСѓРєР°
+	ALvoid    *data;		// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РјР°СЃСЃРёРІ РґР°РЅРЅС‹С… Р·РІСѓРєР°
+	ALsizei    size;		// Р Р°Р·РјРµСЂ СЌС‚РѕРіРѕ РјР°СЃСЃРёРІР°
+	ALsizei    freq;		// Р§Р°СЃС‚РѕС‚Р° Р·РІСѓРєР° РІ РіРµСЂС†Р°С…
+	ALboolean  loop;		// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С†РёРєР»РёС‡РµСЃРєРѕРіРѕ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ
 	
 	alGenBuffers(1,&id);
 
-	alutLoadWAVFile( (ALbyte *)FileName, &format, &data, &size, &freq, &loop);	// Загрузка собственно файла
+	alutLoadWAVFile( (ALbyte *)FileName, &format, &data, &size, &freq, &loop);	// Р—Р°РіСЂСѓР·РєР° СЃРѕР±СЃС‚РІРµРЅРЅРѕ С„Р°Р№Р»Р°
 	err = alGetError();
 	if (err != AL_NO_ERROR) LF.Logf("Snd::LoadWAV","Error %d",err);
 
-	alBufferData(id, format, data, size, freq);							// Заполнение буфера данными
+	alBufferData(id, format, data, size, freq);							// Р—Р°РїРѕР»РЅРµРЅРёРµ Р±СѓС„РµСЂР° РґР°РЅРЅС‹РјРё
 	err = alGetError();
 	if (err != AL_NO_ERROR) LF.Logf("Snd::LoadWAV","Error %d",err);
-	alutUnloadWAV(format, data, size, freq);									// Выгрузка файла из памяти
+	alutUnloadWAV(format, data, size, freq);									// Р’С‹РіСЂСѓР·РєР° С„Р°Р№Р»Р° РёР· РїР°РјСЏС‚Рё
     err = alGetError();
 	if (err != AL_NO_ERROR) LF.Logf("Snd::LoadWAV","Error %d",err);
 	return AL_TRUE;
 };
 //=========================================================================================================
-//====[ Класс "источник звука" ]===========================================================================
+//====[ РљР»Р°СЃСЃ "РёСЃС‚РѕС‡РЅРёРє Р·РІСѓРєР°" ]===========================================================================
 //=========================================================================================================
 soundSource::soundSource()
 {
@@ -212,7 +212,7 @@ ALboolean soundSource::LinkWithBufer(SoundBuf *Buffer)
 	alSourcei (id, AL_BUFFER, BufID);
 	return AL_TRUE;
 };
-//====[ Управление настройками ]===========================================================================
+//====[ РЈРїСЂР°РІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕР№РєР°РјРё ]===========================================================================
 inline ALvoid soundSource::SetPos(const Vector3f &Pos)
 {
 	alSource3f(id, AL_POSITION,  Pos.d.c.x, Pos.d.c.y, Pos.d.c.z);
@@ -229,7 +229,7 @@ inline ALvoid soundSource::SetGain( ALfloat gain)
 {
 	alSourcef(id, AL_GAIN, gain);
 };
-//====[ Управление воспроизведением ]======================================================================
+//====[ РЈРїСЂР°РІР»РµРЅРёРµ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµРј ]======================================================================
 ALvoid soundSource::Play()
 {	
 	now_playing = AL_TRUE; 

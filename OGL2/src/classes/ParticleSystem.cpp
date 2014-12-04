@@ -37,21 +37,21 @@ void	ParticleSystem::ANIM()
 	for (WORD i = 0 ; i < Particles; i++ )
 	{
 		Vels[i] += grav*(float)GT.GetFrameTime() +
-			grav*(rand()/(float)RAND_MAX * 2.0f - 1.0f)/250.0f;		// Óñêîðåíèå
+			grav*(rand()/(float)RAND_MAX * 2.0f - 1.0f)/250.0f;		// Ð£ÑÐºÐ¾Ñ€ÐµÐ½Ð¸Ðµ
 		if (windActive)
 		{
 			tmp		=	Poss[i];
 			tmp		-=	windSource;
 			windA	=	wind;
 			windA	=	windA/(float)tmp.abs();
-			Vels[i]	+=	windA*(float)GT.GetFrameTime();	// Óñêîðåíèå îò âåòðà
+			Vels[i]	+=	windA*(float)GT.GetFrameTime();	// Ð£ÑÐºÐ¾Ñ€ÐµÐ½Ð¸Ðµ Ð¾Ñ‚ Ð²ÐµÑ‚Ñ€Ð°
 		}
 		else
 		{
 			Vels[i].d.c.x	/=	1.001f;
 			Vels[i].d.c.z	/=	1.001f;
 		}
-		Poss[i] += Vels[i]*(float)GT.GetFrameTime();	// Ïåðåìåùåíèå
+		Poss[i] += Vels[i]*(float)GT.GetFrameTime();	// ÐŸÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ
 		if (Poss[i].d.c.y < 0)
 		{
 			Poss[i].d.c.x = rand()/(float)RAND_MAX * 1000.0f - 500.0f;

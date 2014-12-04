@@ -31,7 +31,7 @@ TODO:
 		DWORD	i;
 	};
 
-inline	DWORD	SwapBytesDW(const	DWORD	s)	// Обмен порядка байтов
+inline	DWORD	SwapBytesDW(const	DWORD	s)	// РћР±РјРµРЅ РїРѕСЂСЏРґРєР° Р±Р°Р№С‚РѕРІ
 	{
 		__asm{
 			XOR	EAX,EAX					;
@@ -49,7 +49,7 @@ inline	DWORD	SwapBytesDW(const	DWORD	s)	// Обмен порядка байтов
 			or	EAX,EBX					;
 		}
 	}
-inline	WORD	SwapBytesW(const	WORD	s)	// Изменение порядка байтов
+inline	WORD	SwapBytesW(const	WORD	s)	// РР·РјРµРЅРµРЅРёРµ РїРѕСЂСЏРґРєР° Р±Р°Р№С‚РѕРІ
 	{
 		__asm{
 			XOR	EAX,EAX					;

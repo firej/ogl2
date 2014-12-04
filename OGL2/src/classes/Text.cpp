@@ -22,16 +22,16 @@ void Font::SetStyle(Text::Align halign,Text::Align valign, double size)
 }
 void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...)
 {
-	static char		text[512];	// Место для нашей строки
+	static char		text[512];	// РњРµСЃС‚Рѕ РґР»СЏ РЅР°С€РµР№ СЃС‚СЂРѕРєРё
 	//memset(text,0,256);
-	va_list    ap;				// Указатель на список аргументов
-	if (fmt == NULL || IsBadStringPtr(fmt,200))		// Если нет текста
-		return;					// Ничего не делать
-    va_start(ap, fmt);			// Разбор строки переменных
-    vsprintf(text, fmt, ap);	// И конвертирование символов в реальные коды
-    va_end(ap);					// Результат помещается в строку
+	va_list    ap;				// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРїРёСЃРѕРє Р°СЂРіСѓРјРµРЅС‚РѕРІ
+	if (fmt == NULL || IsBadStringPtr(fmt,200))		// Р•СЃР»Рё РЅРµС‚ С‚РµРєСЃС‚Р°
+		return;					// РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°С‚СЊ
+    va_start(ap, fmt);			// Р Р°Р·Р±РѕСЂ СЃС‚СЂРѕРєРё РїРµСЂРµРјРµРЅРЅС‹С…
+    vsprintf(text, fmt, ap);	// Р РєРѕРЅРІРµСЂС‚РёСЂРѕРІР°РЅРёРµ СЃРёРјРІРѕР»РѕРІ РІ СЂРµР°Р»СЊРЅС‹Рµ РєРѕРґС‹
+    va_end(ap);					// Р РµР·СѓР»СЊС‚Р°С‚ РїРѕРјРµС‰Р°РµС‚СЃСЏ РІ СЃС‚СЂРѕРєСѓ
 
-glPushAttrib(GL_LIST_BIT|GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// Сохранение настроек
+glPushAttrib(GL_LIST_BIT|GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє
 glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	T->bind();
 	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
@@ -49,7 +49,7 @@ glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	glEnable(GL_BLEND);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glColor4f(Color.d.c.x,Color.d.c.y,Color.d.c.z,alfa);// Установка цвета шрифта
+	glColor4f(Color.d.c.x,Color.d.c.y,Color.d.c.z,alfa);// РЈСЃС‚Р°РЅРѕРІРєР° С†РІРµС‚Р° С€СЂРёС„С‚Р°
 	glTranslated(X*Font::scr_width,Y*480.0,0);			// Position The Text (0,0 - Bottom Left)
 	switch(this->ha)
 	{
@@ -86,22 +86,22 @@ glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glPopMatrix();										// Restore The Old Projection Matrix
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-glPopAttrib();											// Возврат
+glPopAttrib();											// Р’РѕР·РІСЂР°С‚
 }
 Text::RESULT Font::LOAD( const char*FileName )
 {
-	iff::tag_t	tagb;								// Буферная переменная
-	DWORD		sizeb;								// Буфер для чтения размера
-	void	*	texture	=	NULL;					// Буфер для хранения текстуры
+	iff::tag_t	tagb;								// Р‘СѓС„РµСЂРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
+	DWORD		sizeb;								// Р‘СѓС„РµСЂ РґР»СЏ С‡С‚РµРЅРёСЏ СЂР°Р·РјРµСЂР°
+	void	*	texture	=	NULL;					// Р‘СѓС„РµСЂ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‚РµРєСЃС‚СѓСЂС‹
 	DWORD		tsize	=	NULL;
 
 	FILE * f = fopen (FileName,"rb");
 	if (!f)	return Text::FILE_NOT_EXIST;
 	tagb.i = iff::GetTAG(f);
 	if (tagb.i != ID_FORM)	return Text::BAD_FORMAT;
-	sizeb = iff::GetDWORD(f);						// Читаем размер
+	sizeb = iff::GetDWORD(f);						// Р§РёС‚Р°РµРј СЂР°Р·РјРµСЂ
 
-	tagb.i = iff::GetTAG(f);						// Читаем формат файла
+	tagb.i = iff::GetTAG(f);						// Р§РёС‚Р°РµРј С„РѕСЂРјР°С‚ С„Р°Р№Р»Р°
 	if (tagb.i != iff::FONTFORMATNAME.i)	return Text::BAD_FORMAT;
 	do	{
 		tagb.i = iff::GetTAG(f);
@@ -122,10 +122,10 @@ Text::RESULT Font::LOAD( const char*FileName )
 		else iff::read_unknow_chunk(f);
 	}
 	while(!feof(f));
-	fclose(f);										// Файл отработан!
-// Создание самого шрифта
-	// Загрузка текстуры
-		// Создание пути к текстуре из пути к шрифту (они должны быть в одной папке)
+	fclose(f);										// Р¤Р°Р№Р» РѕС‚СЂР°Р±РѕС‚Р°РЅ!
+// РЎРѕР·РґР°РЅРёРµ СЃР°РјРѕРіРѕ С€СЂРёС„С‚Р°
+	// Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂС‹
+		// РЎРѕР·РґР°РЅРёРµ РїСѓС‚Рё Рє С‚РµРєСЃС‚СѓСЂРµ РёР· РїСѓС‚Рё Рє С€СЂРёС„С‚Сѓ (РѕРЅРё РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІ РѕРґРЅРѕР№ РїР°РїРєРµ)
 	if (!texture)	return Text::BAD_FORMAT;
 	T = new TextureClass;
 	if (T->LoadL(IL_PNG,texture,tsize))
@@ -135,7 +135,7 @@ Text::RESULT Font::LOAD( const char*FileName )
 		return Text::BAD_FORMAT;
 	}
 	delete	[]	texture;
-	// Создание дисплейных списков
+	// РЎРѕР·РґР°РЅРёРµ РґРёСЃРїР»РµР№РЅС‹С… СЃРїРёСЃРєРѕРІ
 	Base = glGenLists(256);
 	int sym;
 	for ( int i = 0 ; i < 16 ; i++ )
@@ -146,14 +146,14 @@ Text::RESULT Font::LOAD( const char*FileName )
 			glNewList(Base+sym,GL_COMPILE);
 			glTranslatef(lfg[sym].A,0,0);
 			glBegin(GL_QUADS);
-				glTexCoord2d((j  )*0.0625,(i+15.0/16.0)*0.0625f);		// Точка в текстуре (Левая нижняя)
-				glVertex2i	( 0,15);									// Координаты вершины (Левая нижняя)
-				glTexCoord2d((j+15.0/16.0)*0.0625,(i+15.0/16.0)*0.0625);// Точка на текстуре (Правая нижняя)
-				glVertex2i	(15,15);									// Координаты вершины (Правая нижняя)
-				glTexCoord2d((j+15.0/16.0)*0.0625,(i  )*0.0625);		// Точка текстуры (Верхняя правая)
-				glVertex2i	(15, 0);									// Координаты вершины (Верхняя правая)
-				glTexCoord2d((j  )*0.0625,(i  )*0.0625);				// Точка текстуры (Верхняя левая)
-	            glVertex2i	( 0, 0);									// Координаты вершины (Верхняя левая)
+				glTexCoord2d((j  )*0.0625,(i+15.0/16.0)*0.0625f);		// РўРѕС‡РєР° РІ С‚РµРєСЃС‚СѓСЂРµ (Р›РµРІР°СЏ РЅРёР¶РЅСЏСЏ)
+				glVertex2i	( 0,15);									// РљРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹ (Р›РµРІР°СЏ РЅРёР¶РЅСЏСЏ)
+				glTexCoord2d((j+15.0/16.0)*0.0625,(i+15.0/16.0)*0.0625);// РўРѕС‡РєР° РЅР° С‚РµРєСЃС‚СѓСЂРµ (РџСЂР°РІР°СЏ РЅРёР¶РЅСЏСЏ)
+				glVertex2i	(15,15);									// РљРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹ (РџСЂР°РІР°СЏ РЅРёР¶РЅСЏСЏ)
+				glTexCoord2d((j+15.0/16.0)*0.0625,(i  )*0.0625);		// РўРѕС‡РєР° С‚РµРєСЃС‚СѓСЂС‹ (Р’РµСЂС…РЅСЏСЏ РїСЂР°РІР°СЏ)
+				glVertex2i	(15, 0);									// РљРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹ (Р’РµСЂС…РЅСЏСЏ РїСЂР°РІР°СЏ)
+				glTexCoord2d((j  )*0.0625,(i  )*0.0625);				// РўРѕС‡РєР° С‚РµРєСЃС‚СѓСЂС‹ (Р’РµСЂС…РЅСЏСЏ Р»РµРІР°СЏ)
+	            glVertex2i	( 0, 0);									// РљРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹ (Р’РµСЂС…РЅСЏСЏ Р»РµРІР°СЏ)
 			glEnd();
 			glTranslatef(lfg[sym].B,0,0);
 			//glTranslated(10.0,0.0,0.0);
@@ -198,20 +198,20 @@ void Font::SetColor(float r,float g,float b, float alfap)
 	Color = Vector3f(r,g,b); alfa = alfap;
 }
 
-GLdouble	Font::scr_width;	// Статическая переменная
+GLdouble	Font::scr_width;	// РЎС‚Р°С‚РёС‡РµСЃРєР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
 
 void Font::SetAspectRatio()
 {
 	switch(Globals.VP.AR)
 	{
 	case AR::NORMAL:
-		Font::scr_width = 640;					// Самое нормальное такое разрешеньице
+		Font::scr_width = 640;					// РЎР°РјРѕРµ РЅРѕСЂРјР°Р»СЊРЅРѕРµ С‚Р°РєРѕРµ СЂР°Р·СЂРµС€РµРЅСЊРёС†Рµ
 		break;
 	case AR::NORMAL_LCD:
-		Font::scr_width = 1280.0*480.0/1024.0;	// Ширина в пикселах для
-		break;									// разрешения 1280x1024 и пропорциональных ему
+		Font::scr_width = 1280.0*480.0/1024.0;	// РЁРёСЂРёРЅР° РІ РїРёРєСЃРµР»Р°С… РґР»СЏ
+		break;									// СЂР°Р·СЂРµС€РµРЅРёСЏ 1280x1024 Рё РїСЂРѕРїРѕСЂС†РёРѕРЅР°Р»СЊРЅС‹С… РµРјСѓ
 	case AR::WIDE_HDTV:
-		Font::scr_width = 16.0*480.0/9.0;		// HDTV разрешение 1920x1080
+		Font::scr_width = 16.0*480.0/9.0;		// HDTV СЂР°Р·СЂРµС€РµРЅРёРµ 1920x1080
 		break;
 	case AR::WIDE_LDC:
 		Font::scr_width = 16.0*480.0/10.0;		// WIDE LCD - 1280x800

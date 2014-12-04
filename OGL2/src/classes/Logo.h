@@ -3,7 +3,7 @@
 #include "./text.h"
 
 /************************************************************************************************************\
-\*********************************	Супер прикольная штукенция от nVidia	*********************************/
+\*********************************	РЎСѓРїРµСЂ РїСЂРёРєРѕР»СЊРЅР°СЏ С€С‚СѓРєРµРЅС†РёСЏ РѕС‚ nVidia	*********************************/
 class TextureLogo
 {
 protected:
@@ -35,7 +35,7 @@ public:
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		// Настроим глубину
+		// РќР°СЃС‚СЂРѕРёРј РіР»СѓР±РёРЅСѓ
 		glDepthFunc(GL_NOTEQUAL);
 		glDepthMask(false);
 		glDisable(GL_DEPTH_TEST);
@@ -95,16 +95,16 @@ public:
 	}
 };
 
-#define	FJC_STARTUP_LOGO_MODE_BEGIN					0		// "Появить" лого
-#define	FJC_STARTUP_LOGO_MODE_PROCEED_WITH_TEXT		1		// Показать текст
-#define	FJC_STARTUP_LOGO_MODE_PROCEED				2		// Очистить
-#define	FJC_STARTUP_LOGO_MODE_END					3		// Затушить лого
+#define	FJC_STARTUP_LOGO_MODE_BEGIN					0		// "РџРѕСЏРІРёС‚СЊ" Р»РѕРіРѕ
+#define	FJC_STARTUP_LOGO_MODE_PROCEED_WITH_TEXT		1		// РџРѕРєР°Р·Р°С‚СЊ С‚РµРєСЃС‚
+#define	FJC_STARTUP_LOGO_MODE_PROCEED				2		// РћС‡РёСЃС‚РёС‚СЊ
+#define	FJC_STARTUP_LOGO_MODE_END					3		// Р—Р°С‚СѓС€РёС‚СЊ Р»РѕРіРѕ
 #ifdef	_DEBUG 
-#define FJC_STARTUP_LOGO_STEPS_TO_BLEND				10		// Количетво шагов для блендинга
+#define FJC_STARTUP_LOGO_STEPS_TO_BLEND				10		// РљРѕР»РёС‡РµС‚РІРѕ С€Р°РіРѕРІ РґР»СЏ Р±Р»РµРЅРґРёРЅРіР°
 #else
 #define FJC_STARTUP_LOGO_STEPS_TO_BLEND				100
 #endif
-#define	FJC_STARTUP_LOGO_TIME_TO_START				300		// Время появления/затухания в миллисекундах
+#define	FJC_STARTUP_LOGO_TIME_TO_START				300		// Р’СЂРµРјСЏ РїРѕСЏРІР»РµРЅРёСЏ/Р·Р°С‚СѓС…Р°РЅРёСЏ РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…
 
 class TextBlock	{
 public:
@@ -156,11 +156,11 @@ public:
 		glDisable(GL_TEXTURE_GEN_Q);
 		glEnable(GL_BLEND);
 
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);		// Чёрный фон
-		glClear(GL_COLOR_BUFFER_BIT);				// Очистка буфера цвета
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);		// Р§С‘СЂРЅС‹Р№ С„РѕРЅ
+		glClear(GL_COLOR_BUFFER_BIT);				// РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° С†РІРµС‚Р°
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		// Настроим глубину
+		// РќР°СЃС‚СЂРѕРёРј РіР»СѓР±РёРЅСѓ
 		glDepthFunc(GL_NOTEQUAL);
 		glDepthMask(false);
 		glDisable(GL_DEPTH_TEST);
@@ -203,7 +203,7 @@ public:
 		switch (mode){
 		case FJC_STARTUP_LOGO_MODE_BEGIN:
 			for (int i = 0;i<FJC_STARTUP_LOGO_STEPS_TO_BLEND;i++){
-			glClear(GL_COLOR_BUFFER_BIT);				// Очистка буфера цвета
+			glClear(GL_COLOR_BUFFER_BIT);				// РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° С†РІРµС‚Р°
 				glColor4f(1.0f,1.0f,1.0f, float(i)/(float)FJC_STARTUP_LOGO_STEPS_TO_BLEND);
 				glDrawArrays(GL_QUADS,0,4);
 			SBFunc();
@@ -211,20 +211,20 @@ public:
 			break;
 		case FJC_STARTUP_LOGO_MODE_END:
 			for (int i = FJC_STARTUP_LOGO_STEPS_TO_BLEND;i>0;i--){
-			glClear(GL_COLOR_BUFFER_BIT);				// Очистка буфера цвета
+			glClear(GL_COLOR_BUFFER_BIT);				// РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° С†РІРµС‚Р°
 				glColor4f(1.0f,1.0f,1.0f, float(i)/(float)FJC_STARTUP_LOGO_STEPS_TO_BLEND);
 				glDrawArrays(GL_QUADS,0,4);
 			SBFunc();
 			};
 			break;
 		case FJC_STARTUP_LOGO_MODE_PROCEED:
-			glClear(GL_COLOR_BUFFER_BIT);				// Очистка буфера цвета
+			glClear(GL_COLOR_BUFFER_BIT);				// РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° С†РІРµС‚Р°
 				glColor4f(1.0f,1.0f,1.0f, 1.0f);
 				glDrawArrays(GL_QUADS,0,4);
 			SBFunc();
 			break;
 		case FJC_STARTUP_LOGO_MODE_PROCEED_WITH_TEXT:
-			glClear(GL_COLOR_BUFFER_BIT);				// Очистка буфера цвета
+			glClear(GL_COLOR_BUFFER_BIT);				// РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° С†РІРµС‚Р°
 				glColor4f(1.0f,1.0f,1.0f, 1.0f);
 				glDrawArrays(GL_QUADS,0,4);
 				for ( int i = 0,p_shift = 0; i<text_blocks ; i++,p_shift = i*sizeof(TextBlock))

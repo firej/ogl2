@@ -1,26 +1,26 @@
-// Файл реализации класса Application
+// Р¤Р°Р№Р» СЂРµР°Р»РёР·Р°С†РёРё РєР»Р°СЃСЃР° Application
 #include "LocusAFX.h"
 #include "./ApplicationClass.h"
 #include "./time.h"
 //#include <ntddk.h>
 
-Application *	MainApplication;					// Указатель на объект приложения
-GlobalsStruct		Globals;							// Глобальные данные о приложении
-KeySettings			KeySet;								// Настройки клавиатуры
-SysInformationData	SysInfo;							// Информация о системе
-	LogFile	LF;											// Лог-файл
-	CFGFile	CF;											// Файл с настройками
-Timer				GT;									// Глобальный таймер
-Input::Input_t*		Input::I;							// Объект инпута
+Application *	MainApplication;					// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚ РїСЂРёР»РѕР¶РµРЅРёСЏ
+GlobalsStruct		Globals;							// Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ Рѕ РїСЂРёР»РѕР¶РµРЅРёРё
+KeySettings			KeySet;								// РќР°СЃС‚СЂРѕР№РєРё РєР»Р°РІРёР°С‚СѓСЂС‹
+SysInformationData	SysInfo;							// РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРёСЃС‚РµРјРµ
+	LogFile	LF;											// Р›РѕРі-С„Р°Р№Р»
+	CFGFile	CF;											// Р¤Р°Р№Р» СЃ РЅР°СЃС‚СЂРѕР№РєР°РјРё
+Timer				GT;									// Р“Р»РѕР±Р°Р»СЊРЅС‹Р№ С‚Р°Р№РјРµСЂ
+Input::Input_t*		Input::I;							// РћР±СЉРµРєС‚ РёРЅРїСѓС‚Р°
 
 char	ModelName[1024]	=	"test_ball_t.lwo";
 
 TextureLogo NVLogo;
 StartUPLogo SimpleLogo;
 
-GLfloat LightAmbient	[]=	{ 1.0f, 1.0f, 1.0f, 1.0f };	// Значения фонового света
-GLfloat LightDiffuse	[]=	{ 1.0f, 1.0f, 1.0f, 1.0f };	// Значения диффузного света
-GLfloat LightPosition	[]=	{ 0.0f, 0.0f, 0.0f, 1.0f };	// Позиция света
+GLfloat LightAmbient	[]=	{ 1.0f, 1.0f, 1.0f, 1.0f };	// Р—РЅР°С‡РµРЅРёСЏ С„РѕРЅРѕРІРѕРіРѕ СЃРІРµС‚Р°
+GLfloat LightDiffuse	[]=	{ 1.0f, 1.0f, 1.0f, 1.0f };	// Р—РЅР°С‡РµРЅРёСЏ РґРёС„С„СѓР·РЅРѕРіРѕ СЃРІРµС‚Р°
+GLfloat LightPosition	[]=	{ 0.0f, 0.0f, 0.0f, 1.0f };	// РџРѕР·РёС†РёСЏ СЃРІРµС‚Р°
 
 Application::Application()
 {
@@ -42,39 +42,39 @@ bool Application::InitOpenGL()
 {
 #ifdef WIN32
 	wglSwapIntervalEXT_Func wglSwapIntervalEXT = (wglSwapIntervalEXT_Func)wglGetProcAddress("wglSwapIntervalEXT");
-	if(wglSwapIntervalEXT) wglSwapIntervalEXT(Globals.VP.Vsync);//1 - чтобы включить
+	if(wglSwapIntervalEXT) wglSwapIntervalEXT(Globals.VP.Vsync);//1 - С‡С‚РѕР±С‹ РІРєР»СЋС‡РёС‚СЊ
 	else FASSERT (wglSwapIntervalEXT);
 #else
 #error Linux is not supported yet
 #endif
 	LF.Logf("InitOpenGL","Vsync status : %d",Globals.VP.Vsync);
-	//===[ Инициализация всякой фигни ]===================================================||
+	//===[ РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІСЃСЏРєРѕР№ С„РёРіРЅРё ]===================================================||
 		Cam.Init();
-	//===[ Наинициализировались ]=========================================================||
+	//===[ РќР°РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°Р»РёСЃСЊ ]=========================================================||
 	glClearColor(0.0f, 0.0f, 0.25f, 0.0f);
-							// Очистка экрана в черный цвет
-	glClearDepth(1.0);		// Разрешить очистку буфера глубины
-	glDepthFunc(GL_LESS);	// Тип теста глубины (рисуется всё что ближе)
-	glEnable(GL_DEPTH_TEST);// разрешить тест глубины
-	glShadeModel(GL_SMOOTH);// разрешить плавное цветовое сглаживание
+							// РћС‡РёСЃС‚РєР° СЌРєСЂР°РЅР° РІ С‡РµСЂРЅС‹Р№ С†РІРµС‚
+	glClearDepth(1.0);		// Р Р°Р·СЂРµС€РёС‚СЊ РѕС‡РёСЃС‚РєСѓ Р±СѓС„РµСЂР° РіР»СѓР±РёРЅС‹
+	glDepthFunc(GL_LESS);	// РўРёРї С‚РµСЃС‚Р° РіР»СѓР±РёРЅС‹ (СЂРёСЃСѓРµС‚СЃСЏ РІСЃС‘ С‡С‚Рѕ Р±Р»РёР¶Рµ)
+	glEnable(GL_DEPTH_TEST);// СЂР°Р·СЂРµС€РёС‚СЊ С‚РµСЃС‚ РіР»СѓР±РёРЅС‹
+	glShadeModel(GL_SMOOTH);// СЂР°Р·СЂРµС€РёС‚СЊ РїР»Р°РІРЅРѕРµ С†РІРµС‚РѕРІРѕРµ СЃРіР»Р°Р¶РёРІР°РЅРёРµ
 	ReshapeWindow(Globals.VP.Width,Globals.VP.Height);
-	glEnable(GL_TEXTURE_2D);	// Разрешение наложения текстур
-	glClearDepth(1.0f);           // Установка буфера глубины
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Улучшенные вычисления перспективы
+	glEnable(GL_TEXTURE_2D);	// Р Р°Р·СЂРµС€РµРЅРёРµ РЅР°Р»РѕР¶РµРЅРёСЏ С‚РµРєСЃС‚СѓСЂ
+	glClearDepth(1.0f);           // РЈСЃС‚Р°РЅРѕРІРєР° Р±СѓС„РµСЂР° РіР»СѓР±РёРЅС‹
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // РЈР»СѓС‡С€РµРЅРЅС‹Рµ РІС‹С‡РёСЃР»РµРЅРёСЏ РїРµСЂСЃРїРµРєС‚РёРІС‹
 	glDisable(GL_POLYGON_SMOOTH);
 	glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
 	glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
 	glEnable(GL_DITHER);
 	//glEnable(GL_CULL_FACE);
-	//==== Свет ==========================================================================//
-	glEnable(GL_LIGHT1); // Разрешение источника света номер один
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Установка Фонового Света
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Установка Диффузного Света
-	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);	// Позиция света
+	//==== РЎРІРµС‚ ==========================================================================//
+	glEnable(GL_LIGHT1); // Р Р°Р·СЂРµС€РµРЅРёРµ РёСЃС‚РѕС‡РЅРёРєР° СЃРІРµС‚Р° РЅРѕРјРµСЂ РѕРґРёРЅ
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// РЈСЃС‚Р°РЅРѕРІРєР° Р¤РѕРЅРѕРІРѕРіРѕ РЎРІРµС‚Р°
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// РЈСЃС‚Р°РЅРѕРІРєР° Р”РёС„С„СѓР·РЅРѕРіРѕ РЎРІРµС‚Р°
+	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);	// РџРѕР·РёС†РёСЏ СЃРІРµС‚Р°
 	glEnable(GL_LIGHTING);
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE,0.0);
 	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE);
-	//=== /Свет ==========================================================================//
+	//=== /РЎРІРµС‚ ==========================================================================//
 
 	return	NO_ERROR;
 }
@@ -90,17 +90,17 @@ bool Application::InitOpenIL()
 
 bool Application::GetSysInfo()
 {
-// ===[ Видео акселератор ]===================================================================================
+// ===[ Р’РёРґРµРѕ Р°РєСЃРµР»РµСЂР°С‚РѕСЂ ]===================================================================================
 	glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT,&SysInfo.video.MaxAnisotropy);
-	SysInfo.video.RendererName	= (char *)glGetString(GL_RENDERER);					// Выводим имя карты
+	SysInfo.video.RendererName	= (char *)glGetString(GL_RENDERER);					// Р’С‹РІРѕРґРёРј РёРјСЏ РєР°СЂС‚С‹
 	LF.Logf("GetSysInfo","Render            %s",SysInfo.video.RendererName);
-	SysInfo.video.VendorName	= (char *)glGetString(GL_VENDOR);					// Выводим имя поставщика
+	SysInfo.video.VendorName	= (char *)glGetString(GL_VENDOR);					// Р’С‹РІРѕРґРёРј РёРјСЏ РїРѕСЃС‚Р°РІС‰РёРєР°
 	LF.Logf("GetSysInfo","Vendor            %s",SysInfo.video.VendorName);
-	SysInfo.video.OpenGL_Version= (char *)glGetString(GL_VERSION);					// Выводим версию
+	SysInfo.video.OpenGL_Version= (char *)glGetString(GL_VERSION);					// Р’С‹РІРѕРґРёРј РІРµСЂСЃРёСЋ
 	LF.Logf("GetSysInfo","OpenGL version is %s",SysInfo.video.OpenGL_Version);
 	SysInfo.video.SupportedGlExtentions = (char *)glGetString(GL_EXTENSIONS);
-	//LF.Msg("Найденые расширения видеокарты"); LF.Msg(SysInfo.video.SupportedGlExtentions);
-// ===[ Процессор::реестр ]=======================================================================================
+	//LF.Msg("РќР°Р№РґРµРЅС‹Рµ СЂР°СЃС€РёСЂРµРЅРёСЏ РІРёРґРµРѕРєР°СЂС‚С‹"); LF.Msg(SysInfo.video.SupportedGlExtentions);
+// ===[ РџСЂРѕС†РµСЃСЃРѕСЂ::СЂРµРµСЃС‚СЂ ]=======================================================================================
 #ifdef WIN32
 	HKEY CPinfo;
 	FASSERT(!RegOpenKeyEx(HKEY_LOCAL_MACHINE,"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0",NULL,KEY_QUERY_VALUE,&CPinfo));
@@ -117,7 +117,7 @@ bool Application::GetSysInfo()
 	RegQueryValueEx(CPinfo,"VendorIdentifier",NULL,NULL,(LPBYTE)&SysInfo.cpu.vendor_id,&bufsize);
 	LF.Logf("GetSysInfo","Vendor ID \"%s\"",SysInfo.cpu.vendor_id);
 	RegCloseKey(CPinfo);
-		// Расширения процессора
+		// Р Р°СЃС€РёСЂРµРЅРёСЏ РїСЂРѕС†РµСЃСЃРѕСЂР°
 	char fichi[128];
 	sprintf(fichi,"Supported extentions: ");
 	SysInfo.cpu.MMX			= (char)IsProcessorFeaturePresent (PF_MMX_INSTRUCTIONS_AVAILABLE)	;
@@ -132,7 +132,7 @@ bool Application::GetSysInfo()
 	if (SysInfo.cpu.SSE2) strcat(fichi," SSE2");
 	LF.Logf("GetSysInfo","%s",fichi);
 #else
-// ===[ Процессор::ассемблер ]====================================================================================
+// ===[ РџСЂРѕС†РµСЃСЃРѕСЂ::Р°СЃСЃРµРјР±Р»РµСЂ ]====================================================================================
 	unsigned __int64 ticks;
 	ticks = GetCycleCount();
 	Sleep (TIME_TO_CALCULATE_CPU_SPEED);
@@ -145,13 +145,13 @@ bool Application::GetSysInfo()
 			DWORD a,b,c,zero;
 		};
 	}			CPU_name;
-	DWORD a,b,c;								// Временные переменные для доставания имени процессора
+	DWORD a,b,c;								// Р’СЂРµРјРµРЅРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РґРѕСЃС‚Р°РІР°РЅРёСЏ РёРјРµРЅРё РїСЂРѕС†РµСЃСЃРѕСЂР°
 	memset (&CPU_name,0,sizeof(CPU_name));
-	DWORD	CPU_features,						// Возможности процессора 32 бита
-			CPU_data_1,							// Данные о прецессоре первые 32 бита
-			CPU_data_2;							// Данные о прецессоре вторые 32 бита
+	DWORD	CPU_features,						// Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё РїСЂРѕС†РµСЃСЃРѕСЂР° 32 Р±РёС‚Р°
+			CPU_data_1,							// Р”Р°РЅРЅС‹Рµ Рѕ РїСЂРµС†РµСЃСЃРѕСЂРµ РїРµСЂРІС‹Рµ 32 Р±РёС‚Р°
+			CPU_data_2;							// Р”Р°РЅРЅС‹Рµ Рѕ РїСЂРµС†РµСЃСЃРѕСЂРµ РІС‚РѕСЂС‹Рµ 32 Р±РёС‚Р°
 	__asm {
-		mov EAX, 00000000h						// Имя вендора процессора
+		mov EAX, 00000000h						// РРјСЏ РІРµРЅРґРѕСЂР° РїСЂРѕС†РµСЃСЃРѕСЂР°
 		CPUID
 		mov a,EBX
 		mov b,EDX
@@ -205,15 +205,15 @@ bool Application::ReadConfig()
 	strcpy(Globals.RES.TEXTURE_DIR,"data/textures/");
 	strcpy(Globals.RES.MESH_DIR,"data/obj/");
 	strcpy(Globals.RES.FONT_DIR,"data/fonts/");
-	// Настройки по умолчанию
+	// РќР°СЃС‚СЂРѕР№РєРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 	Globals.VP.IsFullScreen		=	false;
-	Globals.VP.Width			=	1024;		// Видео настройки
-	Globals.VP.Height			=	768;		// Видео настройки
-	Globals.VP.AR				=	AR::NORMAL;	// Установка AR
+	Globals.VP.Width			=	1024;		// Р’РёРґРµРѕ РЅР°СЃС‚СЂРѕР№РєРё
+	Globals.VP.Height			=	768;		// Р’РёРґРµРѕ РЅР°СЃС‚СЂРѕР№РєРё
+	Globals.VP.AR				=	AR::NORMAL;	// РЈСЃС‚Р°РЅРѕРІРєР° AR
 	Font::SetAspectRatio();
-	Globals.VP.ScreenStrings	=	40;			// Установка количества строк на экране (для консоли)
-	Globals.VP.Bits				=	32;			// Видео настройки
-	Globals.VP.Hzs				=	85;			// Видео настройки
+	Globals.VP.ScreenStrings	=	40;			// РЈСЃС‚Р°РЅРѕРІРєР° РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє РЅР° СЌРєСЂР°РЅРµ (РґР»СЏ РєРѕРЅСЃРѕР»Рё)
+	Globals.VP.Bits				=	32;			// Р’РёРґРµРѕ РЅР°СЃС‚СЂРѕР№РєРё
+	Globals.VP.Hzs				=	85;			// Р’РёРґРµРѕ РЅР°СЃС‚СЂРѕР№РєРё
 
 	KeySet.CamMoveForward		=	'W'		;	// W key
 	KeySet.CamMoveBackward		=	'S'		;	// S
@@ -231,12 +231,12 @@ bool Application::ReadConfig()
 	
 	Globals.TextureFiltering	=	FJC_TEX_ANISOTROPIC_FILTERING;
 //	Globals.lists				=	0;
-	// =========================================== Конец настроек по умолчанию
+	// =========================================== РљРѕРЅРµС† РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
-	char	buf2 [512];							// Буфер для чтения конфига
-	char	name [128];							// Имя опции
-	char	param[384];							// Параметр
-	char	*buf;								// Указатель на буфер (или 0)
+	char	buf2 [512];							// Р‘СѓС„РµСЂ РґР»СЏ С‡С‚РµРЅРёСЏ РєРѕРЅС„РёРіР°
+	char	name [128];							// РРјСЏ РѕРїС†РёРё
+	char	param[384];							// РџР°СЂР°РјРµС‚СЂ
+	char	*buf;								// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ (РёР»Рё 0)
 	int i = 0;
 	bool	False = false;
 
@@ -251,39 +251,39 @@ bool Application::ReadConfig()
 			for (;(buf[i]!=' ')&&(buf[i]!=0)&&(i<127);i++){
 				name[i]=buf[i];
 			};
-			i++;								// Пропуск пробела!(он один потому что CleanString)
+			i++;								// РџСЂРѕРїСѓСЃРє РїСЂРѕР±РµР»Р°!(РѕРЅ РѕРґРёРЅ РїРѕС‚РѕРјСѓ С‡С‚Рѕ CleanString)
 			for (int j=0;(i < 512)&&(buf2[i]!=0);i++,j++){
 				param[j] = buf2[i];
 			};
 			_strlwr(name);
 		do{
-			if (strcmp( name , "width" ) == 0){							// Ширина экрана ( окошка )
+			if (strcmp( name , "width" ) == 0){							// РЁРёСЂРёРЅР° СЌРєСЂР°РЅР° ( РѕРєРѕС€РєР° )
 				sscanf(param,"%d",&Globals.VP.Width);
 				break;
 			}
-			if (strcmp( name , "height" ) ==0){							// Высота экрана ( окошка )
+			if (strcmp( name , "height" ) ==0){							// Р’С‹СЃРѕС‚Р° СЌРєСЂР°РЅР° ( РѕРєРѕС€РєР° )
 				sscanf(param,"%d",&Globals.VP.Height);
 				break;
 			}
-			if (strcmp( name , "fullscreen" ) ==0){						// запускать в полноэкранном режиме?
+			if (strcmp( name , "fullscreen" ) ==0){						// Р·Р°РїСѓСЃРєР°С‚СЊ РІ РїРѕР»РЅРѕСЌРєСЂР°РЅРЅРѕРј СЂРµР¶РёРјРµ?
 				if (strcmp(param,"true")==0)	{IsFullScreen = true;};
 				if (strcmp(param,"false")==0)	{IsFullScreen = false;};
 				break;
 			}
-			if (strcmp( name , "bits" ) ==0){							// битность экрана
+			if (strcmp( name , "bits" ) ==0){							// Р±РёС‚РЅРѕСЃС‚СЊ СЌРєСЂР°РЅР°
 				sscanf(param,"%d",&Globals.VP.Bits);
 				break;
 			}
-			if (strcmp( name , "frequency" ) ==0){						// Частота развёртки
+			if (strcmp( name , "frequency" ) ==0){						// Р§Р°СЃС‚РѕС‚Р° СЂР°Р·РІС‘СЂС‚РєРё
 				sscanf(param,"%d",&Globals.VP.Hzs);
 				break;
 			}
-			if (strcmp( name , "vsync" ) ==0){							// Вертикальная синхронизация
+			if (strcmp( name , "vsync" ) ==0){							// Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ
 				if (strcmp(param,"ON")==0)	{Globals.VP.Vsync = 1;};
 				if (strcmp(param,"OFF")==0)	{Globals.VP.Vsync = 0;};
 				break;
 			}
-			if (strcmp( name , "model" ) ==0){							// Вертикальная синхронизация
+			if (strcmp( name , "model" ) ==0){							// Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ
 				strcpy(ModelName,param);
 				break;
 			}
@@ -323,7 +323,7 @@ bool Application::AppLoopFunc()
 {
 	MSG msg;
 	ZeroMemory(&msg,sizeof(MSG));
-	do	{// Обработка всех сообщений
+	do	{// РћР±СЂР°Р±РѕС‚РєР° РІСЃРµС… СЃРѕРѕР±С‰РµРЅРёР№
 			while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
 			{
 				if (GetMessage(&msg, NULL, 0, 0))
@@ -345,7 +345,7 @@ bool Application::AppLoopFunc()
 		SwapBuffersEXT();
 		}
 	while (	!Globals.Exiting );
-	return true;// Выход
+	return true;// Р’С‹С…РѕРґ
 }
 
 bool Application::Birth()
@@ -354,9 +354,9 @@ bool Application::Birth()
 	Globals.Exiting	=	false;
 	srand(GetTickCount());
 	Input::I = new Input::Input_t;
-	//===[ КОНФИГУРАЦИЯ ]===========================================================================
+	//===[ РљРћРќР¤РР“РЈР РђР¦РРЇ ]===========================================================================
 		ReadConfig();
-	//===[ КОНФИГУРАЦИЯ ]===========================================================================	
+	//===[ РљРћРќР¤РР“РЈР РђР¦РРЇ ]===========================================================================	
 	CCons.INIT();
 #ifdef WIN32
 	WNDCLASSEX wc;
@@ -414,12 +414,12 @@ bool Application::Birth()
 
 	if(IsFullScreen)
 	{
-			dwExStyle	= WS_EX_APPWINDOW/* | WS_EX_TOPMOST*/; // WS_EX_TOPMOST - Поверх всех окон
+			dwExStyle	= WS_EX_APPWINDOW/* | WS_EX_TOPMOST*/; // WS_EX_TOPMOST - РџРѕРІРµСЂС… РІСЃРµС… РѕРєРѕРЅ
 			dwStyle		= WS_POPUP;
 	}
 	else
 	{
-// ВНИМАНИЕ Здесь обнаружены глюки при использовании nView от nVidia!
+// Р’РќРРњРђРќРР• Р—РґРµСЃСЊ РѕР±РЅР°СЂСѓР¶РµРЅС‹ РіР»СЋРєРё РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё nView РѕС‚ nVidia!
 			dwExStyle	= WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
 			dwStyle		= WS_OVERLAPPEDWINDOW;
 	};
@@ -448,10 +448,10 @@ bool Application::Birth()
 	SetForegroundWindow(Application::Vars.win.MHWnd);
 	SetFocus(Application::Vars.win.MHWnd);
 
-	// Получаем контекст устройства
+	// РџРѕР»СѓС‡Р°РµРј РєРѕРЅС‚РµРєСЃС‚ СѓСЃС‚СЂРѕР№СЃС‚РІР°
 	Application::Vars.win.DC = GetDC(Application::Vars.win.MHWnd);
 		FASSERT(Application::Vars.win.DC);
-	// Установка формата пикселей
+	// РЈСЃС‚Р°РЅРѕРІРєР° С„РѕСЂРјР°С‚Р° РїРёРєСЃРµР»РµР№
 		PIXELFORMATDESCRIPTOR mainPFD;
 		memset(&mainPFD,0,sizeof(PIXELFORMATDESCRIPTOR));
 		mainPFD.nSize			= sizeof(PIXELFORMATDESCRIPTOR);
@@ -462,23 +462,23 @@ bool Application::Birth()
 		mainPFD.cDepthBits		=	16;
 		int PF;
 		PF = ChoosePixelFormat(Application::Vars.win.DC,&mainPFD);
-		FASSERT(PF);	// Выбрали!
-		FASSERT(SetPixelFormat(Application::Vars.win.DC,PF,&mainPFD));			// Поставили!
-	// Создание контекста рендера
+		FASSERT(PF);	// Р’С‹Р±СЂР°Р»Рё!
+		FASSERT(SetPixelFormat(Application::Vars.win.DC,PF,&mainPFD));			// РџРѕСЃС‚Р°РІРёР»Рё!
+	// РЎРѕР·РґР°РЅРёРµ РєРѕРЅС‚РµРєСЃС‚Р° СЂРµРЅРґРµСЂР°
 		Application::Vars.win.RC = wglCreateContext (Application::Vars.win.DC);
 		FASSERT(Application::Vars.win.RC);
-	// Установка полученого контекста главным
+	// РЈСЃС‚Р°РЅРѕРІРєР° РїРѕР»СѓС‡РµРЅРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р° РіР»Р°РІРЅС‹Рј
 		FASSERT(wglMakeCurrent (Application::Vars.win.DC, Application::Vars.win.RC));
 #else
-		dpy = XOpenDisplay(0);						// Открываем дисплей по-умолчанию (может быть сетевой)
-		vi = glXChooseVisual(	dpy,				// Получаем подходящий визуал
+		dpy = XOpenDisplay(0);						// РћС‚РєСЂС‹РІР°РµРј РґРёСЃРїР»РµР№ РїРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ (РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃРµС‚РµРІРѕР№)
+		vi = glXChooseVisual(	dpy,				// РџРѕР»СѓС‡Р°РµРј РїРѕРґС…РѕРґСЏС‰РёР№ РІРёР·СѓР°Р»
 								DefaultScreen(dpy),
 								attributeList);
-		cx = glXCreateContext(dpy, vi, 0, GL_TRUE);	// Создание контекста
+		cx = glXCreateContext(dpy, vi, 0, GL_TRUE);	// РЎРѕР·РґР°РЅРёРµ РєРѕРЅС‚РµРєСЃС‚Р°
 		// create	a color	map
 		cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen),
 				 vi->visual, AllocNone);
-		// Создаём окно
+		// РЎРѕР·РґР°С‘Рј РѕРєРЅРѕ
 		swa.colormap = cmap;
 		swa.border_pixel = 0;
 		swa.event_mask = StructureNotifyMask;
@@ -489,7 +489,7 @@ bool Application::Birth()
 		XIfEvent(dpy, &event, WaitForNotify, (char*)win);
 
 		
-		glXMakeCurrent(dpy, win, cx);				// Привязка контекста к окну
+		glXMakeCurrent(dpy, win, cx);				// РџСЂРёРІСЏР·РєР° РєРѕРЅС‚РµРєСЃС‚Р° Рє РѕРєРЅСѓ
 #endif
 		GetSysInfo();
 #ifndef	_DEBUG
@@ -502,15 +502,15 @@ bool Application::Birth()
 		}
 		else
 		{
-			LF.Logf("Birth","Невозможно загрузить и проиграть заставку");
+			LF.Logf("Birth","РќРµРІРѕР·РјРѕР¶РЅРѕ Р·Р°РіСЂСѓР·РёС‚СЊ Рё РїСЂРѕРёРіСЂР°С‚СЊ Р·Р°СЃС‚Р°РІРєСѓ");
 		}
 #endif
-	// Инициализация библиотек и глобальных объектов
-		InitOpenGL();						// Графика - OpenGL
+	// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р±РёР±Р»РёРѕС‚РµРє Рё РіР»РѕР±Р°Р»СЊРЅС‹С… РѕР±СЉРµРєС‚РѕРІ
+		InitOpenGL();						// Р“СЂР°С„РёРєР° - OpenGL
 		LF.Log("BIRTH","Init OpenGL complete");
-		InitOpenIL();						// Поддержка изображений - OpenIL(DevIL)
+		InitOpenIL();						// РџРѕРґРґРµСЂР¶РєР° РёР·РѕР±СЂР°Р¶РµРЅРёР№ - OpenIL(DevIL)
 		LF.Log("BIRTH","Init OpenIL complete");
-// инициализация менеджера ресурсов		
+// РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРµРЅРµРґР¶РµСЂР° СЂРµСЃСѓСЂСЃРѕРІ		
 		rm.INIT("Consolas.LFont","default.png","cube.lwo");
 		CCons.SetFont(rm.SELECT_Font("Console"));
 
@@ -525,7 +525,7 @@ bool Application::Birth()
 		TestSource.Init();
 		TestSource.LinkWithBufer(&TestBuf);
 		LF.Log("BIRTH","Init OpenAL complete");
-		InitMATH();							// Математическая библиотека
+		InitMATH();							// РњР°С‚РµРјР°С‚РёС‡РµСЃРєР°СЏ Р±РёР±Р»РёРѕС‚РµРєР°
 		LF.Log("BIRTH","InitMATH");
 		LF.Msg("Init complete");
 		LoadResources();
@@ -567,24 +567,24 @@ LF.End(true);
 bool Application::Work()
 {
 	GT.Start();
-	AppLoopFunc();			// Вызов цикла обработки сообщений
+	AppLoopFunc();			// Р’С‹Р·РѕРІ С†РёРєР»Р° РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№
 	return NO_ERROR;
 };
 
 bool Application::ReshapeWindow(int width, int height)
 {
-	if (height==0)	height=1;		// Чтобы избежать деления на ноль
-	glViewport(0,0,width,height);	// Создание "вюпорта"
+	if (height==0)	height=1;		// Р§С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РґРµР»РµРЅРёСЏ РЅР° РЅРѕР»СЊ
+	glViewport(0,0,width,height);	// РЎРѕР·РґР°РЅРёРµ "РІСЋРїРѕСЂС‚Р°"
 	Globals.VP.Width=width;	Globals.VP.Height=height;
 
-	glMatrixMode(GL_PROJECTION);	// Матрица проэкций
-	glLoadIdentity();				// Загрузка единичной матрицы
-	// Умное создание Frustum'a (или глупое - кому как)
+	glMatrixMode(GL_PROJECTION);	// РњР°С‚СЂРёС†Р° РїСЂРѕСЌРєС†РёР№
+	glLoadIdentity();				// Р—Р°РіСЂСѓР·РєР° РµРґРёРЅРёС‡РЅРѕР№ РјР°С‚СЂРёС†С‹
+	// РЈРјРЅРѕРµ СЃРѕР·РґР°РЅРёРµ Frustum'a (РёР»Рё РіР»СѓРїРѕРµ - РєРѕРјСѓ РєР°Рє)
 	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.5f,10000.0f);
 	//glFrustum(,,,,,);
 
-	glMatrixMode(GL_MODELVIEW);		// Видовая матрица
-	glLoadIdentity();				// Загрузка единичной матрицы
+	glMatrixMode(GL_MODELVIEW);		// Р’РёРґРѕРІР°СЏ РјР°С‚СЂРёС†Р°
+	glLoadIdentity();				// Р—Р°РіСЂСѓР·РєР° РµРґРёРЅРёС‡РЅРѕР№ РјР°С‚СЂРёС†С‹
 	return NO_ERROR;
 };
 void Application::ProcessKBInput()
@@ -592,7 +592,7 @@ void Application::ProcessKBInput()
 	if (Input::I->process(VK_OEM_3))
 		CCons.ChangeState();
 
-	if (CCons.Visible())	return;		// Если консоль видима, оставляем все кнопочки ей
+	if (CCons.Visible())	return;		// Р•СЃР»Рё РєРѕРЅСЃРѕР»СЊ РІРёРґРёРјР°, РѕСЃС‚Р°РІР»СЏРµРј РІСЃРµ РєРЅРѕРїРѕС‡РєРё РµР№
 
 	if (Input::I->get(VK_ESCAPE))
 	{
@@ -670,11 +670,11 @@ LRESULT CALLBACK WndProc(	HWND hWnd,
 	
 	switch (uMsg)
 	{
-	case WM_SIZE:		// Событие: Изменение размера
-		if(!MainApplication->IsFullScreen)			// Если приложение работает в окне
+	case WM_SIZE:		// РЎРѕР±С‹С‚РёРµ: РР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР°
+		if(!MainApplication->IsFullScreen)			// Р•СЃР»Рё РїСЂРёР»РѕР¶РµРЅРёРµ СЂР°Р±РѕС‚Р°РµС‚ РІ РѕРєРЅРµ
 		{MainApplication->ReshapeWindow(LOWORD(lParam), HIWORD(lParam));}
 		break; 
-//Управляющие события
+//РЈРїСЂР°РІР»СЏСЋС‰РёРµ СЃРѕР±С‹С‚РёСЏ
 	case WM_LBUTTONDOWN:
 		//if ()
 		Input::I->KeyDown	(VK_LBUTTON);
@@ -722,7 +722,7 @@ LRESULT CALLBACK WndProc(	HWND hWnd,
 		MainApplication->CCons.ProcessChar((char)(wParam & 0x000000FF));
 		break;
 
-	case WM_CLOSE:										// Закрываемся уже
+	case WM_CLOSE:										// Р—Р°РєСЂС‹РІР°РµРјСЃСЏ СѓР¶Рµ
 		Globals.Exiting = true;
 		break;
 	default:											// Return by default
@@ -753,9 +753,9 @@ void Application::RenderTexture()
 	glDisable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);							// Чёрный фон
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// Очистка буфера цвета
-	glDepthFunc(GL_NOTEQUAL);										// Настроим глубину
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);							// Р§С‘СЂРЅС‹Р№ С„РѕРЅ
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° С†РІРµС‚Р°
+	glDepthFunc(GL_NOTEQUAL);										// РќР°СЃС‚СЂРѕРёРј РіР»СѓР±РёРЅСѓ
 	glDepthMask(false);
 	glDisable(GL_DEPTH_TEST);
 
@@ -763,7 +763,7 @@ void Application::RenderTexture()
 	glOrtho(0,1,0,1,-1,1);
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
-	glBegin(GL_QUADS);		// Отрисовываем текущую текстурку
+	glBegin(GL_QUADS);		// РћС‚СЂРёСЃРѕРІС‹РІР°РµРј С‚РµРєСѓС‰СѓСЋ С‚РµРєСЃС‚СѓСЂРєСѓ
 		glTexCoord2d(0,1);		glVertex2d(0,1);
 		glTexCoord2d(1,1);		glVertex2d(1,1);
 		glTexCoord2d(1,0);		glVertex2d(1,0);
@@ -786,7 +786,7 @@ void	Application::ShowMovie(bool	CanBreak)
 	MSG msg;
 	ZeroMemory(&msg,sizeof(MSG));
 	do
-	{// Обработка всех сообщений
+	{// РћР±СЂР°Р±РѕС‚РєР° РІСЃРµС… СЃРѕРѕР±С‰РµРЅРёР№
 			while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
 			{
 				if (GetMessage(&msg, NULL, 0, 0))

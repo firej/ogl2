@@ -4,7 +4,7 @@
 #include "./sound/sound.h"
 
 
-//Конструктор по умолчанию - просто обнуляет позицию и направление взгляда
+//РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - РїСЂРѕСЃС‚Рѕ РѕР±РЅСѓР»СЏРµС‚ РїРѕР·РёС†РёСЋ Рё РЅР°РїСЂР°РІР»РµРЅРёРµ РІР·РіР»СЏРґР°
 
 CameraSet	CamS;
 SkyBox		MSB;
@@ -16,17 +16,17 @@ Camera::Camera(void)
 //	memset(&Direction,	0,	sizeof(Vector3f));
 	memset(&Angles	,	0,	sizeof(Angles));
 }
-//Деструктор камеры
+//Р”РµСЃС‚СЂСѓРєС‚РѕСЂ РєР°РјРµСЂС‹
 Camera::~Camera(void)
 {
 }
 
 void Camera::Init	(void)
 {
-	center.d.c.x = Globals.VP.Width  >> 1;					// Находим середину длины
-	center.d.c.y = Globals.VP.Height >> 1;					// Находим серелину высоты
-	SetCursorPos(center.d.c.x, center.d.c.y);				// Установка указателя в "спокойное" состояние
-	Position = CamS.CamStartPosition;						// Стартовая позиция камеры
+	center.d.c.x = Globals.VP.Width  >> 1;					// РќР°С…РѕРґРёРј СЃРµСЂРµРґРёРЅСѓ РґР»РёРЅС‹
+	center.d.c.y = Globals.VP.Height >> 1;					// РќР°С…РѕРґРёРј СЃРµСЂРµР»РёРЅСѓ РІС‹СЃРѕС‚С‹
+	SetCursorPos(center.d.c.x, center.d.c.y);				// РЈСЃС‚Р°РЅРѕРІРєР° СѓРєР°Р·Р°С‚РµР»СЏ РІ "СЃРїРѕРєРѕР№РЅРѕРµ" СЃРѕСЃС‚РѕСЏРЅРёРµ
+	Position = CamS.CamStartPosition;						// РЎС‚Р°СЂС‚РѕРІР°СЏ РїРѕР·РёС†РёСЏ РєР°РјРµСЂС‹
 }
 
 void Camera::Look	(void)
@@ -39,11 +39,11 @@ void Camera::Look	(void)
 	glRotated(360-Angles.d.c.y,	0.0f,	1.0f,	0.0f);
 	glRotated(Angles.d.c.z,		0.0f,	0.0f,	1.0f);
 
-	MSB();											// Отрисовка неба
+	MSB();											// РћС‚СЂРёСЃРѕРІРєР° РЅРµР±Р°
 
 	glTranslated(	Position.d.c.x,
 					Position.d.c.y,
-					Position.d.c.z);// Перемещает камеру в точку Position
+					Position.d.c.z);// РџРµСЂРµРјРµС‰Р°РµС‚ РєР°РјРµСЂСѓ РІ С‚РѕС‡РєСѓ Position
 
 	Sound.SetLPosition(Point3f((float)Position.d.c.x,(float)Position.d.c.y,(float)Position.d.c.z));
 	Sound.SetLOrientation(Vector3f((float)Direction.d.c.x,(float)Direction.d.c.y,(float)Direction.d.c.z), Vector3f(0.0f,1.0f,0.0f));
@@ -148,26 +148,26 @@ void Camera::KeybMove		(void)
 		Camera::SetPosition( CamS.CamStartPosition);
 }
 
-// FJ_INPUT интерфейс камеры
+// FJ_INPUT РёРЅС‚РµСЂС„РµР№СЃ РєР°РјРµСЂС‹
 
-void Camera::RecalculateDirection	(void)						// Пересчёт вектора вперёд
+void Camera::RecalculateDirection	(void)						// РџРµСЂРµСЃС‡С‘С‚ РІРµРєС‚РѕСЂР° РІРїРµСЂС‘Рґ
 {	Direction.d.c.x	=	+ cost(Angles.d.c.x)*sint(Angles.d.c.y);	/*cost((const short int)Angles.y);*/
 	Direction.d.c.y	=	+ sint(Angles.d.c.x);					/*sint((const short int)Angles.x);*/
 	Direction.d.c.z	=	+ cost(Angles.d.c.x)*cost(Angles.d.c.y);	/*sint((const short int)Angles.y);*/
 	Direction.normalize();
 }
-void Camera::RecalculateStrafe		(void)						// Пересчёт вектора направленного влево
+void Camera::RecalculateStrafe		(void)						// РџРµСЂРµСЃС‡С‘С‚ РІРµРєС‚РѕСЂР° РЅР°РїСЂР°РІР»РµРЅРЅРѕРіРѕ РІР»РµРІРѕ
 {	Strafe.d.c.x	=	+ sint(Angles.d.c.y + 90);
 	Strafe.d.c.y	=	0;
 	Strafe.d.c.z	=	+ cost(Angles.d.c.y + 90);
 	Strafe.normalize();
 }
-void Camera::MoveModelViewMatrix	(void)						// Перемещение системы координат для рендеринга
+void Camera::MoveModelViewMatrix	(void)						// РџРµСЂРµРјРµС‰РµРЅРёРµ СЃРёСЃС‚РµРјС‹ РєРѕРѕСЂРґРёРЅР°С‚ РґР»СЏ СЂРµРЅРґРµСЂРёРЅРіР°
 {	glTranslated(	Position.d.c.x,
 					Position.d.c.y,
-					Position.d.c.z);// Перемещает камеру в точку Position
+					Position.d.c.z);// РџРµСЂРµРјРµС‰Р°РµС‚ РєР°РјРµСЂСѓ РІ С‚РѕС‡РєСѓ Position
 }
-void Camera::RotateModelViewMatrix	(void)						// Поворот системы координат
+void Camera::RotateModelViewMatrix	(void)						// РџРѕРІРѕСЂРѕС‚ СЃРёСЃС‚РµРјС‹ РєРѕРѕСЂРґРёРЅР°С‚
 {	glRotated(Angles.d.c.x		,	1.0f,	0.0f,	0.0f);
 	glRotated(360-Angles.d.c.y	,	0.0f,	1.0f,	0.0f);
 	glRotated(Angles.d.c.z		,	0.0f,	0.0f,	1.0f);

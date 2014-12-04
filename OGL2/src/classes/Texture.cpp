@@ -45,34 +45,34 @@ bool TextureClass::Load(const char* Name)
 };
 bool TextureClass::Load()
 {
-	//ilLoad(FType,TextureFileName);				// Загрузка файла с явным указанием типа
-	if (IL_FALSE == ilLoadImage(TextureFileName))		// Загрузка файла
+	//ilLoad(FType,TextureFileName);				// Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р° СЃ СЏРІРЅС‹Рј СѓРєР°Р·Р°РЅРёРµРј С‚РёРїР°
+	if (IL_FALSE == ilLoadImage(TextureFileName))		// Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р°
 	{
 		return true;
 	};
-	//{char* strError = iluErrorString(err);MessageBox(NULL, Message, "Ошибка при загрузке!", MB_OK);
-	iWidth = ilGetInteger(IL_IMAGE_WIDTH);			// Ширина изображения
-	iHeight = ilGetInteger(IL_IMAGE_HEIGHT);		// Высота изображения
-	Bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);	// Число байт на пиксель
-	size = iWidth * iHeight * Bpp;					// Размер памяти
-	data = new unsigned char[size];					// Память под массив
-	unsigned char* copyData = ilGetData();			// Получение растровых данных
-	memcpy(data, copyData, size);					// Копирование растровых данных
+	//{char* strError = iluErrorString(err);MessageBox(NULL, Message, "РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ!", MB_OK);
+	iWidth = ilGetInteger(IL_IMAGE_WIDTH);			// РЁРёСЂРёРЅР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+	iHeight = ilGetInteger(IL_IMAGE_HEIGHT);		// Р’С‹СЃРѕС‚Р° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+	Bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);	// Р§РёСЃР»Рѕ Р±Р°Р№С‚ РЅР° РїРёРєСЃРµР»СЊ
+	size = iWidth * iHeight * Bpp;					// Р Р°Р·РјРµСЂ РїР°РјСЏС‚Рё
+	data = new unsigned char[size];					// РџР°РјСЏС‚СЊ РїРѕРґ РјР°СЃСЃРёРІ
+	unsigned char* copyData = ilGetData();			// РџРѕР»СѓС‡РµРЅРёРµ СЂР°СЃС‚СЂРѕРІС‹С… РґР°РЅРЅС‹С…
+	memcpy(data, copyData, size);					// РљРѕРїРёСЂРѕРІР°РЅРёРµ СЂР°СЃС‚СЂРѕРІС‹С… РґР°РЅРЅС‹С…
 
-	switch (Bpp) {									// переопределить тип для OpenGL
-	case 1:	type = GL_RGB8;		break;				// Картинка с палитрой
-	case 3:	type = GL_RGB;		break;				// 24 бита (Red, Green, Blue)
-	case 4:	type = GL_RGBA;		break;}				// 32 бита (Red, Green, Blue, Alpha)
+	switch (Bpp) {									// РїРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ С‚РёРї РґР»СЏ OpenGL
+	case 1:	type = GL_RGB8;		break;				// РљР°СЂС‚РёРЅРєР° СЃ РїР°Р»РёС‚СЂРѕР№
+	case 3:	type = GL_RGB;		break;				// 24 Р±РёС‚Р° (Red, Green, Blue)
+	case 4:	type = GL_RGBA;		break;}				// 32 Р±РёС‚Р° (Red, Green, Blue, Alpha)
 	
 //============================================================================================================||
-//===== Загрузка текстуры в OpenGL ===========================================================================||
+//===== Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂС‹ РІ OpenGL ===========================================================================||
 	glGenTextures(1, &Number);
 	glBindTexture(GL_TEXTURE_2D, Number);
 	
-	//выбираем фильтрацию
+	//РІС‹Р±РёСЂР°РµРј С„РёР»СЊС‚СЂР°С†РёСЋ
 	switch (FilterMode)
 	{
-    //без фильтрации
+    //Р±РµР· С„РёР»СЊС‚СЂР°С†РёРё
 	case FJC_TEX_NO_FILTERING:
 		{
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
@@ -80,7 +80,7 @@ bool TextureClass::Load()
 			glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
 		}break;
 
-		//простая билинейная фильтрация
+		//РїСЂРѕСЃС‚Р°СЏ Р±РёР»РёРЅРµР№РЅР°СЏ С„РёР»СЊС‚СЂР°С†РёСЏ
 	case FJC_TEX_BILINEAR_FILTERING:
 		{
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -89,60 +89,60 @@ bool TextureClass::Load()
 
 		}break;
 
-		//Трилинейная
+		//РўСЂРёР»РёРЅРµР№РЅР°СЏ
 	case FJC_TEX_TRILINEAR_FILTERING:
 		{
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-			//--Делаем мипмапы
+			//--Р”РµР»Р°РµРј РјРёРїРјР°РїС‹
 			gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
 
 		}break;
 
-		//Анизотропная
+		//РђРЅРёР·РѕС‚СЂРѕРїРЅР°СЏ
 	case FJC_TEX_ANISOTROPIC_FILTERING:
 		{
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,SysInfo.video.MaxAnisotropy);
-			//--Делаем мипмапы
+			//--Р”РµР»Р°РµРј РјРёРїРјР°РїС‹
 			gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
 		}break;
 	}//switch(filtermode)
-	// Удаление ненужного массива
+	// РЈРґР°Р»РµРЅРёРµ РЅРµРЅСѓР¶РЅРѕРіРѕ РјР°СЃСЃРёРІР°
 	if (data) {	delete [] data;	data = NULL;}
 	return false;
 };
 bool	TextureClass::LoadL(ILenum Type, void *Lump, ILuint size)
 {
 	FilterMode = (int) Globals.TextureFiltering;
-	if (IL_FALSE == ilLoadL(Type,Lump,size))		// Загрузка файла
+	if (IL_FALSE == ilLoadL(Type,Lump,size))		// Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р°
 	{
 		return true;
 	};
-	//{char* strError = iluErrorString(err);MessageBox(NULL, Message, "Ошибка при загрузке!", MB_OK);
-	iWidth = ilGetInteger(IL_IMAGE_WIDTH);			// Ширина изображения
-	iHeight = ilGetInteger(IL_IMAGE_HEIGHT);		// Высота изображения
-	Bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);	// Число байт на пиксель
-	size = iWidth * iHeight * Bpp;					// Размер памяти
-	data = new unsigned char[size];					// Память под массив
-	unsigned char* copyData = ilGetData();			// Получение растровых данных
-	memcpy(data, copyData, size);					// Копирование растровых данных
+	//{char* strError = iluErrorString(err);MessageBox(NULL, Message, "РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ!", MB_OK);
+	iWidth = ilGetInteger(IL_IMAGE_WIDTH);			// РЁРёСЂРёРЅР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+	iHeight = ilGetInteger(IL_IMAGE_HEIGHT);		// Р’С‹СЃРѕС‚Р° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+	Bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);	// Р§РёСЃР»Рѕ Р±Р°Р№С‚ РЅР° РїРёРєСЃРµР»СЊ
+	size = iWidth * iHeight * Bpp;					// Р Р°Р·РјРµСЂ РїР°РјСЏС‚Рё
+	data = new unsigned char[size];					// РџР°РјСЏС‚СЊ РїРѕРґ РјР°СЃСЃРёРІ
+	unsigned char* copyData = ilGetData();			// РџРѕР»СѓС‡РµРЅРёРµ СЂР°СЃС‚СЂРѕРІС‹С… РґР°РЅРЅС‹С…
+	memcpy(data, copyData, size);					// РљРѕРїРёСЂРѕРІР°РЅРёРµ СЂР°СЃС‚СЂРѕРІС‹С… РґР°РЅРЅС‹С…
 
-	switch (Bpp) {									// переопределить тип для OpenGL
-	case 1:	type = GL_RGB8;		break;				// Картинка с палитрой
-	case 3:	type = GL_RGB;		break;				// 24 бита (Red, Green, Blue)
-	case 4:	type = GL_RGBA;		break;}				// 32 бита (Red, Green, Blue, Alpha)
+	switch (Bpp) {									// РїРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ С‚РёРї РґР»СЏ OpenGL
+	case 1:	type = GL_RGB8;		break;				// РљР°СЂС‚РёРЅРєР° СЃ РїР°Р»РёС‚СЂРѕР№
+	case 3:	type = GL_RGB;		break;				// 24 Р±РёС‚Р° (Red, Green, Blue)
+	case 4:	type = GL_RGBA;		break;}				// 32 Р±РёС‚Р° (Red, Green, Blue, Alpha)
 	
 //============================================================================================================||
-//===== Загрузка текстуры в OpenGL ===========================================================================||
+//===== Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂС‹ РІ OpenGL ===========================================================================||
 	glGenTextures(1, &Number);
 	glBindTexture(GL_TEXTURE_2D, Number);
 	
-	//выбираем фильтрацию
+	//РІС‹Р±РёСЂР°РµРј С„РёР»СЊС‚СЂР°С†РёСЋ
 	switch (FilterMode)
 	{
-    //без фильтрации
+    //Р±РµР· С„РёР»СЊС‚СЂР°С†РёРё
 	case FJC_TEX_NO_FILTERING:
 		{
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
@@ -150,7 +150,7 @@ bool	TextureClass::LoadL(ILenum Type, void *Lump, ILuint size)
 			glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
 		}break;
 
-		//простая билинейная фильтрация
+		//РїСЂРѕСЃС‚Р°СЏ Р±РёР»РёРЅРµР№РЅР°СЏ С„РёР»СЊС‚СЂР°С†РёСЏ
 	case FJC_TEX_BILINEAR_FILTERING:
 		{
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -159,23 +159,23 @@ bool	TextureClass::LoadL(ILenum Type, void *Lump, ILuint size)
 
 		}break;
 
-		//Трилинейная
+		//РўСЂРёР»РёРЅРµР№РЅР°СЏ
 	case FJC_TEX_TRILINEAR_FILTERING:
 		{
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-			//--Делаем мипмапы
+			//--Р”РµР»Р°РµРј РјРёРїРјР°РїС‹
 			gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
 
 		}break;
 
-		//Анизотропная
+		//РђРЅРёР·РѕС‚СЂРѕРїРЅР°СЏ
 	case FJC_TEX_ANISOTROPIC_FILTERING:
 		{
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,SysInfo.video.MaxAnisotropy);
-			//--Делаем мипмапы
+			//--Р”РµР»Р°РµРј РјРёРїРјР°РїС‹
 			gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
 		}break;
 	default:
@@ -184,7 +184,7 @@ bool	TextureClass::LoadL(ILenum Type, void *Lump, ILuint size)
 		glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
 		break;
 	}//switch(filtermode)
-	// Удаление ненужного массива
+	// РЈРґР°Р»РµРЅРёРµ РЅРµРЅСѓР¶РЅРѕРіРѕ РјР°СЃСЃРёРІР°
 	if (data) {	delete [] data;	data = NULL;}
 	return false;
 }
@@ -216,16 +216,16 @@ void FJCRendererTexture::Init	(
 void FJCRendererTexture::Init	()
 {
 	data = (unsigned char*)new GLuint[(size * sizeof(unsigned char))];
-	// Очистка памяти массива
+	// РћС‡РёСЃС‚РєР° РїР°РјСЏС‚Рё РјР°СЃСЃРёРІР°
 	ZeroMemory(data,(size * sizeof(unsigned char)));
-	glGenTextures(1, &Number);            // Создать 1 текстуру
-	glBindTexture(GL_TEXTURE_2D, Number); // Связать текстуру
-	// Построить текстуру по информации в data
+	glGenTextures(1, &Number);            // РЎРѕР·РґР°С‚СЊ 1 С‚РµРєСЃС‚СѓСЂСѓ
+	glBindTexture(GL_TEXTURE_2D, Number); // РЎРІСЏР·Р°С‚СЊ С‚РµРєСЃС‚СѓСЂСѓ
+	// РџРѕСЃС‚СЂРѕРёС‚СЊ С‚РµРєСЃС‚СѓСЂСѓ РїРѕ РёРЅС„РѕСЂРјР°С†РёРё РІ data
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, iWidth, iHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	//выбираем фильтрацию
+	//РІС‹Р±РёСЂР°РµРј С„РёР»СЊС‚СЂР°С†РёСЋ
 	/*switch (FilterMode)
 	{
-    //без фильтрации
+    //Р±РµР· С„РёР»СЊС‚СЂР°С†РёРё
 	case FJC_TEX_NO_FILTERING:
 		{
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
@@ -233,7 +233,7 @@ void FJCRendererTexture::Init	()
 			glTexImage2D(GL_TEXTURE_2D, 0, 4, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		}break;
 
-		//простая билинейная фильтрация
+		//РїСЂРѕСЃС‚Р°СЏ Р±РёР»РёРЅРµР№РЅР°СЏ С„РёР»СЊС‚СЂР°С†РёСЏ
 	case FJC_TEX_BILINEAR_FILTERING:
 		{
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -241,7 +241,7 @@ void FJCRendererTexture::Init	()
 			glTexImage2D(GL_TEXTURE_2D, 0, 4, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		}break;
 	}//switch(filtermode)*/
-	//delete [] data;   // Удалить data
+	//delete [] data;   // РЈРґР°Р»РёС‚СЊ data
 }
 
 void FJCRendererTexture::bind	()
@@ -252,7 +252,7 @@ void FJCRendererTexture::bind	()
 void FJCRendererTexture::CopyBackbufferToTexture()
 {
 	bind();
-	// Копирование области просмотра в текстуру
+	// РљРѕРїРёСЂРѕРІР°РЅРёРµ РѕР±Р»Р°СЃС‚Рё РїСЂРѕСЃРјРѕС‚СЂР° РІ С‚РµРєСЃС‚СѓСЂСѓ
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, iWidth, iHeight);
 	static int ret = glGetError();
 	if (ret != GL_NO_ERROR) {__asm INT 3};
@@ -278,5 +278,5 @@ void FJCRendererTexture::Save()
 	if (ret != 0) MessageBox(NULL,iluErrorString(ret),"ERROR! in ilSaveImage",16);
 }
 
-FJCRendererTexture RendTex;						// Одна текстурка для работы
+FJCRendererTexture RendTex;						// РћРґРЅР° С‚РµРєСЃС‚СѓСЂРєР° РґР»СЏ СЂР°Р±РѕС‚С‹
 #endif

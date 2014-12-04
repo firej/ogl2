@@ -14,24 +14,24 @@ using namespace std;
 		Resource manadger for OGL2 project LOCUS Engine
 			by FJ													*/
 
-enum	ResourceType		// Тип ресурса
+enum	ResourceType		// РўРёРї СЂРµСЃСѓСЂСЃР°
 {
-	Res_FONT,				// Объект - шрифта
-	Res_TEXTURE,			// Объект - текстура
-	Res_MESH				// Объект - простая 3D модель
+	Res_FONT,				// РћР±СЉРµРєС‚ - С€СЂРёС„С‚Р°
+	Res_TEXTURE,			// РћР±СЉРµРєС‚ - С‚РµРєСЃС‚СѓСЂР°
+	Res_MESH				// РћР±СЉРµРєС‚ - РїСЂРѕСЃС‚Р°СЏ 3D РјРѕРґРµР»СЊ
 };
 
 struct	ResourceObject
 {
 	ResourceObject()
 	{memset(this,0,sizeof(ResourceObject));};
-	void*			Res;		// Указатель на абстрактный ресурс
-	int				used;		// Количество использованных экземпляров
-	ResourceType	RType;		// Тип ресурса
+	void*			Res;		// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№ СЂРµСЃСѓСЂСЃ
+	int				used;		// РљРѕР»РёС‡РµСЃС‚РІРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРЅС‹С… СЌРєР·РµРјРїР»СЏСЂРѕРІ
+	ResourceType	RType;		// РўРёРї СЂРµСЃСѓСЂСЃР°
 };
-typedef hash_map <string,ResourceObject>	ResMapL_t;			// Словарь для сопоставления имён и функций
-typedef	ResMapL_t :: iterator				ResMapL_Iter_t;		// Итератор для словаря
-typedef	ResMapL_t :: const_iterator			ResMapL_cIter_t;	// Константный итератор
+typedef hash_map <string,ResourceObject>	ResMapL_t;			// РЎР»РѕРІР°СЂСЊ РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РёРјС‘РЅ Рё С„СѓРЅРєС†РёР№
+typedef	ResMapL_t :: iterator				ResMapL_Iter_t;		// РС‚РµСЂР°С‚РѕСЂ РґР»СЏ СЃР»РѕРІР°СЂСЏ
+typedef	ResMapL_t :: const_iterator			ResMapL_cIter_t;	// РљРѕРЅСЃС‚Р°РЅС‚РЅС‹Р№ РёС‚РµСЂР°С‚РѕСЂ
 
 struct	ResPointer
 {
@@ -46,39 +46,39 @@ public:
 	ResMapL_Iter_t	data;
 };
 
-typedef hash_map <string,ResPointer>		ResMapH_t;			// Словарь для сопоставления имён и функций
-typedef	ResMapH_t :: iterator				ResMapH_Iter_t;		// Итератор для словаря
-typedef	ResMapH_t :: const_iterator			ResMapH_cIter_t;	// Константный итератор
+typedef hash_map <string,ResPointer>		ResMapH_t;			// РЎР»РѕРІР°СЂСЊ РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РёРјС‘РЅ Рё С„СѓРЅРєС†РёР№
+typedef	ResMapH_t :: iterator				ResMapH_Iter_t;		// РС‚РµСЂР°С‚РѕСЂ РґР»СЏ СЃР»РѕРІР°СЂСЏ
+typedef	ResMapH_t :: const_iterator			ResMapH_cIter_t;	// РљРѕРЅСЃС‚Р°РЅС‚РЅС‹Р№ РёС‚РµСЂР°С‚РѕСЂ
 
 
 class	ResMan
 {
 protected:
-	ResMapL_t	mapL;			// массив физического (низкого) уровня
+	ResMapL_t	mapL;			// РјР°СЃСЃРёРІ С„РёР·РёС‡РµСЃРєРѕРіРѕ (РЅРёР·РєРѕРіРѕ) СѓСЂРѕРІРЅСЏ
 ResMapL_Iter_t	mapLi;
-	ResMapH_t	mapH;			// массив идентификаторов высшего (логического) уровня
+	ResMapH_t	mapH;			// РјР°СЃСЃРёРІ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ РІС‹СЃС€РµРіРѕ (Р»РѕРіРёС‡РµСЃРєРѕРіРѕ) СѓСЂРѕРІРЅСЏ
 ResMapH_Iter_t	mapHi;
-	PFont		defFont;		// Набор стандартных 
+	PFont		defFont;		// РќР°Р±РѕСЂ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… 
 TexturePointer	defTexture;
 	meshPointer	defMesh;
-//	int			Resources;		// Количество загруженных ресурсов
-FindRes_ret_t	FindRes(ResMapH_Iter_t	mapHi);	/*	Поиск элемента в mapL, соотв-го данному ресурсу	*/
+//	int			Resources;		// РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… СЂРµСЃСѓСЂСЃРѕРІ
+FindRes_ret_t	FindRes(ResMapH_Iter_t	mapHi);	/*	РџРѕРёСЃРє СЌР»РµРјРµРЅС‚Р° РІ mapL, СЃРѕРѕС‚РІ-РіРѕ РґР°РЅРЅРѕРјСѓ СЂРµСЃСѓСЂСЃСѓ	*/
 public:
 	ResMan();
 	~ResMan();
 
-	void INIT				(	char*	DefFont,		// Инициализация менеджера ресурсов
+	void INIT				(	char*	DefFont,		// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРµРЅРµРґР¶РµСЂР° СЂРµСЃСѓСЂСЃРѕРІ
 								char*	DefTexture,
 								char*	DefMesh);
-	void DEINIT				(void);			// Конец работы менеджера ресурсов
+	void DEINIT				(void);			// РљРѕРЅРµС† СЂР°Р±РѕС‚С‹ РјРµРЅРµРґР¶РµСЂР° СЂРµСЃСѓСЂСЃРѕРІ
 // LOAD functions
-	void			LOAD_Font		(char* ResName,char* FontName);	// Загрузка шрифта
-	PFont			SELECT_Font		(char* ResName);				// Выбор шрифта
+	void			LOAD_Font		(char* ResName,char* FontName);	// Р—Р°РіСЂСѓР·РєР° С€СЂРёС„С‚Р°
+	PFont			SELECT_Font		(char* ResName);				// Р’С‹Р±РѕСЂ С€СЂРёС„С‚Р°
 	void			ULOAD_Font		(char* ResName);
-	void			LOAD_Texture	(char *ResName,char *FileName);	// Загрузка текстур
+	void			LOAD_Texture	(char *ResName,char *FileName);	// Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂ
 TexturePointer		SELECT_Texture	(char* ResName);
 	void			ULOAD_Texture	(char* ResName);
-	void			LOAD_Mesh		(char *ResName,char *FileName);	// Загрузка 3Д объектов
+	void			LOAD_Mesh		(char *ResName,char *FileName);	// Р—Р°РіСЂСѓР·РєР° 3Р” РѕР±СЉРµРєС‚РѕРІ
 	meshPointer		SELECT_Mesh		(char* ResName);
 	void			ULOAD_Mesh		(char* ResName);
 

@@ -7,10 +7,10 @@ bool	TextBenchmark = false;
 bool Application::RenderScene()
 {
 	GT.NewFrame();
-	glClear(GL_DEPTH_BUFFER_BIT);   // Очистка буфера глубины
+	glClear(GL_DEPTH_BUFFER_BIT);   // РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° РіР»СѓР±РёРЅС‹
 	Cam.Look();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//	РИСОВАНИЕ 
+//	Р РРЎРћР’РђРќРР• 
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 	rm.SELECT_Mesh("someMesh")->Render();
@@ -24,9 +24,9 @@ bool Application::RenderScene()
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//	Рисование осей координат :)
-	//	Ось X
-	glPushAttrib(GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// Сохранение настроек
+//	Р РёСЃРѕРІР°РЅРёРµ РѕСЃРµР№ РєРѕРѕСЂРґРёРЅР°С‚ :)
+	//	РћСЃСЊ X
+	glPushAttrib(GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє
 	glDisable(GL_DEPTH_TEST);
 	glPushMatrix();
 	glScaled(0.2,0.2,0.2);
@@ -48,7 +48,7 @@ bool Application::RenderScene()
 		glVertex3d( 4.00, 0.00,  0.00);
 	}
 	glEnd();
-	// Ось Y
+	// РћСЃСЊ Y
 	glColor3d(0.0,0.0,1.0);
 	glBegin(GL_LINES);
 	{
@@ -82,8 +82,8 @@ bool Application::RenderScene()
 	glPopMatrix();
 	glPopAttrib();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//	ТЕКСТ
-	// TODO: удалить енто после полной отладки текста
+//	РўР•РљРЎРў
+	// TODO: СѓРґР°Р»РёС‚СЊ РµРЅС‚Рѕ РїРѕСЃР»Рµ РїРѕР»РЅРѕР№ РѕС‚Р»Р°РґРєРё С‚РµРєСЃС‚Р°
 
 	if (TextBenchmark)
 	{
@@ -124,14 +124,14 @@ bool Application::RenderScene()
 
 			/*uif->SetStyle(Text::left,Text::top,1.0);
 			uif->SetColor(0.0f,0.0f,0.0f,1.0f);
-			uif->Print(0.0,0.075,"Состояние ветра - %d",PS.windActive);
+			uif->Print(0.0,0.075,"РЎРѕСЃС‚РѕСЏРЅРёРµ РІРµС‚СЂР° - %d",PS.windActive);
 			uif->Print(0.0,0.1,
-				"Скорость ветра - %5.1f,%5.1f,%5.1f",PS.wind.d.c.x,PS.wind.d.c.y,PS.wind.d.c.z);
+				"РЎРєРѕСЂРѕСЃС‚СЊ РІРµС‚СЂР° - %5.1f,%5.1f,%5.1f",PS.wind.d.c.x,PS.wind.d.c.y,PS.wind.d.c.z);
 			uif->Print(0.0,0.125,
-				"Гравитация     - %5.1f,%5.1f,%5.1f",PS.grav.d.c.x,PS.grav.d.c.y,PS.grav.d.c.z);*/
+				"Р“СЂР°РІРёС‚Р°С†РёСЏ     - %5.1f,%5.1f,%5.1f",PS.grav.d.c.x,PS.grav.d.c.y,PS.grav.d.c.z);*/
 
 			uif->SetStyle(Text::right,Text::top,1.0);
-			uif->Print(0.95,0.0,"Количество материалов - %d",rm.SELECT_Mesh("someMesh")->iSurfaces);
+			uif->Print(0.95,0.0,"РљРѕР»РёС‡РµСЃС‚РІРѕ РјР°С‚РµСЂРёР°Р»РѕРІ - %d",rm.SELECT_Mesh("someMesh")->iSurfaces);
 			meshPointer sm  =rm.SELECT_Mesh("someMesh");
 			for (WORD	i = 0 ; i < rm.SELECT_Mesh("someMesh")->iSurfaces ; i++ )
 				uif->Print(1.0,0.025*(i+1),
@@ -141,12 +141,12 @@ bool Application::RenderScene()
 					sm->SurfList[i].Diffuse.d.c.g,
 					sm->SurfList[i].Diffuse.d.c.b,
 					sm->SurfList[i].color.d.c.a);
-			//uif->Print(0.95,0.5,"Информация о модели:");
+			//uif->Print(0.95,0.5,"РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РјРѕРґРµР»Рё:");
 			//uif->Print(0.95,0.5,"",sm->);
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//	Интерфейс пользователя
+//	РРЅС‚РµСЂС„РµР№СЃ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 //	NVLogo.render_logo();
 
 #ifdef ENABLE_TEXTURE_RENDERING

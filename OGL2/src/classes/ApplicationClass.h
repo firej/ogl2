@@ -2,9 +2,9 @@
 #ifndef APPLICATIONCLASS_HEADER
 #define APPLICATIONCLASS_HEADER
 
-//#define AUX_ENABLED								// Включение библиотеки AUX
+//#define AUX_ENABLED								// Р’РєР»СЋС‡РµРЅРёРµ Р±РёР±Р»РёРѕС‚РµРєРё AUX
 #define _CRT_SECURE_NO_DEPRECATE
-//====== Загрузка моих собственных классов и функций
+//====== Р—Р°РіСЂСѓР·РєР° РјРѕРёС… СЃРѕР±СЃС‚РІРµРЅРЅС‹С… РєР»Р°СЃСЃРѕРІ Рё С„СѓРЅРєС†РёР№
 #include "./globals.h"
 #include "./input.h"
 #include "./Texture.h"
@@ -30,7 +30,7 @@
 #define MY_WINDOW_CLASS_NAME	("FJC_OGL_Window_CLASS")
 #define MY_WINDOW_NAME			("FJC_OGL_Window")
 typedef BOOL (APIENTRY *wglSwapIntervalEXT_Func)(int);
-LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);	// Функция окна
+LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);	// Р¤СѓРЅРєС†РёСЏ РѕРєРЅР°
 #else
 	int attributeList[] =
 		{
@@ -43,26 +43,26 @@ LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);	// Функция окна
 	{	return (e->type == MapNotify) && (e->xmap.window == (Window)arg);	}
 
 #endif
-// Глобальные переменные
-extern GLfloat LightAmbient[4];			// Значения фонового света
-extern GLfloat LightDiffuse[4];			// Значения диффузного света
-extern GLfloat LightPosition[4];			// Позиция света
+// Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
+extern GLfloat LightAmbient[4];			// Р—РЅР°С‡РµРЅРёСЏ С„РѕРЅРѕРІРѕРіРѕ СЃРІРµС‚Р°
+extern GLfloat LightDiffuse[4];			// Р—РЅР°С‡РµРЅРёСЏ РґРёС„С„СѓР·РЅРѕРіРѕ СЃРІРµС‚Р°
+extern GLfloat LightPosition[4];			// РџРѕР·РёС†РёСЏ СЃРІРµС‚Р°
 extern TextureLogo NVLogo;
 extern bool	TextBenchmark;
 
-void	SwapBuffersEXT	();							// Смена кадров - одна для быстрой замены
+void	SwapBuffersEXT	();							// РЎРјРµРЅР° РєР°РґСЂРѕРІ - РѕРґРЅР° РґР»СЏ Р±С‹СЃС‚СЂРѕР№ Р·Р°РјРµРЅС‹
 
-// Класс описывающий работу всего графического приложения
+// РљР»Р°СЃСЃ РѕРїРёСЃС‹РІР°СЋС‰РёР№ СЂР°Р±РѕС‚Сѓ РІСЃРµРіРѕ РіСЂР°С„РёС‡РµСЃРєРѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ
 class Application
 {
 
 protected:
-	bool			AppLoopFunc	();					// Функция приёма сообщений
-	Camera			Cam;							// Камера для First-Person-Mode
-	AVI_player		AVIp;							// Плеер заставок )
-	ParticleSystem	PS;								// Система частиц
+	bool			AppLoopFunc	();					// Р¤СѓРЅРєС†РёСЏ РїСЂРёС‘РјР° СЃРѕРѕР±С‰РµРЅРёР№
+	Camera			Cam;							// РљР°РјРµСЂР° РґР»СЏ First-Person-Mode
+	AVI_player		AVIp;							// РџР»РµРµСЂ Р·Р°СЃС‚Р°РІРѕРє )
+	ParticleSystem	PS;								// РЎРёСЃС‚РµРјР° С‡Р°СЃС‚РёС†
 public:
-	CConsole		CCons;							// Экземпляр консоли
+	CConsole		CCons;							// Р­РєР·РµРјРїР»СЏСЂ РєРѕРЅСЃРѕР»Рё
 //protected:
 
 public:
@@ -70,45 +70,45 @@ public:
 	struct	Vars_t
 	{
 		struct App_t {
-			HINSTANCE	HInstance;					// Хендл экземпляра приложения
+			HINSTANCE	HInstance;					// РҐРµРЅРґР» СЌРєР·РµРјРїР»СЏСЂР° РїСЂРёР»РѕР¶РµРЅРёСЏ
 		} App;
 		struct WindowVars_t {
-			HDC		DC;								// Хендл контекста устройства
-			HGLRC	RC;								// Хендл контекста рендера
-			HWND	MHWnd;							// Хендл главного окна
-			DEVMODE PrevDS,CurrDS;					// Настройки экрана до и после запуска
+			HDC		DC;								// РҐРµРЅРґР» РєРѕРЅС‚РµРєСЃС‚Р° СѓСЃС‚СЂРѕР№СЃС‚РІР°
+			HGLRC	RC;								// РҐРµРЅРґР» РєРѕРЅС‚РµРєСЃС‚Р° СЂРµРЅРґРµСЂР°
+			HWND	MHWnd;							// РҐРµРЅРґР» РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР°
+			DEVMODE PrevDS,CurrDS;					// РќР°СЃС‚СЂРѕР№РєРё СЌРєСЂР°РЅР° РґРѕ Рё РїРѕСЃР»Рµ Р·Р°РїСѓСЃРєР°
 		}		win;
 
 	}		Vars;
 #else
-	Display			*dpy;							// Линк на дисплей
-	XVisualInfo		*vi;							// Инфа о визуале
-	Colormap		cmap;							// Карта цветов?
-	XSetWindowAttributes swa;						// Атрибуты окна
-	Window			win;							// Само окно
-	GLXContext		cx;								// Контекст
-	XEvent			event;							// Событие
+	Display			*dpy;							// Р›РёРЅРє РЅР° РґРёСЃРїР»РµР№
+	XVisualInfo		*vi;							// РРЅС„Р° Рѕ РІРёР·СѓР°Р»Рµ
+	Colormap		cmap;							// РљР°СЂС‚Р° С†РІРµС‚РѕРІ?
+	XSetWindowAttributes swa;						// РђС‚СЂРёР±СѓС‚С‹ РѕРєРЅР°
+	Window			win;							// РЎР°РјРѕ РѕРєРЅРѕ
+	GLXContext		cx;								// РљРѕРЅС‚РµРєСЃС‚
+	XEvent			event;							// РЎРѕР±С‹С‚РёРµ
 
 #endif
-	bool	IsFullScreen;							// Флаг полноэкранного режима
+	bool	IsFullScreen;							// Р¤Р»Р°Рі РїРѕР»РЅРѕСЌРєСЂР°РЅРЅРѕРіРѕ СЂРµР¶РёРјР°
 
-	Application				();						// Конструктор класса
-	~Application			();						// Деструктор класса
-	bool	ReadConfig		();						// Загрузка настроек из файла
-	bool	SaveConfig		();						// Сохранение настроек в файл
-	bool	InitOpenGL		();						// Инициалазация настроек OpenGL
-	bool	InitOpenIL		();						// Инициализация графической библиотеки
-	bool	GetSysInfo		();						// Узнаём конфигурацию системы
-	bool	Birth			();						// Функция инициализации приложения
-	bool	Suicide			();						// Деинициализация приложения
-	bool	Work			();						// Нормальная работа приложения
-	bool	ReshapeWindow	(int,int);				// Изменение размеров рисовательной области
-	bool	RenderScene		();						// Отрисовка картинки
-	void	RenderTexture	();						// Отрисовка текущей забинденой текстуры
-	void	ShowMovie		(bool CanBreak);		// Показывает видик
-	bool	LoadResources	();						// Загрузка ресурсов
-	void	ProcessKBInput	();						// Реакция на нажатия клавиш
+	Application				();						// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР°
+	~Application			();						// Р”РµСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР°
+	bool	ReadConfig		();						// Р—Р°РіСЂСѓР·РєР° РЅР°СЃС‚СЂРѕРµРє РёР· С„Р°Р№Р»Р°
+	bool	SaveConfig		();						// РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РІ С„Р°Р№Р»
+	bool	InitOpenGL		();						// РРЅРёС†РёР°Р»Р°Р·Р°С†РёСЏ РЅР°СЃС‚СЂРѕРµРє OpenGL
+	bool	InitOpenIL		();						// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РіСЂР°С„РёС‡РµСЃРєРѕР№ Р±РёР±Р»РёРѕС‚РµРєРё
+	bool	GetSysInfo		();						// РЈР·РЅР°С‘Рј РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ СЃРёСЃС‚РµРјС‹
+	bool	Birth			();						// Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїСЂРёР»РѕР¶РµРЅРёСЏ
+	bool	Suicide			();						// Р”РµРёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ
+	bool	Work			();						// РќРѕСЂРјР°Р»СЊРЅР°СЏ СЂР°Р±РѕС‚Р° РїСЂРёР»РѕР¶РµРЅРёСЏ
+	bool	ReshapeWindow	(int,int);				// РР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂРѕРІ СЂРёСЃРѕРІР°С‚РµР»СЊРЅРѕР№ РѕР±Р»Р°СЃС‚Рё
+	bool	RenderScene		();						// РћС‚СЂРёСЃРѕРІРєР° РєР°СЂС‚РёРЅРєРё
+	void	RenderTexture	();						// РћС‚СЂРёСЃРѕРІРєР° С‚РµРєСѓС‰РµР№ Р·Р°Р±РёРЅРґРµРЅРѕР№ С‚РµРєСЃС‚СѓСЂС‹
+	void	ShowMovie		(bool CanBreak);		// РџРѕРєР°Р·С‹РІР°РµС‚ РІРёРґРёРє
+	bool	LoadResources	();						// Р—Р°РіСЂСѓР·РєР° СЂРµСЃСѓСЂСЃРѕРІ
+	void	ProcessKBInput	();						// Р РµР°РєС†РёСЏ РЅР° РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€
 };
 
-extern Application* MainApplication;				// Указатель на объект приложения
+extern Application* MainApplication;				// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚ РїСЂРёР»РѕР¶РµРЅРёСЏ
 #endif	//#ifndef APPLICATIONCLASS_HEADER

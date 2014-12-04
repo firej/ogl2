@@ -5,7 +5,7 @@
 #include "./ConsoleFunctions.h"
 //#include "./Application.h"
 
-ConVarsMap			CVmap;		// Карта изменяемых переменных
+ConVarsMap			CVmap;		// РљР°СЂС‚Р° РёР·РјРµРЅСЏРµРјС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
 CConsole		*	MainCon	=	NULL;
 
 char	upcase	(	char	a	)
@@ -37,35 +37,35 @@ char	upcase	(	char	a	)
 	if (a == 'y') return 'Y';
 	if (a == 'z') return 'Z';
 
-	if (a == 'а') return 'А';
-	if (a == 'б') return 'Б';
-	if (a == 'в') return 'В';
-	if (a == 'г') return 'Г';
-	if (a == 'д') return 'Д';
-	if (a == 'е') return 'Е';
-	if (a == 'ё') return 'Ё';
-	if (a == 'ж') return 'Ж';
-	if (a == 'з') return 'З';
-	if (a == 'и') return 'И';
-	if (a == 'й') return 'Й';
-	if (a == 'к') return 'К';
-	if (a == 'л') return 'Л';
-	if (a == 'м') return 'М';
-	if (a == 'н') return 'Н';
-	if (a == 'о') return 'О';
-	if (a == 'п') return 'П';
-	if (a == 'р') return 'Р';
-	if (a == 'с') return 'С';
-	if (a == 'т') return 'Т';
-	if (a == 'у') return 'У';
-	if (a == 'ф') return 'Ф';
-	if (a == 'х') return 'Х';
-	if (a == 'ц') return 'Ц';
-	if (a == 'ч') return 'Ч';
-	if (a == 'ы') return 'Ы';
-	if (a == 'э') return 'Э';
-	if (a == 'ю') return 'Ю';
-	if (a == 'я') return 'Я';
+	if (a == 'Р°') return 'Рђ';
+	if (a == 'Р±') return 'Р‘';
+	if (a == 'РІ') return 'Р’';
+	if (a == 'Рі') return 'Р“';
+	if (a == 'Рґ') return 'Р”';
+	if (a == 'Рµ') return 'Р•';
+	if (a == 'С‘') return 'РЃ';
+	if (a == 'Р¶') return 'Р–';
+	if (a == 'Р·') return 'Р—';
+	if (a == 'Рё') return 'Р';
+	if (a == 'Р№') return 'Р™';
+	if (a == 'Рє') return 'Рљ';
+	if (a == 'Р»') return 'Р›';
+	if (a == 'Рј') return 'Рњ';
+	if (a == 'РЅ') return 'Рќ';
+	if (a == 'Рѕ') return 'Рћ';
+	if (a == 'Рї') return 'Рџ';
+	if (a == 'СЂ') return 'Р ';
+	if (a == 'СЃ') return 'РЎ';
+	if (a == 'С‚') return 'Рў';
+	if (a == 'Сѓ') return 'РЈ';
+	if (a == 'С„') return 'Р¤';
+	if (a == 'С…') return 'РҐ';
+	if (a == 'С†') return 'Р¦';
+	if (a == 'С‡') return 'Р§';
+	if (a == 'С‹') return 'Р«';
+	if (a == 'СЌ') return 'Р­';
+	if (a == 'СЋ') return 'Р®';
+	if (a == 'СЏ') return 'РЇ';
 		return a;
 }
 
@@ -83,7 +83,7 @@ void	CConsole::INIT()
 	if (MainCon)
 	{
 		MainCon->OUT_STRING(CONCOL_ERROR,
-			"Почемуто появляется второй объект консоли !!! или второй раз запускается инициализация.");
+			"РџРѕС‡РµРјСѓС‚Рѕ РїРѕСЏРІР»СЏРµС‚СЃСЏ РІС‚РѕСЂРѕР№ РѕР±СЉРµРєС‚ РєРѕРЅСЃРѕР»Рё !!! РёР»Рё РІС‚РѕСЂРѕР№ СЂР°Р· Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ.");
 	}
 	else
 	{
@@ -94,7 +94,7 @@ void	CConsole::INIT()
 	transparency	=	0.8;
 	height			=	0.8;
 	lastTick		=	0.0;
-	Period			=	0.65;							// Пол секунды времени
+	Period			=	0.65;							// РџРѕР» СЃРµРєСѓРЅРґС‹ РІСЂРµРјРµРЅРё
 	iAComp			=	8;
 	CurVisible		=	true;
 	Colors[CONCOL_DEFAULT]		=	Point3f(1.0f,1.0f,1.0f);
@@ -124,7 +124,7 @@ void	CConsole::INIT()
 			flist		=	next;
 		list = next;
 	}
-	list->next				=	flist;				// Закругляем список
+	list->next				=	flist;				// Р—Р°РєСЂСѓРіР»СЏРµРј СЃРїРёСЃРѕРє
 	//RegFunc					("get",&Console_Get);
 	//RegFunc					("set",&Console_Set);
 	RegFunc					("Help",&Console_Help);
@@ -147,16 +147,16 @@ void	CConsole::DEINIT()
 void	CConsole::OUT_STRING	(BYTE	c, const char *fmt, ...)
 {
 	char	text[512];
-	va_list    ap;				// Указатель на список аргументов
-	if (fmt == NULL || IsBadStringPtr(fmt,200))		// Если нет текста
-		return;					// Ничего не делать
-    va_start(ap, fmt);			// Разбор строки переменных
-    vsprintf(text, fmt, ap);	// И конвертирование символов в реальные коды
-    va_end(ap);					// Результат помещается в строку
+	va_list    ap;				// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРїРёСЃРѕРє Р°СЂРіСѓРјРµРЅС‚РѕРІ
+	if (fmt == NULL || IsBadStringPtr(fmt,200))		// Р•СЃР»Рё РЅРµС‚ С‚РµРєСЃС‚Р°
+		return;					// РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°С‚СЊ
+    va_start(ap, fmt);			// Р Р°Р·Р±РѕСЂ СЃС‚СЂРѕРєРё РїРµСЂРµРјРµРЅРЅС‹С…
+    vsprintf(text, fmt, ap);	// Р РєРѕРЅРІРµСЂС‚РёСЂРѕРІР°РЅРёРµ СЃРёРјРІРѕР»РѕРІ РІ СЂРµР°Р»СЊРЅС‹Рµ РєРѕРґС‹
+    va_end(ap);					// Р РµР·СѓР»СЊС‚Р°С‚ РїРѕРјРµС‰Р°РµС‚СЃСЏ РІ СЃС‚СЂРѕРєСѓ
 	list->data.c	=	c;
 	list->data.s	=	string(text);
-	list = list->next;			// Переключаемся на следующию строчку
-	list->data.s.clear();		// Очистка текущей строчки
+	list = list->next;			// РџРµСЂРµРєР»СЋС‡Р°РµРјСЃСЏ РЅР° СЃР»РµРґСѓСЋС‰РёСЋ СЃС‚СЂРѕС‡РєСѓ
+	list->data.s.clear();		// РћС‡РёСЃС‚РєР° С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕС‡РєРё
 	list->data.c = CONCOL_DEFAULT;
 	chars	=	0;
 	cursor	=	0;
@@ -165,7 +165,7 @@ void	CConsole::Draw()
 {
 	switch	(State)
 	{
-	case Console::ST_INVISIBLE:	return;			// Как можно рисовать консоль в закрытом состоянии?
+	case Console::ST_INVISIBLE:	return;			// РљР°Рє РјРѕР¶РЅРѕ СЂРёСЃРѕРІР°С‚СЊ РєРѕРЅСЃРѕР»СЊ РІ Р·Р°РєСЂС‹С‚РѕРј СЃРѕСЃС‚РѕСЏРЅРёРё?
 	case Console::ST_FADEIN:	persent += pers_step * GT.GetFrameTime() * 60;
 		if (persent >= transparency)
 			State = Console::ST_VISIBLE;	break;
@@ -181,7 +181,7 @@ void	CConsole::Draw()
 		lastTick	-=	Period;
 		CurVisible	=	!CurVisible;
 	}
-	glPushAttrib(GL_LIST_BIT|GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// Сохранение настроек
+	glPushAttrib(GL_LIST_BIT|GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	//T->bind();
 	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
@@ -200,8 +200,8 @@ void	CConsole::Draw()
 	glEnable(GL_BLEND);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   РИСОВАНИЕ КОНСОЛИ
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ФОН
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   Р РРЎРћР’РђРќРР• РљРћРќРЎРћР›Р
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Р¤РћРќ
 	glColor4d(	Colors[CONCOL_BACKGROUND].d.c.x,
 				Colors[CONCOL_BACKGROUND].d.c.y,
 				Colors[CONCOL_BACKGROUND].d.c.z,
@@ -212,7 +212,7 @@ void	CConsole::Draw()
 		glVertex2d( 1.0 , 0.0 );
 		glVertex2d( 1.0 , 1.0 - 1.0/ListElements );
 	glEnd();
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Строка ввода
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm РЎС‚СЂРѕРєР° РІРІРѕРґР°
 	glColor4d(	Colors[CONCOL_INPUTLINE].d.c.x,
 				Colors[CONCOL_INPUTLINE].d.c.y,
 				Colors[CONCOL_INPUTLINE].d.c.z,
@@ -223,19 +223,19 @@ void	CConsole::Draw()
 		glVertex2d( 1.0, 1.0 - 1.0/ListElements );
 		glVertex2d( 1.0, 1.0 );
 	glEnd();
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Текст вводимый
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm РўРµРєСЃС‚ РІРІРѕРґРёРјС‹Р№
 	ConsoleFont->SetStyle	(Text::left,Text::top,height);
 	ConsoleFont->SetColor	(Colors[CONCOL_DEFAULT],(float)persent/(float)transparency);
 	ConsoleFont->Print		(0.0, 0.975*height, "%s",list->data.s.c_str());
 	Console::ListElement	*	next = list->next;
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Текст основной
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm РўРµРєСЃС‚ РѕСЃРЅРѕРІРЅРѕР№
 	for (DWORD i = 0 ; i < ListElements - 1 ; i++)
 	{
 		ConsoleFont->SetColor(Colors[next->data.c]);
 		ConsoleFont->Print		(0.0, 0.025*height*i, "%s",next->data.s.c_str());
 		next = next->next;
 	}
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Текст автодополнения
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm РўРµРєСЃС‚ Р°РІС‚РѕРґРѕРїРѕР»РЅРµРЅРёСЏ
 	if ( ! list->data.s.empty() )
 	{
 		string	s1,s2;
@@ -251,7 +251,7 @@ void	CConsole::Draw()
 			if (s2 == s1) break;
 		}
 	}
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm КурсорчеГ
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm РљСѓСЂСЃРѕСЂС‡РµР“
 	if (CurVisible)
 	{
 		string	tmp;
@@ -267,13 +267,13 @@ void	CConsole::Draw()
 			glVertex2f	( offset, 1.0f );
 		glEnd	();
 	}
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   КОНЕЦ
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   РљРћРќР•Р¦
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glPopMatrix();										// Restore The Old Projection Matrix
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glPopMatrix();										// Restore The Old Projection Matrix
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-	glPopAttrib();										// Возврат
+	glPopAttrib();										// Р’РѕР·РІСЂР°С‚
 }
 
 void	CConsole::ProcessChar	(char c)
@@ -284,13 +284,13 @@ void	CConsole::ProcessChar	(char c)
 	if ( c == 127				)				return;
 	if (cursor == chars)
 	{
-		list->data.s.append(1,c);		// Прибавляем в конец символ
+		list->data.s.append(1,c);		// РџСЂРёР±Р°РІР»СЏРµРј РІ РєРѕРЅРµС† СЃРёРјРІРѕР»
 		cursor++;
 		chars++;
 	}
 	else
 	{
-		list->data.s.insert(cursor,1,c);			// Вставляем в позицию курсора символ
+		list->data.s.insert(cursor,1,c);			// Р’СЃС‚Р°РІР»СЏРµРј РІ РїРѕР·РёС†РёСЋ РєСѓСЂСЃРѕСЂР° СЃРёРјРІРѕР»
 		cursor++;
 		chars++;
 	}
@@ -330,8 +330,8 @@ void	CConsole::ProcessKey	(DWORD	key)
 		if (!list->data.s.empty())
 		{
 			string com = list->data.s;
-			list = list->next;			// Переключаемся на следующию строчку
-			list->data.s.clear();		// Очистка текущей строчки
+			list = list->next;			// РџРµСЂРµРєР»СЋС‡Р°РµРјСЃСЏ РЅР° СЃР»РµРґСѓСЋС‰РёСЋ СЃС‚СЂРѕС‡РєСѓ
+			list->data.s.clear();		// РћС‡РёСЃС‚РєР° С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕС‡РєРё
 			list->data.c = CONCOL_DEFAULT;
 			chars	=	0;
 			cursor	=	0;
@@ -406,20 +406,20 @@ bool	CConsole::Visible()
 			return false;
 }
 //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-//mmmmmmmmmmmmmmmm Выполнение консольных команд mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+//mmmmmmmmmmmmmmmm Р’С‹РїРѕР»РЅРµРЅРёРµ РєРѕРЅСЃРѕР»СЊРЅС‹С… РєРѕРјР°РЅРґ mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 void	CConsole::DoString(string s)
 {
 	bool	verdict = !CommandsHistory.empty();
-	if (verdict)		// Если история не пуста делаем ещё одну проверку
+	if (verdict)		// Р•СЃР»Рё РёСЃС‚РѕСЂРёСЏ РЅРµ РїСѓСЃС‚Р° РґРµР»Р°РµРј РµС‰С‘ РѕРґРЅСѓ РїСЂРѕРІРµСЂРєСѓ
 	{
-		verdict = *(CommandsHistory.begin()) != s;	// Повторяющиеся команды не имеет смысла логировать
+		verdict = *(CommandsHistory.begin()) != s;	// РџРѕРІС‚РѕСЂСЏСЋС‰РёРµСЃСЏ РєРѕРјР°РЅРґС‹ РЅРµ РёРјРµРµС‚ СЃРјС‹СЃР»Р° Р»РѕРіРёСЂРѕРІР°С‚СЊ
 	}
-	// После всех проверок добавляем команду в историю
+	// РџРѕСЃР»Рµ РІСЃРµС… РїСЂРѕРІРµСЂРѕРє РґРѕР±Р°РІР»СЏРµРј РєРѕРјР°РЅРґСѓ РІ РёСЃС‚РѕСЂРёСЋ
 	if (CommandsHistory.empty() || verdict)
 	{
 		CommandsHistory.insert(CommandsHistory.begin(),s);
 	}
-	iCndHistory = CommandsHistory.end();			// Переводим указатель истории на начало
+	iCndHistory = CommandsHistory.end();			// РџРµСЂРµРІРѕРґРёРј СѓРєР°Р·Р°С‚РµР»СЊ РёСЃС‚РѕСЂРёРё РЅР° РЅР°С‡Р°Р»Рѕ
 
 	DWORD	comLength	=	(DWORD)	s.find(' ');
 	string	command, cParam;
@@ -433,14 +433,14 @@ void	CConsole::DoString(string s)
 	ConFuncsMap::iterator	i	=	CFmap.find(command);
 	if ( i == CFmap.end())
 	{
-		//ConVarsMap::iterator j	=	CVmap.find(command);					// Поищем переменную
+		//ConVarsMap::iterator j	=	CVmap.find(command);					// РџРѕРёС‰РµРј РїРµСЂРµРјРµРЅРЅСѓСЋ
 		//if ( j == CVmap.end())
 		//{
-			OUT_STRING(CONCOL_ERROR,"Неизвестная комманда");
+			OUT_STRING(CONCOL_ERROR,"РќРµРёР·РІРµСЃС‚РЅР°СЏ РєРѕРјРјР°РЅРґР°");
 		//}
 		//else
 		//{
-		//	Console_Get(command);		// Найдена переменная - выведем на экран её значение
+		//	Console_Get(command);		// РќР°Р№РґРµРЅР° РїРµСЂРµРјРµРЅРЅР°СЏ - РІС‹РІРµРґРµРј РЅР° СЌРєСЂР°РЅ РµС‘ Р·РЅР°С‡РµРЅРёРµ
 		//}
 		return;
 	}
@@ -501,7 +501,7 @@ void	CConsole::UnRegFunc(std::string s)
 	}
 }
 
-void	CConsole::UnRegVar		(string	s)				// Убирать регистрацию переменной
+void	CConsole::UnRegVar		(string	s)				// РЈР±РёСЂР°С‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РїРµСЂРµРјРµРЅРЅРѕР№
 {
 	if (s.empty())		return;
 	s = upcase_string(s);
@@ -523,7 +523,7 @@ void	Console_Set		(std::string	s)
 	DWORD	varLength	=	(DWORD)	s.find(' ');
 	if (varLength == s.size())
 	{
-		MainCon->OUT_STRING(CONCOL_ERROR,"Использование: set <переменная> значение1 [ значение2 ] [ значение3 ]");
+		MainCon->OUT_STRING(CONCOL_ERROR,"РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ: set <РїРµСЂРµРјРµРЅРЅР°СЏ> Р·РЅР°С‡РµРЅРёРµ1 [ Р·РЅР°С‡РµРЅРёРµ2 ] [ Р·РЅР°С‡РµРЅРёРµ3 ]");
 		return;
 	}
 	string	var, vParam;
@@ -534,7 +534,7 @@ void	Console_Set		(std::string	s)
 	ConVarsMap::iterator i	=	CVmap.find(var);
 	if ( i == CVmap.end())
 	{
-		MainCon->OUT_STRING(CONCOL_ERROR,"Неизвестная переменная");
+		MainCon->OUT_STRING(CONCOL_ERROR,"РќРµРёР·РІРµСЃС‚РЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ");
 		return;
 	}
 	else
@@ -554,7 +554,7 @@ void	Console_Set		(std::string	s)
 			sscanf(vParam.c_str(),"%f %f %f",&(((Point3f*)(i->second.var))->d.c.x),&(((Point3f*)(i->second.var))->d.c.y),&(((Point3f*)(i->second.var))->d.c.z));
 			break;
 		case	Console::VT_COLOR4f:
-			MainCon->OUT_STRING(CONCOL_ERROR,"Установку 4х мерных цветовых переменных сделать лень");
+			MainCon->OUT_STRING(CONCOL_ERROR,"РЈСЃС‚Р°РЅРѕРІРєСѓ 4С… РјРµСЂРЅС‹С… С†РІРµС‚РѕРІС‹С… РїРµСЂРµРјРµРЅРЅС‹С… СЃРґРµР»Р°С‚СЊ Р»РµРЅСЊ");
 			break;
 		case	Console::VT_QWORD:
 			sscanf(vParam.c_str(),"%llu",(unsigned long long * )i->second.var);
@@ -607,14 +607,14 @@ void	Console_Set		(std::string	s)
 
 void	Console_Help	(std::string	s)
 {
-	MainCon->OUT_STRING(CONCOL_HELP,"Список допустимых команд консоли LocusEngine (более подробно \"команда help\")");
+	MainCon->OUT_STRING(CONCOL_HELP,"РЎРїРёСЃРѕРє РґРѕРїСѓСЃС‚РёРјС‹С… РєРѕРјР°РЅРґ РєРѕРЅСЃРѕР»Рё LocusEngine (Р±РѕР»РµРµ РїРѕРґСЂРѕР±РЅРѕ \"РєРѕРјР°РЅРґР° help\")");
 	unsigned int	strings = Globals.VP.ScreenStrings - 2;
 	unsigned int	maxLenght = 0;
 	char			buf[512];
-	char			forsprintf[32];			// Строка спецификаций для sprintf
+	char			forsprintf[32];			// РЎС‚СЂРѕРєР° СЃРїРµС†РёС„РёРєР°С†РёР№ РґР»СЏ sprintf
 	ConFuncsMap	*	map;
 	map = MainCon->GetMap();
-	// Находим максимальную длину команды в словаре
+	// РќР°С…РѕРґРёРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ РєРѕРјР°РЅРґС‹ РІ СЃР»РѕРІР°СЂРµ
 	for (ConFuncsMap::iterator	i = map->begin() ; i != map->end(); i++ )
 	{
 		if (i->first.length() > maxLenght) maxLenght = (unsigned int)i->first.length();

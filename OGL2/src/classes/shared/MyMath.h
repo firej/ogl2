@@ -1,10 +1,10 @@
-/* Зачатки математической библиотеки ===========================================================\\
+/* Р—Р°С‡Р°С‚РєРё РјР°С‚РµРјР°С‚РёС‡РµСЃРєРѕР№ Р±РёР±Р»РёРѕС‚РµРєРё ===========================================================\\
 \\==============================================================================================*/
 #pragma once
-/* Здесь : =====================================================================================\\
-||	1) Точки
-||	2) Векторы
-||	3) Таблица косинусов, синусов и тангенсов
+/* Р—РґРµСЃСЊ : =====================================================================================\\
+||	1) РўРѕС‡РєРё
+||	2) Р’РµРєС‚РѕСЂС‹
+||	3) РўР°Р±Р»РёС†Р° РєРѕСЃРёРЅСѓСЃРѕРІ, СЃРёРЅСѓСЃРѕРІ Рё С‚Р°РЅРіРµРЅСЃРѕРІ
 ||	4) ++
 \\==============================================================================================*/
 #include <Math.h>
@@ -12,12 +12,12 @@
 #define PI	3.14159265358979f
 #define PI2	6.28318530717958f
 
-void InitMATH	(void);								// Инициализация математической библиотеки
-float __fastcall ulrsqrt(float x);					// 1/быстрый_корень
-float __fastcall ulsqrt(float x);					// Просто 
+void InitMATH	(void);								// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјР°С‚РµРјР°С‚РёС‡РµСЃРєРѕР№ Р±РёР±Р»РёРѕС‚РµРєРё
+float __fastcall ulrsqrt(float x);					// 1/Р±С‹СЃС‚СЂС‹Р№_РєРѕСЂРµРЅСЊ
+float __fastcall ulsqrt(float x);					// РџСЂРѕСЃС‚Рѕ 
 
 //===[ sin, cos, tan ]============================================================
-//======[ В качестве итератора выступает угол выраженный в градусах ]============
+//======[ Р’ РєР°С‡РµСЃС‚РІРµ РёС‚РµСЂР°С‚РѕСЂР° РІС‹СЃС‚СѓРїР°РµС‚ СѓРіРѕР» РІС‹СЂР°Р¶РµРЅРЅС‹Р№ РІ РіСЂР°РґСѓСЃР°С… ]============
 extern float _sint [361];
 extern float _cost [361];
 extern float _tant [361];
@@ -29,16 +29,16 @@ double cost	(double angle);
 float tant	(float angle);
 double tant	(double angle);
 
-//===[ Вектора+точки ]============================================================
-// Класс для трёхмерного вектора/точки
+//===[ Р’РµРєС‚РѕСЂР°+С‚РѕС‡РєРё ]============================================================
+// РљР»Р°СЃСЃ РґР»СЏ С‚СЂС‘С…РјРµСЂРЅРѕРіРѕ РІРµРєС‚РѕСЂР°/С‚РѕС‡РєРё
 template < class VectorComponent > class Vector3
 {
 public:
-// Конструкторы/деструторы
-	// Стандартный конструктор
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/РґРµСЃС‚СЂСѓС‚РѕСЂС‹
+	// РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	Vector3()
 	{d.c.x=0;d.c.y=0;d.c.z=0;}
-	// Конструктор с инициализацией
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РёРЅРёС†РёР°Р»РёР·Р°С†РёРµР№
 	Vector3(VectorComponent X, VectorComponent Y, VectorComponent Z) 
 	{
 		d.c.x = X;
@@ -46,13 +46,13 @@ public:
 		d.c.z = Z;
 	}
 
-// Методы
-	// Модуль
+// РњРµС‚РѕРґС‹
+	// РњРѕРґСѓР»СЊ
 	double	abs()
 	{
 		return sqrt(d.c.x*d.c.x+d.c.y*d.c.y+d.c.z*d.c.z);
 	}
-	// Нормализация вектора (приведение модуля к 1)
+	// РќРѕСЂРјР°Р»РёР·Р°С†РёСЏ РІРµРєС‚РѕСЂР° (РїСЂРёРІРµРґРµРЅРёРµ РјРѕРґСѓР»СЏ Рє 1)
 	void	normalize()
 	{
 		VectorComponent L_squared, one_over_L;
@@ -63,18 +63,18 @@ public:
 		d.c.z *= one_over_L;
 	}
     
-// Перегруженые операции
-	// Сложение
+// РџРµСЂРµРіСЂСѓР¶РµРЅС‹Рµ РѕРїРµСЂР°С†РёРё
+	// РЎР»РѕР¶РµРЅРёРµ
 	Vector3 operator+(Vector3 vVector)
 	{
 		return Vector3(vVector.d.c.x + d.c.x, vVector.d.c.y + d.c.y, vVector.d.c.z + d.c.z);
 	}
-	// Вычитание
+	// Р’С‹С‡РёС‚Р°РЅРёРµ
 	Vector3 operator-(Vector3 vVector)
 	{
 		return Vector3(d.c.x - vVector.d.c.x, d.c.y - vVector.d.c.y, d.c.z - vVector.d.c.z);
 	}
-	// Умножение
+	// РЈРјРЅРѕР¶РµРЅРёРµ
 	Vector3 operator*(double	num)
 	{return Vector3(d.c.x * num, d.c.y * num, d.c.z * num);}
 	Vector3 operator*(float		num)
@@ -85,7 +85,7 @@ public:
 	{return Vector3(d.c.x * num, d.c.y * num, d.c.z * num);}
 	Vector3 operator*(long int	num)
 	{return Vector3(d.c.x * num, d.c.y * num, d.c.z * num);}
-	// Деление
+	// Р”РµР»РµРЅРёРµ
 	Vector3 operator/(double	num)
 	{return Vector3(d.c.x / num, d.c.y / num, d.c.z / num);}
 	Vector3 operator/(float		num)
@@ -119,7 +119,7 @@ public:
 		this->d.c.z = Vect.d.c.z;
 		return *this;
 	}
-	Vector3			vector_product	(Vector3	v)	// Векторное произведение
+	Vector3			vector_product	(Vector3	v)	// Р’РµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 	{	//	      [ Ax ]   [ Bx ]   | i  j  k  |   [ Ay*Bz-Az*By ]
 		//  AxB = [ Ay ] x [ By ] = | Ax Ay Az | = [ Az*Bx-Ax*Bz ]
 		//	      [ Az ]   [ Bz ]   | Bx By Bz |   [ Ax*By-Ay*Bx ]
@@ -127,17 +127,17 @@ public:
 						this->d.c.z*v.d.c.x - this->d.c.x*v.d.c.z,
 						this->d.c.x*v.d.c.y - this->d.c.y*v.d.c.x);
 	}
-	VectorComponent	scalar_product	(Vector3	v)	// Скалярное произведение
+	VectorComponent	scalar_product	(Vector3	v)	// РЎРєР°Р»СЏСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 	{	//	[ 1 ]   [ 4 ]
 		//	[ 2 ] * [ 5 ] = 1*4 + 2*5 + 3*6 = 32
 		//	[ 3 ]   [ 6 ]
 		return this->d.c.x * v.d.c.x + this->d.c.y * v.d.c.y + this->d.c.z * v.d.c.z;
 	}
-	double			angle			(Vector3	v)	// Угол между векторами
+	double			angle			(Vector3	v)	// РЈРіРѕР» РјРµР¶РґСѓ РІРµРєС‚РѕСЂР°РјРё
 	{	// cos a = AB / |A|*|B|
 		return	acos((double)( this->scalar_product(v) / this->abs()*v.abs() ));
 	}
-// компоненты
+// РєРѕРјРїРѕРЅРµРЅС‚С‹
 	union	Vector3_union_type{
 		struct	Vector3_struct_type{
 			VectorComponent x, y, z;
@@ -146,7 +146,7 @@ public:
 			} d ;
 
 };
-// Определяем типы векторов
+// РћРїСЂРµРґРµР»СЏРµРј С‚РёРїС‹ РІРµРєС‚РѕСЂРѕРІ
 typedef Vector3 <float> Vector3f;
 typedef Vector3 <float> Point3f;
 typedef Vector3 <float> Color3f;
@@ -163,23 +163,23 @@ typedef Vector3 <char> Vector3c;
 typedef Vector3 <char> Point3c;
 typedef Vector3 <char> Color3c;
 
-// Класс для точки/вектора в двухмерном пространстве		  
+// РљР»Р°СЃСЃ РґР»СЏ С‚РѕС‡РєРё/РІРµРєС‚РѕСЂР° РІ РґРІСѓС…РјРµСЂРЅРѕРј РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ		  
 template < class VectorComponent > class Vector2 
 {
 public:
-// Конструторы/деструкторы
-	// Конструктор по молчанию
+// РљРѕРЅСЃС‚СЂСѓС‚РѕСЂС‹/РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ РјРѕР»С‡Р°РЅРёСЋ
 	Vector2() {}
 
-	// Конструктор с инициализацией
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РёРЅРёС†РёР°Р»РёР·Р°С†РёРµР№
 	Vector2(VectorComponent X, VectorComponent Y) 
 	{x = X; y = Y;}
 
-// Методы
-	// Модуль
+// РњРµС‚РѕРґС‹
+	// РњРѕРґСѓР»СЊ
 	float	abs()
 	{return sqrt(x*x+y*y);}
-	// Нормализация
+	// РќРѕСЂРјР°Р»РёР·Р°С†РёСЏ
 	void	normalize()
 	{
 		float abs=Vector2::abs();
@@ -187,14 +187,14 @@ public:
 		y/=abs;
 	}
 
-// Перегруженные операции
-	// Сложение
+// РџРµСЂРµРіСЂСѓР¶РµРЅРЅС‹Рµ РѕРїРµСЂР°С†РёРё
+	// РЎР»РѕР¶РµРЅРёРµ
 	Vector2 operator+(Vector2 vVector)
 	{return Vector2(vVector.x + x, vVector.y + y);}
-	// Вычитание
+	// Р’С‹С‡РёС‚Р°РЅРёРµ
 	Vector2 operator-(Vector2 vVector)
 	{return Vector2(x - vVector.x, y - vVector.y);}
-	// Умножение
+	// РЈРјРЅРѕР¶РµРЅРёРµ
 	Vector2 operator*(double	num)
 	{return Vector2(x * num, y * num);}
 	Vector2 operator*(float		num)
@@ -205,7 +205,7 @@ public:
 	{return Vector2(x * num, y * num);}
 	Vector2 operator*(long int	num)
 	{return Vector2(x * num, y * num);}
-	// Деление
+	// Р”РµР»РµРЅРёРµ
 	Vector2 operator/(double	num)
 	{return Vector2(x / num, y / num);}
 	Vector2 operator/(float		num)
@@ -233,12 +233,12 @@ public:
 		this->y = Vect.y;
 		return *this;
 	}
-	VectorComponent	scalar_product	(Vector2 v)		// Скалярное произведение
+	VectorComponent	scalar_product	(Vector2 v)		// РЎРєР°Р»СЏСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 	{
 		return this->d.c.x * v.d.c.x + this->d.c.y * v.d.c.y;
 	}
 
-// Компоненты
+// РљРѕРјРїРѕРЅРµРЅС‚С‹
 	union	Vector2_union_type{
 		struct	Vector2_struct_type{
             VectorComponent x, y;
@@ -247,7 +247,7 @@ public:
 			} d ;
 };
 
-// Реализация векторов
+// Р РµР°Р»РёР·Р°С†РёСЏ РІРµРєС‚РѕСЂРѕРІ
 typedef Vector2 <float> Vector2f;
 typedef Vector2 <float> Point2f;
 typedef Vector2 <double> Vector2d;
@@ -259,15 +259,15 @@ typedef Vector2 <char> Point2c;
 typedef Vector2 <long int> Vector2l;
 typedef Vector2 <long int> Point2l;
 
-// Класс для 4хмерного цвета
+// РљР»Р°СЃСЃ РґР»СЏ 4С…РјРµСЂРЅРѕРіРѕ С†РІРµС‚Р°
 template < class ColorComponent > class Color4
 {
 public:
-// Конструкторы/деструторы
-	// Стандартный конструктор
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/РґРµСЃС‚СЂСѓС‚РѕСЂС‹
+	// РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	Color4()
 	{d.c.r=0;d.c.g=0;d.c.b=0;d.c.a=1;}
-	// Конструктор с инициализацией
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РёРЅРёС†РёР°Р»РёР·Р°С†РёРµР№
 	Color4(ColorComponent R, ColorComponent G, ColorComponent B, ColorComponent A)
 	{
 		d.c.r = R;
@@ -282,13 +282,13 @@ public:
 		d.c.b = (ColorComponent)v3.d.c.z;
 		d.c.a = A;
 	}
-// Методы
-	// Модуль
+// РњРµС‚РѕРґС‹
+	// РњРѕРґСѓР»СЊ
 	double	abs()
 	{
 		return sqrt(d.c.r*d.c.r+d.c.g*d.c.g+d.c.b*d.c.b);
 	}
-	// Нормализация вектора (приведение модуля к 1)
+	// РќРѕСЂРјР°Р»РёР·Р°С†РёСЏ РІРµРєС‚РѕСЂР° (РїСЂРёРІРµРґРµРЅРёРµ РјРѕРґСѓР»СЏ Рє 1)
 	void	normalize()
 	{
 		ColorComponent L_squared, one_over_L;
@@ -299,18 +299,18 @@ public:
 		d.c.b *= one_over_L;
 	}
     
-// Перегруженые операции
-	// Сложение
+// РџРµСЂРµРіСЂСѓР¶РµРЅС‹Рµ РѕРїРµСЂР°С†РёРё
+	// РЎР»РѕР¶РµРЅРёРµ
 	Color4 operator+(Color4 vVector)
 	{
 		return Color4(vVector.d.c.r + d.c.r, vVector.d.c.g + d.c.g, vVector.d.c.b + d.c.b);
 	}
-	// Вычитание
+	// Р’С‹С‡РёС‚Р°РЅРёРµ
 	Color4 operator-(Color4 vVector)
 	{
 		return Color4(d.c.r - vVector.d.c.r, d.c.g - vVector.d.c.g, d.c.b - vVector.d.c.b);
 	}
-	// Умножение
+	// РЈРјРЅРѕР¶РµРЅРёРµ
 	Color4 operator*(double	num)
 	{return Color4(d.c.r * num, d.c.g * num, d.c.b * num, d.c.a);}
 	Color4 operator*(float		num)
@@ -321,7 +321,7 @@ public:
 	{return Color4(d.c.r * num, d.c.g * num, d.c.b * num, d.c.a);}
 	Color4 operator*(long int	num)
 	{return Color4(d.c.r * num, d.c.g * num, d.c.b * num, d.c.a);}
-	// Деление
+	// Р”РµР»РµРЅРёРµ
 	Color4 operator/(double	num)
 	{return Color4(d.c.r / num, d.c.g / num, d.c.b / num, d.c.a);}
 	Color4 operator/(float		num)
@@ -356,7 +356,7 @@ public:
 		this->d.c.a = Vect.d.c.a;
 		return *this;
 	}
-	Color4	vector_product (Color4 v)		// Векторное произведение
+	Color4	vector_product (Color4 v)		// Р’РµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 	{
 	//	      [ Ax ]   [ Bx ]   | i  j  k  |   [ Ay*Bz-Az*By ]
 	//  AxB = [ Ay ] x [ By ] = | Ax Ay Az | = [ Az*Bx-Ax*Bz ]
@@ -365,7 +365,7 @@ public:
 						this->d.c.b*v.d.c.r - this->d.c.r*v.d.c.b,
 						this->d.c.r*v.d.c.g - this->d.c.g*v.d.c.r);
 	}
-// компоненты
+// РєРѕРјРїРѕРЅРµРЅС‚С‹
 	union	Color4_union_type{
 		struct	Color4_struct_type{
 			ColorComponent r, g, b, a;

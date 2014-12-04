@@ -3,7 +3,7 @@
 
 #include "./globals.h"
 #include "./texture.h"
-// Вектор контейнер для слоёв
+// Р’РµРєС‚РѕСЂ РєРѕРЅС‚РµР№РЅРµСЂ РґР»СЏ СЃР»РѕС‘РІ
 #include <vector>
 #include <map>
 #include <string>
@@ -28,17 +28,17 @@ namespace Mesh
 			texture			= false;
 			Smoothing		= false;
 		}
-		string			name;			// Имя материала
-		string			AncestorName;	// Имя родительского материала (не учитываем)
-		Color4f			color;			// Общий цвет
-		Color4f			Diffuse;		// Диффузный цвет
-		Color4f			Specular;		// Спекулярная состовляющая
-		bool			DoubleSided;	// Флаг двухсторонности полигона
-		bool			texture;		// Определяет валидность следующих далее полей
-		TexturePointer	Texure;			// Указатель текстуры
-		int				imageIndex;		// Индекс текстуры в массиве clipVector
-		bool			Smoothing;		// Флаг сглаживания (сглаживаются ли нормали)
-		float			nSmoothAngle;	// Маскимальный угол для сглаживания (больше уже не сглаживается)
+		string			name;			// РРјСЏ РјР°С‚РµСЂРёР°Р»Р°
+		string			AncestorName;	// РРјСЏ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РјР°С‚РµСЂРёР°Р»Р° (РЅРµ СѓС‡РёС‚С‹РІР°РµРј)
+		Color4f			color;			// РћР±С‰РёР№ С†РІРµС‚
+		Color4f			Diffuse;		// Р”РёС„С„СѓР·РЅС‹Р№ С†РІРµС‚
+		Color4f			Specular;		// РЎРїРµРєСѓР»СЏСЂРЅР°СЏ СЃРѕСЃС‚РѕРІР»СЏСЋС‰Р°СЏ
+		bool			DoubleSided;	// Р¤Р»Р°Рі РґРІСѓС…СЃС‚РѕСЂРѕРЅРЅРѕСЃС‚Рё РїРѕР»РёРіРѕРЅР°
+		bool			texture;		// РћРїСЂРµРґРµР»СЏРµС‚ РІР°Р»РёРґРЅРѕСЃС‚СЊ СЃР»РµРґСѓСЋС‰РёС… РґР°Р»РµРµ РїРѕР»РµР№
+		TexturePointer	Texure;			// РЈРєР°Р·Р°С‚РµР»СЊ С‚РµРєСЃС‚СѓСЂС‹
+		int				imageIndex;		// РРЅРґРµРєСЃ С‚РµРєСЃС‚СѓСЂС‹ РІ РјР°СЃСЃРёРІРµ clipVector
+		bool			Smoothing;		// Р¤Р»Р°Рі СЃРіР»Р°Р¶РёРІР°РЅРёСЏ (СЃРіР»Р°Р¶РёРІР°СЋС‚СЃСЏ Р»Рё РЅРѕСЂРјР°Р»Рё)
+		float			nSmoothAngle;	// РњР°СЃРєРёРјР°Р»СЊРЅС‹Р№ СѓРіРѕР» РґР»СЏ СЃРіР»Р°Р¶РёРІР°РЅРёСЏ (Р±РѕР»СЊС€Рµ СѓР¶Рµ РЅРµ СЃРіР»Р°Р¶РёРІР°РµС‚СЃСЏ)
 	}	lwSurface_t	;
 
 	typedef	struct clipElement_tt
@@ -73,12 +73,12 @@ namespace Mesh
 			ns		=	0;
 			iSurf	=	0;
 		}
-		WORD		v;						// Количество вершин на полигоне
-		WORD		*vi;					// Массив индексов вершин
-		bool		*ns;					// Массив флагов сглаженности нормали
-		// если true - нормаль берётся у текущей точки иначе у полигона
-		WORD		iSurf;					// Индекс сурфейса
-		Vector3f	normal;					// Нормаль полигона
+		WORD		v;						// РљРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ РЅР° РїРѕР»РёРіРѕРЅРµ
+		WORD		*vi;					// РњР°СЃСЃРёРІ РёРЅРґРµРєСЃРѕРІ РІРµСЂС€РёРЅ
+		bool		*ns;					// РњР°СЃСЃРёРІ С„Р»Р°РіРѕРІ СЃРіР»Р°Р¶РµРЅРЅРѕСЃС‚Рё РЅРѕСЂРјР°Р»Рё
+		// РµСЃР»Рё true - РЅРѕСЂРјР°Р»СЊ Р±РµСЂС‘С‚СЃСЏ Сѓ С‚РµРєСѓС‰РµР№ С‚РѕС‡РєРё РёРЅР°С‡Рµ Сѓ РїРѕР»РёРіРѕРЅР°
+		WORD		iSurf;					// РРЅРґРµРєСЃ СЃСѓСЂС„РµР№СЃР°
+		Vector3f	normal;					// РќРѕСЂРјР°Р»СЊ РїРѕР»РёРіРѕРЅР°
 	}	Poly_t	;
 
 	typedef	struct BoundingBox_tt
@@ -89,8 +89,8 @@ namespace Mesh
 
 	typedef	struct lwVertex_tt
 	{
-		Point3f		v;						// Координаты текущей вершины
-		Point3f		n;						// Нормаль у текущей вершины
+		Point3f		v;						// РљРѕРѕСЂРґРёРЅР°С‚С‹ С‚РµРєСѓС‰РµР№ РІРµСЂС€РёРЅС‹
+		Point3f		n;						// РќРѕСЂРјР°Р»СЊ Сѓ С‚РµРєСѓС‰РµР№ РІРµСЂС€РёРЅС‹
 	}	lwVertex_t	;
 
 	typedef	struct lwLayer_tt
@@ -99,70 +99,70 @@ namespace Mesh
 		WORD			flags;
 		WORD			pivot;
 		string			name;
-		Point3f			PivotPoint;			// Главная точка слоя (от неё отсчёт)
-		BoundingBox_t	*bbox;				// Опциональный ббокс
-		lwVertex_t	*	Vertexes;			// Массив вершин
-		DWORD			iVertexes;			// Количество вершин
-		Poly_t		*	Pols;				// Массив полигонов
-		DWORD			iPols;				// Количество полигонов
+		Point3f			PivotPoint;			// Р“Р»Р°РІРЅР°СЏ С‚РѕС‡РєР° СЃР»РѕСЏ (РѕС‚ РЅРµС‘ РѕС‚СЃС‡С‘С‚)
+		BoundingBox_t	*bbox;				// РћРїС†РёРѕРЅР°Р»СЊРЅС‹Р№ Р±Р±РѕРєСЃ
+		lwVertex_t	*	Vertexes;			// РњР°СЃСЃРёРІ РІРµСЂС€РёРЅ
+		DWORD			iVertexes;			// РљРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ
+		Poly_t		*	Pols;				// РњР°СЃСЃРёРІ РїРѕР»РёРіРѕРЅРѕРІ
+		DWORD			iPols;				// РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»РёРіРѕРЅРѕРІ
 	}	lwLayer_t	;
 
 	typedef vector<lwLayer_t>	lwLayers;
-//mmm Сглаживание нормалей mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+//mmm РЎРіР»Р°Р¶РёРІР°РЅРёРµ РЅРѕСЂРјР°Р»РµР№ mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 	typedef	struct NormalSmoothPolygonPointer_tt
 	{
 		NormalSmoothPolygonPointer_tt()
 		{
 			s = false;
 		}
-		NormalSmoothPolygonPointer_tt(Poly_t * pp)	// Специальный конструтор
+		NormalSmoothPolygonPointer_tt(Poly_t * pp)	// РЎРїРµС†РёР°Р»СЊРЅС‹Р№ РєРѕРЅСЃС‚СЂСѓС‚РѕСЂ
 		{
 			p = pp;
 			s = false;
 		}
-		Poly_t	*	p;		// Указатель на полигон
-		bool		s;		// Флаг сглаживания
-		WORD		np;		// Номер вершины в полигоне
-		// значит что этот полигон должен использовать сглаженную нормаль по этой вершине
+		Poly_t	*	p;		// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РїРѕР»РёРіРѕРЅ
+		bool		s;		// Р¤Р»Р°Рі СЃРіР»Р°Р¶РёРІР°РЅРёСЏ
+		WORD		np;		// РќРѕРјРµСЂ РІРµСЂС€РёРЅС‹ РІ РїРѕР»РёРіРѕРЅРµ
+		// Р·РЅР°С‡РёС‚ С‡С‚Рѕ СЌС‚РѕС‚ РїРѕР»РёРіРѕРЅ РґРѕР»Р¶РµРЅ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРіР»Р°Р¶РµРЅРЅСѓСЋ РЅРѕСЂРјР°Р»СЊ РїРѕ СЌС‚РѕР№ РІРµСЂС€РёРЅРµ
 	}	NormalSmoothPolygonPointer_t;
 	typedef	struct NormalSmoothVertex_tt
 	{
-		// Массив полигонов, которым принадлежит данная вершина
+		// РњР°СЃСЃРёРІ РїРѕР»РёРіРѕРЅРѕРІ, РєРѕС‚РѕСЂС‹Рј РїСЂРёРЅР°РґР»РµР¶РёС‚ РґР°РЅРЅР°СЏ РІРµСЂС€РёРЅР°
 		vector<NormalSmoothPolygonPointer_t>	polys;
-		DWORD									n;		// Номер текущей вершины
-		Vector3f								normal;	// результирующая нормаль
+		DWORD									n;		// РќРѕРјРµСЂ С‚РµРєСѓС‰РµР№ РІРµСЂС€РёРЅС‹
+		Vector3f								normal;	// СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰Р°СЏ РЅРѕСЂРјР°Р»СЊ
 	}	NormalSmoothVertex_t;
 
 //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-//mmm Класс mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+//mmm РљР»Р°СЃСЃ mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 	class LWOMesh
 	{
 	private:
-		// Данные геометрии
-		lwLayers		Layers;						// Массив слоёв
-		DWORD			iLayers;					// Счётчик слоёв
+		// Р”Р°РЅРЅС‹Рµ РіРµРѕРјРµС‚СЂРёРё
+		lwLayers		Layers;						// РњР°СЃСЃРёРІ СЃР»РѕС‘РІ
+		DWORD			iLayers;					// РЎС‡С‘С‚С‡РёРє СЃР»РѕС‘РІ
 		GLuint			ListID;
-		// Данные материалов и т. д.
-		lwTagList_t		TagList;					// Массив тэгов
-		// Данные объекта
-		Point3f			Translate;					// Смещение, поворот и масштаб
+		// Р”Р°РЅРЅС‹Рµ РјР°С‚РµСЂРёР°Р»РѕРІ Рё С‚. Рґ.
+		lwTagList_t		TagList;					// РњР°СЃСЃРёРІ С‚СЌРіРѕРІ
+		// Р”Р°РЅРЅС‹Рµ РѕР±СЉРµРєС‚Р°
+		Point3f			Translate;					// РЎРјРµС‰РµРЅРёРµ, РїРѕРІРѕСЂРѕС‚ Рё РјР°СЃС€С‚Р°Р±
 		Point3f			Rotate;
 		Point3f			Scale;
 		DWORD			Pols;
 		DWORD			Points;
 		GLuint			list;
 		bool			compiled;
-		clipVector_t	clipVector;					// Список всех имён текстур
-	public:		lwSurfList_t	SurfList;			// Список сурфейсов
-		WORD			iSurfaces;					// Количество сурфейсов
+		clipVector_t	clipVector;					// РЎРїРёСЃРѕРє РІСЃРµС… РёРјС‘РЅ С‚РµРєСЃС‚СѓСЂ
+	public:		lwSurfList_t	SurfList;			// РЎРїРёСЃРѕРє СЃСѓСЂС„РµР№СЃРѕРІ
+		WORD			iSurfaces;					// РљРѕР»РёС‡РµСЃС‚РІРѕ СЃСѓСЂС„РµР№СЃРѕРІ
 
-		//material_t	*	material;				// Массив материалов
-		//int				mi;						// Индекс материала
-		//Point3f		*	vertexes;				// Массив вершин
-		//Point2f		*	tc;						// Текстурные координаты
-		//Mesh::Poly_t	*	Pols;					// Массив полигонов
-		//DWORD			iPols;						// Количество полигонов
-	// Читалки чанков
+		//material_t	*	material;				// РњР°СЃСЃРёРІ РјР°С‚РµСЂРёР°Р»РѕРІ
+		//int				mi;						// РРЅРґРµРєСЃ РјР°С‚РµСЂРёР°Р»Р°
+		//Point3f		*	vertexes;				// РњР°СЃСЃРёРІ РІРµСЂС€РёРЅ
+		//Point2f		*	tc;						// РўРµРєСЃС‚СѓСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+		//Mesh::Poly_t	*	Pols;					// РњР°СЃСЃРёРІ РїРѕР»РёРіРѕРЅРѕРІ
+		//DWORD			iPols;						// РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»РёРіРѕРЅРѕРІ
+	// Р§РёС‚Р°Р»РєРё С‡Р°РЅРєРѕРІ
 	private:
 		bool	ReadPNTSChunk		(	FILE	*	f	);
 		bool	ReadPOLSChunk		(	FILE	*	f	);
@@ -171,11 +171,11 @@ namespace Mesh
 		bool	ReadSURFChunk		(	FILE	*	f	);
 		bool	ReadPTAGChunk		(	FILE	*	f	);
 		bool	ReadCLIPChunk		(	FILE	*	f	);
-	// Читалки субчанков
+	// Р§РёС‚Р°Р»РєРё СЃСѓР±С‡Р°РЅРєРѕРІ
 		WORD	ReadSURFCOLRSubChunk(	FILE	*	f	);
 		WORD	ReadSURFDIFFSubChunk(	FILE	*	f	);
 		WORD	ReadSURFSPECSubChunk(	FILE	*	f	);
-	// Постобработка файла - сортировка сурфейсов, запоминание индексов и т. д. и т. п.
+	// РџРѕСЃС‚РѕР±СЂР°Р±РѕС‚РєР° С„Р°Р№Р»Р° - СЃРѕСЂС‚РёСЂРѕРІРєР° СЃСѓСЂС„РµР№СЃРѕРІ, Р·Р°РїРѕРјРёРЅР°РЅРёРµ РёРЅРґРµРєСЃРѕРІ Рё С‚. Рґ. Рё С‚. Рї.
 		void	PostLoadProcessing	(	void			);
 		void	DrawFromSource		(	void			);
 		void	CompileList			(	void			);

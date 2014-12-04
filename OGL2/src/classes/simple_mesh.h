@@ -20,9 +20,9 @@ namespace Mesh
 
 	struct	material_t
 	{
-		TexturePointer	tex;						// Указатель на текстуру
-		char			TextureName[128];			// Имя текстуры (для RM)
-		Vector3f		ambient;					// Составляющие цвета объекта
+		TexturePointer	tex;						// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С‚РµРєСЃС‚СѓСЂСѓ
+		char			TextureName[128];			// РРјСЏ С‚РµРєСЃС‚СѓСЂС‹ (РґР»СЏ RM)
+		Vector3f		ambient;					// РЎРѕСЃС‚Р°РІР»СЏСЋС‰РёРµ С†РІРµС‚Р° РѕР±СЉРµРєС‚Р°
 		Vector3f		diffuse;
 		Vector3f		specular;
 		GLfloat			shine;
@@ -34,11 +34,11 @@ namespace Mesh
 	{
 	private:
 		GLuint			ListID;
-		GLuint			mat_q;						// Количество задейтвованных текстур
-		Point3f			Translate;					// Смещение, поворот и масштаб
+		GLuint			mat_q;						// РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РґРµР№С‚РІРѕРІР°РЅРЅС‹С… С‚РµРєСЃС‚СѓСЂ
+		Point3f			Translate;					// РЎРјРµС‰РµРЅРёРµ, РїРѕРІРѕСЂРѕС‚ Рё РјР°СЃС€С‚Р°Р±
 		Point3f			Rotate;
 		Point3f			Scale;
-		material_t*		material;					// Массив материалов
+		material_t*		material;					// РњР°СЃСЃРёРІ РјР°С‚РµСЂРёР°Р»РѕРІ
 	public:
 		simpleMesh			();
 		Mesh::RESULT	Load	(char	*FileName);

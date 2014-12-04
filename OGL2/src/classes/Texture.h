@@ -1,5 +1,5 @@
 #pragma once
-//====== Общие файлы
+//====== РћР±С‰РёРµ С„Р°Р№Р»С‹
 #include "./globals.h"
 
 #include <windows.h>
@@ -10,35 +10,35 @@
 class TextureClass
 {
 protected:
-	char			TextureFileName[_MAX_PATH];			// Имя файла с рисунком
-	int				iHeight, iWidth, Bpp;				// Ширина, высота и !БАЙТОВОСТЬ! рисунка
-	ILenum			FType;								// Тип текстуры (JPEG,BMP,PNG...)
-	int				size;								// Размер текстуры
-	unsigned int	type;								// Тип хранения данных
-	unsigned char*	data;								// Данные картинки
-	int				FilterMode;							// Режим отображения текстуры
+	char			TextureFileName[_MAX_PATH];			// РРјСЏ С„Р°Р№Р»Р° СЃ СЂРёСЃСѓРЅРєРѕРј
+	int				iHeight, iWidth, Bpp;				// РЁРёСЂРёРЅР°, РІС‹СЃРѕС‚Р° Рё !Р‘РђР™РўРћР’РћРЎРўР¬! СЂРёСЃСѓРЅРєР°
+	ILenum			FType;								// РўРёРї С‚РµРєСЃС‚СѓСЂС‹ (JPEG,BMP,PNG...)
+	int				size;								// Р Р°Р·РјРµСЂ С‚РµРєСЃС‚СѓСЂС‹
+	unsigned int	type;								// РўРёРї С…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С…
+	unsigned char*	data;								// Р”Р°РЅРЅС‹Рµ РєР°СЂС‚РёРЅРєРё
+	int				FilterMode;							// Р РµР¶РёРј РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С‚РµРєСЃС‚СѓСЂС‹
 public:
-	GLuint			Number;								// Индекс текстуры
+	GLuint			Number;								// РРЅРґРµРєСЃ С‚РµРєСЃС‚СѓСЂС‹
 
 	TextureClass				(void);
 	~TextureClass				(void);
 
-	void	SetFileName		(const char *Name);			// Устанавливает имя файла для текстуры
-	void	SetFileType		(ILenum Type);				// Установка типа файла
-	void	SetFM			(int FM);					// Установить режим фильтрации
-	char*	GetFileName		(void);						// Возврат имени файла с текстурой
-	int		GetNumber		(void)	{return Number;};	// Должен возвращать номер текстуры
-	bool	Load			();							// Грузит текстуру в память
-	bool	Load (int FM,ILenum Type,const char* Name);	// Таж фигня но с параметрами
-	bool	Load(const char* Name);						// Здесь OIL сам определяет тип и фильтрация по умолчанию
-	bool	LoadL	(ILenum Type, void* Lump, ILuint size);// Загрузка текстуры из памяти
+	void	SetFileName		(const char *Name);			// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РёРјСЏ С„Р°Р№Р»Р° РґР»СЏ С‚РµРєСЃС‚СѓСЂС‹
+	void	SetFileType		(ILenum Type);				// РЈСЃС‚Р°РЅРѕРІРєР° С‚РёРїР° С„Р°Р№Р»Р°
+	void	SetFM			(int FM);					// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµР¶РёРј С„РёР»СЊС‚СЂР°С†РёРё
+	char*	GetFileName		(void);						// Р’РѕР·РІСЂР°С‚ РёРјРµРЅРё С„Р°Р№Р»Р° СЃ С‚РµРєСЃС‚СѓСЂРѕР№
+	int		GetNumber		(void)	{return Number;};	// Р”РѕР»Р¶РµРЅ РІРѕР·РІСЂР°С‰Р°С‚СЊ РЅРѕРјРµСЂ С‚РµРєСЃС‚СѓСЂС‹
+	bool	Load			();							// Р“СЂСѓР·РёС‚ С‚РµРєСЃС‚СѓСЂСѓ РІ РїР°РјСЏС‚СЊ
+	bool	Load (int FM,ILenum Type,const char* Name);	// РўР°Р¶ С„РёРіРЅСЏ РЅРѕ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё
+	bool	Load(const char* Name);						// Р—РґРµСЃСЊ OIL СЃР°Рј РѕРїСЂРµРґРµР»СЏРµС‚ С‚РёРї Рё С„РёР»СЊС‚СЂР°С†РёСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+	bool	LoadL	(ILenum Type, void* Lump, ILuint size);// Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂС‹ РёР· РїР°РјСЏС‚Рё
 
 	const int		GetWidth		()
 	{	return iWidth;};	// No comments :=)
 	const int		GetHeight		()
 	{	return iHeight;};
 
-	void	bind			()							// Задействовать текстуру
+	void	bind			()							// Р—Р°РґРµР№СЃС‚РІРѕРІР°С‚СЊ С‚РµРєСЃС‚СѓСЂСѓ
 	{glBindTexture(GL_TEXTURE_2D, Number);}
 };
 
@@ -46,28 +46,28 @@ typedef TextureClass * TexturePointer;
 
 #ifdef ENABLE_TEXTURE_RENDERING
 
-#define	FJC_RTEX_NO_FILTERING			0				// Режимы фильтрации для рендер-текстур
+#define	FJC_RTEX_NO_FILTERING			0				// Р РµР¶РёРјС‹ С„РёР»СЊС‚СЂР°С†РёРё РґР»СЏ СЂРµРЅРґРµСЂ-С‚РµРєСЃС‚СѓСЂ
 #define FJC_RTEX_BILINEAR_FILTERING		1
 
 class FJCRendererTexture
 {
 protected:
-	GLuint			Number;								// Индекс текстуры
-	int				iHeight, iWidth, Bpp;				// Ширина, высота и !БАЙТОВОСТЬ! рисунка
-	int				size;								// Размер текстуры	(и байтах)
-	unsigned char*	data;								// Данные картинки
-	int				FilterMode;							// Режим отображения текстуры
-	char			ScreenShot	[64];					// Имя для скрина
-	unsigned int	ScreenIndex;						// Индекс имени скрина
+	GLuint			Number;								// РРЅРґРµРєСЃ С‚РµРєСЃС‚СѓСЂС‹
+	int				iHeight, iWidth, Bpp;				// РЁРёСЂРёРЅР°, РІС‹СЃРѕС‚Р° Рё !Р‘РђР™РўРћР’РћРЎРўР¬! СЂРёСЃСѓРЅРєР°
+	int				size;								// Р Р°Р·РјРµСЂ С‚РµРєСЃС‚СѓСЂС‹	(Рё Р±Р°Р№С‚Р°С…)
+	unsigned char*	data;								// Р”Р°РЅРЅС‹Рµ РєР°СЂС‚РёРЅРєРё
+	int				FilterMode;							// Р РµР¶РёРј РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С‚РµРєСЃС‚СѓСЂС‹
+	char			ScreenShot	[64];					// РРјСЏ РґР»СЏ СЃРєСЂРёРЅР°
+	unsigned int	ScreenIndex;						// РРЅРґРµРєСЃ РёРјРµРЅРё СЃРєСЂРёРЅР°
 public:
 	FJCRendererTexture				(void);
 	~FJCRendererTexture				(void);
 
-	void	SetSize			(int x,int y)				// установить размер
+	void	SetSize			(int x,int y)				// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЂР°Р·РјРµСЂ
 	{	iHeight = y; iWidth = x;	size = x*y*4; };
-	void	SetFM			(int FM)					// Установить режим фильтрации
+	void	SetFM			(int FM)					// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµР¶РёРј С„РёР»СЊС‚СЂР°С†РёРё
 	{ FilterMode = FM; };
-	int		GetNumber		(void)						// Должен возвращать номер текстуры
+	int		GetNumber		(void)						// Р”РѕР»Р¶РµРЅ РІРѕР·РІСЂР°С‰Р°С‚СЊ РЅРѕРјРµСЂ С‚РµРєСЃС‚СѓСЂС‹
 	{return Number;};
 
 	void	Init			(
@@ -75,13 +75,13 @@ public:
 								int Height,
 								int FilterMode = FJC_RTEX_BILINEAR_FILTERING
 							);
-	void	Init			();							// Инициализация тектуры (выделение памяти и вся фигня)
+	void	Init			();							// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‚РµРєС‚СѓСЂС‹ (РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё Рё РІСЃСЏ С„РёРіРЅСЏ)
 	
-	void	CopyBackbufferToTexture();					// Копировать backbuffer в текстуру
+	void	CopyBackbufferToTexture();					// РљРѕРїРёСЂРѕРІР°С‚СЊ backbuffer РІ С‚РµРєСЃС‚СѓСЂСѓ
 
-	void	bind			();							// Задействовать текстуру
+	void	bind			();							// Р—Р°РґРµР№СЃС‚РІРѕРІР°С‚СЊ С‚РµРєСЃС‚СѓСЂСѓ
 
-	void	Save			();							// Сохранение картинки на винт
+	void	Save			();							// РЎРѕС…СЂР°РЅРµРЅРёРµ РєР°СЂС‚РёРЅРєРё РЅР° РІРёРЅС‚
 };
-extern FJCRendererTexture RendTex;						// Одна текстурка для работы
+extern FJCRendererTexture RendTex;						// РћРґРЅР° С‚РµРєСЃС‚СѓСЂРєР° РґР»СЏ СЂР°Р±РѕС‚С‹
 #endif

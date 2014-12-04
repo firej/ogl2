@@ -15,20 +15,20 @@
 #define VC_EXTRALEAN
 #endif
 #include "LocusAFX.h"
-//====== Подключение Header'ов
+//====== РџРѕРґРєР»СЋС‡РµРЅРёРµ Header'РѕРІ
 #include "./MAIN.h"
 
 Application MyApplication;
-// Главная функция приложения!
+// Р“Р»Р°РІРЅР°СЏ С„СѓРЅРєС†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ!
 int APIENTRY WinMain( HINSTANCE,
 					  HINSTANCE,
 					  LPSTR,
 					  int)
 {
-	//  Слежение за утечками памяти
+	//  РЎР»РµР¶РµРЅРёРµ Р·Р° СѓС‚РµС‡РєР°РјРё РїР°РјСЏС‚Рё
 	//_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_LEAK_CHECK_DF );
-	MyApplication.Birth();								// Инициализация приложения
-	MyApplication.Work();								// Цикл обработки сообщений
-	MyApplication.Suicide();							// Убивание приложения
+	MyApplication.Birth();								// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ
+	MyApplication.Work();								// Р¦РёРєР» РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№
+	MyApplication.Suicide();							// РЈР±РёРІР°РЅРёРµ РїСЂРёР»РѕР¶РµРЅРёСЏ
 	return 0;
 };

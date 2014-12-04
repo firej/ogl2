@@ -21,13 +21,13 @@
 
 #pragma comment (lib, "src/ex/MesaGL/glew32.lib")
 
-//#define WGL_WGLEXT_PROTOTYPES		// Включаем дополнительные возможности из WGL
+//#define WGL_WGLEXT_PROTOTYPES		// Р’РєР»СЋС‡Р°РµРј РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РёР· WGL
 //#include "../Ex/MesaGL/WGLEXT.H"
 #ifdef AUX_ENABLED
 #include "../Ex/MesaGL/Glaux.h"
 #endif
 
-//====== Подключение графических библиотек
+//====== РџРѕРґРєР»СЋС‡РµРЅРёРµ РіСЂР°С„РёС‡РµСЃРєРёС… Р±РёР±Р»РёРѕС‚РµРє
 #pragma comment (lib, "opengl32.lib")
 #pragma comment (lib, "glu32.lib")
 #ifdef AUX_ENABLED
@@ -42,13 +42,13 @@
 #include "./Ex/IL/ilu.h"
 #endif
 //#include "../Ex/IL/ilut.h"
-//====== Подключение библиотек OIL
+//====== РџРѕРґРєР»СЋС‡РµРЅРёРµ Р±РёР±Р»РёРѕС‚РµРє OIL
 #pragma comment (lib, "src/ex/il/DevIL.lib")
 #ifdef ILU_ENABLED
 #pragma comment (lib, "src/ex/il/ilu.lib")
 #endif
 
-//======[ Звук - OpenAL ]========================================================================================
+//======[ Р—РІСѓРє - OpenAL ]========================================================================================
 #include "./EX/AL/AL.h"
 #include "./EX/AL/alc.h"
 #include "./EX/AL/ALut.h"

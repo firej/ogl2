@@ -30,23 +30,23 @@ namespace	Console
 		ST_FADEIN			=	2,
 		ST_FADEOUT			=	3
 	};
-	enum	FadeEffect						// Различные эффекты появления/исчезновения консоли
+	enum	FadeEffect						// Р Р°Р·Р»РёС‡РЅС‹Рµ СЌС„С„РµРєС‚С‹ РїРѕСЏРІР»РµРЅРёСЏ/РёСЃС‡РµР·РЅРѕРІРµРЅРёСЏ РєРѕРЅСЃРѕР»Рё
 	{
-		ALFA				=	0			// Эффект алфа-проявления
+		ALFA				=	0			// Р­С„С„РµРєС‚ Р°Р»С„Р°-РїСЂРѕСЏРІР»РµРЅРёСЏ
 	};
 	struct	ConString
 	{
-		//BYTE		chars;		// Количество использованных символов (для переноса)
+		//BYTE		chars;		// РљРѕР»РёС‡РµСЃС‚РІРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРЅС‹С… СЃРёРјРІРѕР»РѕРІ (РґР»СЏ РїРµСЂРµРЅРѕСЃР°)
 		BYTE		c;
-		string		s;			// Строка
+		string		s;			// РЎС‚СЂРѕРєР°
 	};
 	struct	ListElement
 	{
-		ListElement	*	next;	// Указатель на следующий элемент списка
-		ConString		data;	// Данные
+		ListElement	*	next;	// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РµРґСѓСЋС‰РёР№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°
+		ConString		data;	// Р”Р°РЅРЅС‹Рµ
 	};
 
-	enum	VarType					// Перечисление возможных типов переменных
+	enum	VarType					// РџРµСЂРµС‡РёСЃР»РµРЅРёРµ РІРѕР·РјРѕР¶РЅС‹С… С‚РёРїРѕРІ РїРµСЂРµРјРµРЅРЅС‹С…
 	{
 		VT_BYTE			=	14,
 		VT_WORD			=	0,
@@ -67,50 +67,50 @@ namespace	Console
 	};
 }
 
-typedef void (*ConFunc)(string);					// Тип указателя на косольную функцию
-typedef map <string,ConFunc,less<string>>	ConFuncsMap;		// Словарь для сопоставления имён и функций
-typedef map <string,ConFunc,less<string>>::iterator	iCFuncsMap;	// Словарь для сопоставления имён и функций
+typedef void (*ConFunc)(string);					// РўРёРї СѓРєР°Р·Р°С‚РµР»СЏ РЅР° РєРѕСЃРѕР»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ
+typedef map <string,ConFunc,less<string>>	ConFuncsMap;		// РЎР»РѕРІР°СЂСЊ РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РёРјС‘РЅ Рё С„СѓРЅРєС†РёР№
+typedef map <string,ConFunc,less<string>>::iterator	iCFuncsMap;	// РЎР»РѕРІР°СЂСЊ РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РёРјС‘РЅ Рё С„СѓРЅРєС†РёР№
 struct	Var_t
 {
 	Console::VarType	type;
 	void			*	var;
 	BYTE				maxsize;
 };
-typedef map <string,Var_t>				ConVarsMap;	// Словарь для сопоставления имён и переменных
-typedef	map <string,Var_t>::iterator	iCVarsMap;	// Словарь для сопоставления имён и переменных
+typedef map <string,Var_t>				ConVarsMap;	// РЎР»РѕРІР°СЂСЊ РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РёРјС‘РЅ Рё РїРµСЂРµРјРµРЅРЅС‹С…
+typedef	map <string,Var_t>::iterator	iCVarsMap;	// РЎР»РѕРІР°СЂСЊ РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РёРјС‘РЅ Рё РїРµСЂРµРјРµРЅРЅС‹С…
 
 class CConsole
 {
 //private:
 protected:
-	//BYTE			CurrSubString;					// Номер
-	Console::ListElement*	list;					// Указатель на список строк консоли
-									// (по совместительству указатель на текущую редактируемую строку)
-	DWORD					chars;					// Количество букв в текущей строке
-	DWORD					cursor;					// Позиция курсора в строке
-	DWORD					ListElements;			// Количество элементов списка
-	Point3f					Colors[64];				// Массив предопределённых цветов
-	PFont					ConsoleFont;			// Указатель на консольный шрифт
-	Console::Status			State;					// Состояние движения консоли
-	double					persent;				// Проценты появления/исчезновения консоли
-	double					pers_step;				// Шаг изменения состояния консоли
-	double					transparency;			// Максимальная прозрачность (при максимальной видимости)
-	double					height;					// Процент занимаемого на экране места
-	double					lastTick;				// Послдее время курсора
-	double					Period;					// Период мигания курсора
-	bool					CurVisible;				// Видим ли курсор
-	string					Commands[60];			// Список команд для повторения
-	DWORD					CurCommand;				// Текущая выбранная команда для повторения
-	WORD					iAComp;					// Количество слов для вывода в автодополнении
-	std::list<string>			CommandsHistory;		// История введённых команд
-	std::list<string>::iterator	iCndHistory;			// Итератор в истории
+	//BYTE			CurrSubString;					// РќРѕРјРµСЂ
+	Console::ListElement*	list;					// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРїРёСЃРѕРє СЃС‚СЂРѕРє РєРѕРЅСЃРѕР»Рё
+									// (РїРѕ СЃРѕРІРјРµСЃС‚РёС‚РµР»СЊСЃС‚РІСѓ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С‚РµРєСѓС‰СѓСЋ СЂРµРґР°РєС‚РёСЂСѓРµРјСѓСЋ СЃС‚СЂРѕРєСѓ)
+	DWORD					chars;					// РљРѕР»РёС‡РµСЃС‚РІРѕ Р±СѓРєРІ РІ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРµ
+	DWORD					cursor;					// РџРѕР·РёС†РёСЏ РєСѓСЂСЃРѕСЂР° РІ СЃС‚СЂРѕРєРµ
+	DWORD					ListElements;			// РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ СЃРїРёСЃРєР°
+	Point3f					Colors[64];				// РњР°СЃСЃРёРІ РїСЂРµРґРѕРїСЂРµРґРµР»С‘РЅРЅС‹С… С†РІРµС‚РѕРІ
+	PFont					ConsoleFont;			// РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РєРѕРЅСЃРѕР»СЊРЅС‹Р№ С€СЂРёС„С‚
+	Console::Status			State;					// РЎРѕСЃС‚РѕСЏРЅРёРµ РґРІРёР¶РµРЅРёСЏ РєРѕРЅСЃРѕР»Рё
+	double					persent;				// РџСЂРѕС†РµРЅС‚С‹ РїРѕСЏРІР»РµРЅРёСЏ/РёСЃС‡РµР·РЅРѕРІРµРЅРёСЏ РєРѕРЅСЃРѕР»Рё
+	double					pers_step;				// РЁР°Рі РёР·РјРµРЅРµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРЅСЃРѕР»Рё
+	double					transparency;			// РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ (РїСЂРё РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ РІРёРґРёРјРѕСЃС‚Рё)
+	double					height;					// РџСЂРѕС†РµРЅС‚ Р·Р°РЅРёРјР°РµРјРѕРіРѕ РЅР° СЌРєСЂР°РЅРµ РјРµСЃС‚Р°
+	double					lastTick;				// РџРѕСЃР»РґРµРµ РІСЂРµРјСЏ РєСѓСЂСЃРѕСЂР°
+	double					Period;					// РџРµСЂРёРѕРґ РјРёРіР°РЅРёСЏ РєСѓСЂСЃРѕСЂР°
+	bool					CurVisible;				// Р’РёРґРёРј Р»Рё РєСѓСЂСЃРѕСЂ
+	string					Commands[60];			// РЎРїРёСЃРѕРє РєРѕРјР°РЅРґ РґР»СЏ РїРѕРІС‚РѕСЂРµРЅРёСЏ
+	DWORD					CurCommand;				// РўРµРєСѓС‰Р°СЏ РІС‹Р±СЂР°РЅРЅР°СЏ РєРѕРјР°РЅРґР° РґР»СЏ РїРѕРІС‚РѕСЂРµРЅРёСЏ
+	WORD					iAComp;					// РљРѕР»РёС‡РµСЃС‚РІРѕ СЃР»РѕРІ РґР»СЏ РІС‹РІРѕРґР° РІ Р°РІС‚РѕРґРѕРїРѕР»РЅРµРЅРёРё
+	std::list<string>			CommandsHistory;		// РСЃС‚РѕСЂРёСЏ РІРІРµРґС‘РЅРЅС‹С… РєРѕРјР°РЅРґ
+	std::list<string>::iterator	iCndHistory;			// РС‚РµСЂР°С‚РѕСЂ РІ РёСЃС‚РѕСЂРёРё
 public:
 	CConsole			(): ListElements(0),list(0)
 	{}
 	void	SetColors	(	Point3f	C_Def, Point3f C_Help, Point3f C_Warn, Point3f C_Err)
 	{	Colors[0] = C_Def; Colors[1] = C_Help; Colors[2] = C_Warn; Colors[3] = C_Err;	}
 	void	SetFont		(PFont	CFont)
-	{	ConsoleFont	=	CFont;	}		// Выбор консольного шрифта	
+	{	ConsoleFont	=	CFont;	}		// Р’С‹Р±РѕСЂ РєРѕРЅСЃРѕР»СЊРЅРѕРіРѕ С€СЂРёС„С‚Р°	
 	void	INIT		();
 	void	DEINIT		();
 	void	ProcessChar	(char	c);
@@ -121,27 +121,27 @@ public:
 	void	Hide		();
 	void	ChangeState	();
 	bool	Visible		();
-// Работа с командами
+// Р Р°Р±РѕС‚Р° СЃ РєРѕРјР°РЅРґР°РјРё
 private:
-	ConFuncsMap			CFmap;		// Карта функций консоли
+	ConFuncsMap			CFmap;		// РљР°СЂС‚Р° С„СѓРЅРєС†РёР№ РєРѕРЅСЃРѕР»Рё
 public:
-	void	DoString	(string	s);					// Выполнение строки, введённой пользователем
-	string	FindNextSym	(string	s);					// Найти следующий за этим символ в карте
-	void	RegFunc		(string	s,ConFunc cf);		// Регистрация функции для возможности вызова
+	void	DoString	(string	s);					// Р’С‹РїРѕР»РЅРµРЅРёРµ СЃС‚СЂРѕРєРё, РІРІРµРґС‘РЅРЅРѕР№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј
+	string	FindNextSym	(string	s);					// РќР°Р№С‚Рё СЃР»РµРґСѓСЋС‰РёР№ Р·Р° СЌС‚РёРј СЃРёРјРІРѕР» РІ РєР°СЂС‚Рµ
+	void	RegFunc		(string	s,ConFunc cf);		// Р РµРіРёСЃС‚СЂР°С†РёСЏ С„СѓРЅРєС†РёРё РґР»СЏ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РІС‹Р·РѕРІР°
 	void	RegFunc		(char*	s,ConFunc cf)
 	{	RegFunc(string(s),cf);				}
-	void	UnRegFunc	(string	s);					// Убирать регистрацию функции
+	void	UnRegFunc	(string	s);					// РЈР±РёСЂР°С‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ С„СѓРЅРєС†РёРё
 	/*void	RegVar		(string	s,Console::VarType	type,void*	var,BYTE	maxsize);
 	void	RegVar		(char*	s,Console::VarType	type,void*	var,BYTE	maxsize)
 	{	RegVar		(string(s),type,var,maxsize);	}
-	void	UnRegVar	(string	s);					// Убирать регистрацию переменной*/
+	void	UnRegVar	(string	s);					// РЈР±РёСЂР°С‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РїРµСЂРµРјРµРЅРЅРѕР№*/
 	ConFuncsMap*	GetMap	(void)
 	{	return &CFmap;	}
-	void	DropHistory	(	void	);				// Очистка истории команд
+	void	DropHistory	(	void	);				// РћС‡РёСЃС‚РєР° РёСЃС‚РѕСЂРёРё РєРѕРјР°РЅРґ
 };
 
 extern CConsole	*	MainCon;
 
-//void	Console_Set			(string	s);	// Установить значение зарегистрированной переменной
-//void	Console_Get			(string	s);	// Вывести в консоль значение некоторой переменной
-void	Console_Help		(string	s);	// Вывести справку вообще или по команде
+//void	Console_Set			(string	s);	// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅРѕР№ РїРµСЂРµРјРµРЅРЅРѕР№
+//void	Console_Get			(string	s);	// Р’С‹РІРµСЃС‚Рё РІ РєРѕРЅСЃРѕР»СЊ Р·РЅР°С‡РµРЅРёРµ РЅРµРєРѕС‚РѕСЂРѕР№ РїРµСЂРµРјРµРЅРЅРѕР№
+void	Console_Help		(string	s);	// Р’С‹РІРµСЃС‚Рё СЃРїСЂР°РІРєСѓ РІРѕРѕР±С‰Рµ РёР»Рё РїРѕ РєРѕРјР°РЅРґРµ

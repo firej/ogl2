@@ -44,7 +44,7 @@ Vector3f	GetNormal(Point3f	a,Point3f	b,Point3f	c);
 //
 // You must set material and texture mapping for mesh in 3DS or this func
 // will hang up.
-// Спёрто у BH :)
+// РЎРїС‘СЂС‚Рѕ Сѓ BH :)
 
 Mesh::RESULT	Mesh::simpleMesh::Load(char *FileName)
 {
@@ -66,15 +66,15 @@ Mesh::RESULT	Mesh::simpleMesh::Load(char *FileName)
 	FindStr("\t*MATERIAL_COUNT",fModel);
 	sscanf(szString,"\t*MATERIAL_COUNT %i",&mat_q);
 
-	material = new Mesh::material_t		[mat_q];		// Создаём нужное количество указателей
+	material = new Mesh::material_t		[mat_q];		// РЎРѕР·РґР°С‘Рј РЅСѓР¶РЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СѓРєР°Р·Р°С‚РµР»РµР№
 
-	for (unsigned int i=0;i<mat_q;i++)						// Генерируем имена ресурсов
+	for (unsigned int i=0;i<mat_q;i++)						// Р“РµРЅРµСЂРёСЂСѓРµРј РёРјРµРЅР° СЂРµСЃСѓСЂСЃРѕРІ
 	{	sprintf(szString,"Mesh_tex_#%d_for_%s",i,FileName);
 		memcpy(material[i].TextureName,szString,128);		};
 
 	for (unsigned int loop = 0; loop < mat_q; loop++)
 	{
-		FindStr("\t\t*MATERIAL_AMBIENT",fModel); // Заполняем структуры материалов
+		FindStr("\t\t*MATERIAL_AMBIENT",fModel); // Р—Р°РїРѕР»РЅСЏРµРј СЃС‚СЂСѓРєС‚СѓСЂС‹ РјР°С‚РµСЂРёР°Р»РѕРІ
 		sscanf(szString,"\t\t*MATERIAL_AMBIENT %f %f %f",
 						&material[loop].ambient.d.c.x,
 						&material[loop].ambient.d.c.y,
@@ -112,14 +112,14 @@ Mesh::RESULT	Mesh::simpleMesh::Load(char *FileName)
 		sscanf(szString,"\t\t\t*BITMAP \"%s\"",path);
 		if (path[strlen(path)-1] == '\"') path[strlen(path)-1]=0;
 		
-		if (path[0] != '\n' && path[0] != '\0')//избежим пустых строчек
+		if (path[0] != '\n' && path[0] != '\0')//РёР·Р±РµР¶РёРј РїСѓСЃС‚С‹С… СЃС‚СЂРѕС‡РµРє
 		{
 			rm.LOAD_Texture(material[loop].TextureName,path);
 			material[loop].tex = rm.SELECT_Texture(material[loop].TextureName);
 			//if (!texture[loop].Load(path))MessageBox(0,path,"Cannot Load!",16);
 		}
 	}
-	//Подготовка списка отображения
+	//РџРѕРґРіРѕС‚РѕРІРєР° СЃРїРёСЃРєР° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
 	ListID=glGenLists(1);
 	if(!ListID) return Mesh::NO_LISTS;
 	glMatrixMode(GL_MODELVIEW);
@@ -133,16 +133,16 @@ Mesh::RESULT	Mesh::simpleMesh::Load(char *FileName)
 	do
 	{
 		FindStr("\t\t*MESH_NUMVERTEX",fModel);
-		//Если в процессе поиска уткнулись в конец, то нам хватит
+		//Р•СЃР»Рё РІ РїСЂРѕС†РµСЃСЃРµ РїРѕРёСЃРєР° СѓС‚РєРЅСѓР»РёСЃСЊ РІ РєРѕРЅРµС†, С‚Рѕ РЅР°Рј С…РІР°С‚РёС‚
 		if (feof(fModel)) break;
-		//Определим число вершин
+		//РћРїСЂРµРґРµР»РёРј С‡РёСЃР»Рѕ РІРµСЂС€РёРЅ
 		sscanf(szString,"\t\t*MESH_NUMVERTEX %d",&Vertices);
 
-		//Определим число полигонов
+		//РћРїСЂРµРґРµР»РёРј С‡РёСЃР»Рѕ РїРѕР»РёРіРѕРЅРѕРІ
 		FindStr("\t\t*MESH_NUMFACES",fModel);
 		sscanf(szString,"\t\t*MESH_NUMFACES %d",&Faces);
 
-		//Выделим память
+		//Р’С‹РґРµР»РёРј РїР°РјСЏС‚СЊ
 		vx=new GLfloat[Vertices];
 		vy=new GLfloat[Vertices];
 		vz=new GLfloat[Vertices];
@@ -224,7 +224,7 @@ Mesh::RESULT	Mesh::simpleMesh::Load(char *FileName)
 			sscanf(szString,"\t\t\t*MESH_FACENORMAL %d %f %f %f",&tp,&(nx[i]),&(ny[i]),&(nz[i]));
 		}
 		
-		//Обработаем материал / цвет
+		//РћР±СЂР°Р±РѕС‚Р°РµРј РјР°С‚РµСЂРёР°Р» / С†РІРµС‚
 		GLfloat Colors[3];
 		GLuint material_number = 0;
 

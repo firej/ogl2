@@ -53,11 +53,11 @@ double tant	(double angle)
 }
 
 
-// Быстрый корень от nVidia
+// Р‘С‹СЃС‚СЂС‹Р№ РєРѕСЂРµРЅСЊ РѕС‚ nVidia
 static float _0_47 = 0.47f;
 static float _1_47 = 1.47f;
 
-float __fastcall ulrsqrt(float x)		// Обратный корень
+float __fastcall ulrsqrt(float x)		// РћР±СЂР°С‚РЅС‹Р№ РєРѕСЂРµРЅСЊ
 {
   DWORD y;
   float r;
@@ -92,7 +92,7 @@ float __fastcall ulrsqrt(float x)		// Обратный корень
 /*
     sqrt(x) = x / sqrt(x)
 */
-float __fastcall ulsqrt(float x)		// Настоящий корень
+float __fastcall ulsqrt(float x)		// РќР°СЃС‚РѕСЏС‰РёР№ РєРѕСЂРµРЅСЊ
 {
   return x * ulrsqrt(x);
 }

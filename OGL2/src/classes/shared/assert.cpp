@@ -9,13 +9,13 @@ char  __stdcall _FASSERT(void* expr, void *filename, unsigned int linenum,const 
 	{
 		ShowCursor(true);
         char buf[400] = "";
-		sprintf(buf,"Не выполняется утверждение в программе!\nУтверждение:%s\nФайл:\"%s\"\nСтрока №%u\n\tПрервать - выход\n\tПовторить - перейти в Debug\n\tОтменить - игнорировать",FunctionName,filename,linenum);
+		sprintf(buf,"РќРµ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ СѓС‚РІРµСЂР¶РґРµРЅРёРµ РІ РїСЂРѕРіСЂР°РјРјРµ!\nРЈС‚РІРµСЂР¶РґРµРЅРёРµ:%s\nР¤Р°Р№Р»:\"%s\"\nРЎС‚СЂРѕРєР° в„–%u\n\tРџСЂРµСЂРІР°С‚СЊ - РІС‹С…РѕРґ\n\tРџРѕРІС‚РѕСЂРёС‚СЊ - РїРµСЂРµР№С‚Рё РІ Debug\n\tРћС‚РјРµРЅРёС‚СЊ - РёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ",FunctionName,filename,linenum);
 		int ret = MessageBox(0,buf,MY_APP_ERROR_HDR,MB_ABORTRETRYIGNORE | MB_ICONWARNING | MB_DEFBUTTON2);
 		switch(ret)
 		{
 		case IDABORT	:ExitProcess(0)		;break;
-		case IDRETRY	:return NEED_DEBUG	;break;									// DEBUG останов
-		case IDIGNORE	:ShowCursor(false); return NEED_IGNORE	; break;	// Игнор
+		case IDRETRY	:return NEED_DEBUG	;break;									// DEBUG РѕСЃС‚Р°РЅРѕРІ
+		case IDIGNORE	:ShowCursor(false); return NEED_IGNORE	; break;	// РРіРЅРѕСЂ
 		}
 	}
 	return 0;

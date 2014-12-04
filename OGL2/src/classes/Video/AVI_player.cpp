@@ -44,7 +44,7 @@ bool AVI_player::OpenAVI(char* szFile)								// Opens An AVI File (szFile)
 	AVIFileInit();													// Opens The AVIFile Library
 	if (GetLastError())
 	{
-		return FJC_ERROR;		// Êàêàÿ-òî îøèáêà èíèöèàëèçàöèè âèäåî áèáëèîòåêè
+		return FJC_ERROR;		// ÐšÐ°ÐºÐ°Ñ-Ñ‚Ð¾ Ð¾ÑˆÐ¸Ð±ÐºÐ° Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ Ð²Ð¸Ð´ÐµÐ¾ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ¸
 	}
 	hdd = DrawDibOpen();											// Grab A Device Context For Our Dib
 
@@ -105,7 +105,7 @@ void AVI_player::GrabAVIFrame()						// Grabs A Frame From The Stream
 	// Update The Texture
 	glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, twidth, theight, GL_BGR, GL_UNSIGNED_BYTE, data);
 }
-// Ñïåöèàëüíî äëÿ âîçìîæíîñòè êåøèðîâàíèÿ
+// Ð¡Ð¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ð¾ Ð´Ð»Ñ Ð²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾ÑÑ‚Ð¸ ÐºÐµÑˆÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
 void AVI_player::GrabAVIFrame(int frame)				// Grabs A Frame From The Stream
 {
 	this->frame = frame;

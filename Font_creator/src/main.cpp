@@ -25,7 +25,7 @@ char		TexSizes[5][16]	=
 							"1024x1024",
 							"2048x2048"/*,
 							"4096x4096"	*/	};
-char		TestString[]	=	"ABCDabcd АБВГабвг 123 [!,.;:]";
+char		TestString[]	=	"ABCDabcd РђР‘Р’Р“Р°Р±РІРі 123 [!,.;:]";
 #define		FONT_SIZES	8
 char		FontSizes[FONT_SIZES][16]={	"10","12","14","16","18","20","24","30"};
 bool		ForcedMono		= false			;
@@ -44,32 +44,32 @@ char		Bs		[10][32]= {	"  0 - FW_DONTCARE",
 								"900 - FW_HEAVY"};
 struct	LFontGlyph_t
 {
-	float	A;			// Смещение до символа
-	float	B;			// Смещение после символа
+	float	A;			// РЎРјРµС‰РµРЅРёРµ РґРѕ СЃРёРјРІРѕР»Р°
+	float	B;			// РЎРјРµС‰РµРЅРёРµ РїРѕСЃР»Рµ СЃРёРјРІРѕР»Р°
 };
 struct	renderVars_t
 	{
-		int		TexSizeN;						// Номер размера текстуры
+		int		TexSizeN;						// РќРѕРјРµСЂ СЂР°Р·РјРµСЂР° С‚РµРєСЃС‚СѓСЂС‹
 		int Width,Height;
 		struct	Font_t
 		{
 			DWORD				Italic;
-			int					Bolding;		// Толщина
+			int					Bolding;		// РўРѕР»С‰РёРЅР°
 			DWORD				UnderLine;
 			DWORD				StrikeOut;
 			DWORD				Mono;
-			char				Name	[128];	// Имя шрифта
-			int					Format;			// Номер формата в массиве имён
-			void			*	TBuf;			// Буфер под текстурку
+			char				Name	[128];	// РРјСЏ С€СЂРёС„С‚Р°
+			int					Format;			// РќРѕРјРµСЂ С„РѕСЂРјР°С‚Р° РІ РјР°СЃСЃРёРІРµ РёРјС‘РЅ
+			void			*	TBuf;			// Р‘СѓС„РµСЂ РїРѕРґ С‚РµРєСЃС‚СѓСЂРєСѓ
 			DWORD				TSize;
-		} Font;									// Структура с переменными определяющими фонт
-	}	RenderVars;								// --//--//--//--//--//--- для рендеринга
+		} Font;									// РЎС‚СЂСѓРєС‚СѓСЂР° СЃ РїРµСЂРµРјРµРЅРЅС‹РјРё РѕРїСЂРµРґРµР»СЏСЋС‰РёРјРё С„РѕРЅС‚
+	}	RenderVars;								// --//--//--//--//--//--- РґР»СЏ СЂРµРЅРґРµСЂРёРЅРіР°
 char				SaveFolder	[512]	=	"Fonts";
 char				buf			[1024]	=	{NULL};
-void				RenderFont			(void);	// Отрендрерить шрифт
-// Сохранить шрифт в файл
+void				RenderFont			(void);	// РћС‚СЂРµРЅРґСЂРµСЂРёС‚СЊ С€СЂРёС„С‚
+// РЎРѕС…СЂР°РЅРёС‚СЊ С€СЂРёС„С‚ РІ С„Р°Р№Р»
 void				WriteFontToFile		(char* FileName, HDC hdc, int FontSize, void* Texture, DWORD	TLength);
-void				RefreshDialogVars	(void);	// Обновление данных из диалога
+void				RefreshDialogVars	(void);	// РћР±РЅРѕРІР»РµРЅРёРµ РґР°РЅРЅС‹С… РёР· РґРёР°Р»РѕРіР°
 float				PointSizetoLogicalX	(HDC	hDC, float points);
 void				UpdatePreview		(	void	);
 INT_PTR CALLBACK	DialogProc			(HWND hDlg,	UINT message,	WPARAM wParam,	LPARAM lParam);
@@ -114,13 +114,13 @@ INT_PTR CALLBACK	DialogProc	(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 			iluInit();
 			ilutRenderer(ILUT_WIN32);
 			::hDlg = hDlg;
-			for (int i=0;i<5;i++)				// Заполнение комбов тестом
+			for (int i=0;i<5;i++)				// Р—Р°РїРѕР»РЅРµРЅРёРµ РєРѕРјР±РѕРІ С‚РµСЃС‚РѕРј
 				SendDlgItemMessage(hDlg,IDC_COMBOTEXSIZE,CB_INSERTSTRING,i,(LPARAM)TexSizes[i]);
-			SendDlgItemMessage(hDlg,IDC_COMBOTEXSIZE,CB_SETCURSEL,3,NULL);	// Выбираем 4-й размер текстуры
-			for (int i=0;i<10;i++)				// Заполнение комбы с ширинами символов
+			SendDlgItemMessage(hDlg,IDC_COMBOTEXSIZE,CB_SETCURSEL,3,NULL);	// Р’С‹Р±РёСЂР°РµРј 4-Р№ СЂР°Р·РјРµСЂ С‚РµРєСЃС‚СѓСЂС‹
+			for (int i=0;i<10;i++)				// Р—Р°РїРѕР»РЅРµРЅРёРµ РєРѕРјР±С‹ СЃ С€РёСЂРёРЅР°РјРё СЃРёРјРІРѕР»РѕРІ
 				SendDlgItemMessage(hDlg,IDC_COMBO_BOLD,CB_INSERTSTRING,i,(LPARAM)Bs[i]);
-			SendDlgItemMessage(hDlg,IDC_COMBO_BOLD,CB_SETCURSEL,5,NULL);	// Выбираем нормальную толщину
-			// Задаём имя шрифта
+			SendDlgItemMessage(hDlg,IDC_COMBO_BOLD,CB_SETCURSEL,5,NULL);	// Р’С‹Р±РёСЂР°РµРј РЅРѕСЂРјР°Р»СЊРЅСѓСЋ С‚РѕР»С‰РёРЅСѓ
+			// Р—Р°РґР°С‘Рј РёРјСЏ С€СЂРёС„С‚Р°
 			SendDlgItemMessage(hDlg,IDC_EDIT1,WM_SETTEXT,NULL,(LPARAM)RenderVars.Font.Name);
 			SendDlgItemMessage(hDlg,IDC_EDIT2,WM_SETTEXT,NULL,(LPARAM)SaveFolder);
 			UpdatePreview	();
@@ -151,7 +151,7 @@ INT_PTR CALLBACK	DialogProc	(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 			bi.hwndOwner		=	hDlg;
 			bi.pidlRoot			=	NULL;
 			bi.pszDisplayName	=	NULL;
-			bi.lpszTitle		=	"Выберите папку для сохранения файлов шрифта...";
+			bi.lpszTitle		=	"Р’С‹Р±РµСЂРёС‚Рµ РїР°РїРєСѓ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»РѕРІ С€СЂРёС„С‚Р°...";
 			bi.lpfn				=	NULL;
 			bi.lParam			=	NULL;
 			bi.iImage			=	NULL;
@@ -185,7 +185,7 @@ void			RenderFont	(void)
 {
 	RefreshDialogVars();
 
-	int PixelPerSymbol = RenderVars.Width/16;		// Скока пикселей на один букв
+	int PixelPerSymbol = RenderVars.Width/16;		// РЎРєРѕРєР° РїРёРєСЃРµР»РµР№ РЅР° РѕРґРёРЅ Р±СѓРєРІ
 
 	BYTE data[2000]={0};
 	BITMAPINFOHEADER *bh=(BITMAPINFOHEADER*)data;
@@ -193,22 +193,22 @@ void			RenderFont	(void)
 	BYTE *MyBmpPixels;
 
 		bh->biSize=sizeof(BITMAPINFOHEADER);
-		bh->biWidth			=	RenderVars.Width;	// Размер X
-		bh->biHeight		=	RenderVars.Height;	// Размер Y, upside down (line 0=bottom)
+		bh->biWidth			=	RenderVars.Width;	// Р Р°Р·РјРµСЂ X
+		bh->biHeight		=	RenderVars.Height;	// Р Р°Р·РјРµСЂ Y, upside down (line 0=bottom)
 		bh->biPlanes		=	1;
 		bh->biBitCount		=	24;
 		bh->biClrUsed		=
 		bh->biClrImportant	=	256;
 
 
-		// Создаем Bitmap
+		// РЎРѕР·РґР°РµРј Bitmap
 		MyBmp=CreateDIBSection(0,(BITMAPINFO*)bh,DIB_RGB_COLORS,(void **)&MyBmpPixels,NULL,0);
 		DWORD dwRet = GetLastError();
 		UNREFERENCED_PARAMETER(dwRet);
-		HDC Bmp_hDC = CreateCompatibleDC( NULL );					// Получаем DC из ниоткуда
-		HBITMAP hbmOld = (HBITMAP)SelectObject( Bmp_hDC, MyBmp );	// м предыдущий обьект GDI
+		HDC Bmp_hDC = CreateCompatibleDC( NULL );					// РџРѕР»СѓС‡Р°РµРј DC РёР· РЅРёРѕС‚РєСѓРґР°
+		HBITMAP hbmOld = (HBITMAP)SelectObject( Bmp_hDC, MyBmp );	// Рј РїСЂРµРґС‹РґСѓС‰РёР№ РѕР±СЊРµРєС‚ GDI
 
-		// Создаем шрифт, размером ХЗ скока пикселей
+		// РЎРѕР·РґР°РµРј С€СЂРёС„С‚, СЂР°Р·РјРµСЂРѕРј РҐР— СЃРєРѕРєР° РїРёРєСЃРµР»РµР№
 		HFONT hFont =	CreateFont(	PixelPerSymbol,
 									0,
 									0,
@@ -224,21 +224,21 @@ void			RenderFont	(void)
 									DEFAULT_PITCH | FF_DONTCARE,
 									RenderVars.Font.Name);
 
-		// выбираем наш шрифт в качестве текущего
+		// РІС‹Р±РёСЂР°РµРј РЅР°С€ С€СЂРёС„С‚ РІ РєР°С‡РµСЃС‚РІРµ С‚РµРєСѓС‰РµРіРѕ
 		SelectObject( Bmp_hDC, hFont );
 
 		SetTextColor( Bmp_hDC, RGB(0,0,0) );
 		SetBkColor(   Bmp_hDC, 0x00000000 );
 
-		// выключаем заливку фон для текста.
+		// РІС‹РєР»СЋС‡Р°РµРј Р·Р°Р»РёРІРєСѓ С„РѕРЅ РґР»СЏ С‚РµРєСЃС‚Р°.
 		SetBkMode(Bmp_hDC, TRANSPARENT);
-		// выравнивание текста
+		// РІС‹СЂР°РІРЅРёРІР°РЅРёРµ С‚РµРєСЃС‚Р°
 		SetTextAlign( Bmp_hDC, TA_TOP );
 
-		// Выбираем цвет
+		// Р’С‹Р±РёСЂР°РµРј С†РІРµС‚
 		SetTextColor( Bmp_hDC, RGB(255,255,255) );
 
-		// и печатаем.
+		// Рё РїРµС‡Р°С‚Р°РµРј.
 		for (int i = 0;i<16;i++)
 			for (int j = 0;j<16;j++)
 			{
@@ -246,43 +246,43 @@ void			RenderFont	(void)
 				sprintf(buf,"%c",i*16+j+1);
 				ExtTextOut( Bmp_hDC,j*PixelPerSymbol,i*PixelPerSymbol,0,NULL,buf,	1,		NULL );
 			};
-// Создание 32х юитного битмапа из 24х битного
+// РЎРѕР·РґР°РЅРёРµ 32С… СЋРёС‚РЅРѕРіРѕ Р±РёС‚РјР°РїР° РёР· 24С… Р±РёС‚РЅРѕРіРѕ
 		BYTE data32[2000]={0};
 		BITMAPINFOHEADER *bh32=(BITMAPINFOHEADER*)data32;
 		HBITMAP MyBmp32;
 		BYTE *MyBmpPixels32;
 		
 		bh32->biSize=sizeof(*bh32);
-		bh32->biWidth			=	RenderVars.Width;	// Размер X
-		bh32->biHeight			=	RenderVars.Height;	// Размер Y, upside down (line 0=bottom)
+		bh32->biWidth			=	RenderVars.Width;	// Р Р°Р·РјРµСЂ X
+		bh32->biHeight			=	RenderVars.Height;	// Р Р°Р·РјРµСЂ Y, upside down (line 0=bottom)
 		bh32->biPlanes			=	1;
 		bh32->biBitCount		=	32;
 		bh32->biClrUsed			=
 		bh32->biClrImportant	=	256;
 
 
-		// Создаем Bitmap
+		// РЎРѕР·РґР°РµРј Bitmap
 		MyBmp32=CreateDIBSection(0,(BITMAPINFO*)bh32,DIB_RGB_COLORS,(void **)&MyBmpPixels32,NULL,0);
-		HDC Bmp_hDC32 = CreateCompatibleDC( NULL );					// Получаем DC битмапа
-		HBITMAP hbmOld32 = (HBITMAP)SelectObject( Bmp_hDC32, MyBmp32 );	// м предыдущий обьект GDI
+		HDC Bmp_hDC32 = CreateCompatibleDC( NULL );					// РџРѕР»СѓС‡Р°РµРј DC Р±РёС‚РјР°РїР°
+		HBITMAP hbmOld32 = (HBITMAP)SelectObject( Bmp_hDC32, MyBmp32 );	// Рј РїСЂРµРґС‹РґСѓС‰РёР№ РѕР±СЊРµРєС‚ GDI
 
 		BYTE *src_pxls=MyBmpPixels;
 		BYTE *dst_pxls=MyBmpPixels32;
 
-		// Заливаем фон красивым градиентом
+		// Р—Р°Р»РёРІР°РµРј С„РѕРЅ РєСЂР°СЃРёРІС‹Рј РіСЂР°РґРёРµРЅС‚РѕРј
 		for(int y=0;y<RenderVars.Height;y++)
 			for(int x=0;x<RenderVars.Width;x++)
 			{
-				//memcpy(dst_pxls,src_pxls,3);	// Копируем RGB
+				//memcpy(dst_pxls,src_pxls,3);	// РљРѕРїРёСЂСѓРµРј RGB
 				//if (*src_pxls != 0x00)
-					memset(dst_pxls,0xFF,3);	// Выставляем цветовые плоскости в белый цвет
+					memset(dst_pxls,0xFF,3);	// Р’С‹СЃС‚Р°РІР»СЏРµРј С†РІРµС‚РѕРІС‹Рµ РїР»РѕСЃРєРѕСЃС‚Рё РІ Р±РµР»С‹Р№ С†РІРµС‚
 				//else
-				//	memset(dst_pxls,0x00,3);	// Устанавливаем чёрный цвет
-				dst_pxls[3] = src_pxls[0];		// Выставляем альфу по R каналу
-				dst_pxls	+= 4;	// Перемещаемся на следующий пиксель
+				//	memset(dst_pxls,0x00,3);	// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј С‡С‘СЂРЅС‹Р№ С†РІРµС‚
+				dst_pxls[3] = src_pxls[0];		// Р’С‹СЃС‚Р°РІР»СЏРµРј Р°Р»СЊС„Сѓ РїРѕ R РєР°РЅР°Р»Сѓ
+				dst_pxls	+= 4;	// РџРµСЂРµРјРµС‰Р°РµРјСЃСЏ РЅР° СЃР»РµРґСѓСЋС‰РёР№ РїРёРєСЃРµР»СЊ
 				src_pxls	+= 3;
 			}
-// Сохранение изображения в файл
+// РЎРѕС…СЂР°РЅРµРЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РІ С„Р°Р№Р»
 		sprintf (buf,"%s/%s",SaveFolder,"TempTextre.png");
 		DeleteFile(buf);
 		int ret;
@@ -290,17 +290,17 @@ void			RenderFont	(void)
 		ret = ilGetError();
 		if (ret == IL_FILE_ALREADY_EXISTS)
 		{
-			MessageBox(hDlg,"Косяк однако с сохранением текстуры","ОбШиБкА!!!",16);
+			MessageBox(hDlg,"РљРѕСЃСЏРє РѕРґРЅР°РєРѕ СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј С‚РµРєСЃС‚СѓСЂС‹","РћР±РЁРёР‘РєРђ!!!",16);
 			return;
 		}
 		FILE	*	t = fopen(buf,"rb");
-		fseek(t,0,SEEK_END);	// Получили размер файла
+		fseek(t,0,SEEK_END);	// РџРѕР»СѓС‡РёР»Рё СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
 		RenderVars.Font.TSize = ftell(t);
-		fseek(t,0,SEEK_SET);	// Указатель в начало
+		fseek(t,0,SEEK_SET);	// РЈРєР°Р·Р°С‚РµР»СЊ РІ РЅР°С‡Р°Р»Рѕ
 		RenderVars.Font.TBuf = new char [RenderVars.Font.TSize];
 		if (RenderVars.Font.TBuf == NULL)
 		{
-			MessageBox(hDlg,"Косяк однако c выделением памяти","ОбШиБкА!!!",16);
+			MessageBox(hDlg,"РљРѕСЃСЏРє РѕРґРЅР°РєРѕ c РІС‹РґРµР»РµРЅРёРµРј РїР°РјСЏС‚Рё","РћР±РЁРёР‘РєРђ!!!",16);
 			fclose(t);
 			return;
 		}
@@ -310,7 +310,7 @@ void			RenderFont	(void)
 		sprintf (buf,"%s/%s.LFont",SaveFolder,RenderVars.Font.Name);
 		WriteFontToFile(buf,Bmp_hDC,abs(PixelPerSymbol-2),RenderVars.Font.TBuf,RenderVars.Font.TSize);
 		delete [] RenderVars.Font.TBuf;
-		// восстанавливаем установки
+		// РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј СѓСЃС‚Р°РЅРѕРІРєРё
 		SelectObject( Bmp_hDC, hbmOld );
 		DeleteObject( hFont );
 		ReleaseDC(NULL,Bmp_hDC);
@@ -325,7 +325,7 @@ void			RenderFont	(void)
 
 void	WriteFontToFile	(char* FileName, HDC hdc, int FontSize, void* Texture, DWORD	TLength)
 {
-	ABCFLOAT	abc_ss[256];		// Структуры типа ABC
+	ABCFLOAT	abc_ss[256];		// РЎС‚СЂСѓРєС‚СѓСЂС‹ С‚РёРїР° ABC
 	GetCharABCWidthsFloat(hdc,0,255,abc_ss);
 
 	for (int i = 0 ; i<256 ; i++)
@@ -344,39 +344,39 @@ void	WriteFontToFile	(char* FileName, HDC hdc, int FontSize, void* Texture, DWOR
 	FILE *f = fopen (FileName,"wb");
 	if (!f)
 	{
-		MessageBox(NULL,"Невозможно открыть файл для записи","Ошибка при сохранении шрифта",16);
+		MessageBox(NULL,"РќРµРІРѕР·РјРѕР¶РЅРѕ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РґР»СЏ Р·Р°РїРёСЃРё","РћС€РёР±РєР° РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё С€СЂРёС„С‚Р°",16);
 		return;
 	}
-	iff::PutTAG(f,ID_FORM);						// Запись идентификатора FORM
-	// Считаем размер файла
+	iff::PutTAG(f,ID_FORM);						// Р—Р°РїРёСЃСЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° FORM
+	// РЎС‡РёС‚Р°РµРј СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
 	size_t	fsize = 0;
-	fsize += sizeof(iff::FONTFORMATNAME);		// Место под ID формата
-	// Место под имя фонта, ID чанка и размер
+	fsize += sizeof(iff::FONTFORMATNAME);		// РњРµСЃС‚Рѕ РїРѕРґ ID С„РѕСЂРјР°С‚Р°
+	// РњРµСЃС‚Рѕ РїРѕРґ РёРјСЏ С„РѕРЅС‚Р°, ID С‡Р°РЅРєР° Рё СЂР°Р·РјРµСЂ
 	fsize += sizeof(iff::FONTNAME)		+ 4 + strlen(RenderVars.Font.Name) +
 		iff::TestString(RenderVars.Font.Name,(DWORD)strlen(RenderVars.Font.Name));
-	// Место под ID чанка, размер и размер шрифта
+	// РњРµСЃС‚Рѕ РїРѕРґ ID С‡Р°РЅРєР°, СЂР°Р·РјРµСЂ Рё СЂР°Р·РјРµСЂ С€СЂРёС„С‚Р°
 	fsize += sizeof(iff::FONTSIZE)		+ 4 + 4;
-	// ID чанка, размер блока и размер нашей текстурки
+	// ID С‡Р°РЅРєР°, СЂР°Р·РјРµСЂ Р±Р»РѕРєР° Рё СЂР°Р·РјРµСЂ РЅР°С€РµР№ С‚РµРєСЃС‚СѓСЂРєРё
 	fsize += sizeof(iff::FONTTEXTURE)	+ 4 + TLength;
-	// ID чанка, размер блока и размер массива глифов
+	// ID С‡Р°РЅРєР°, СЂР°Р·РјРµСЂ Р±Р»РѕРєР° Рё СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР° РіР»РёС„РѕРІ
 	fsize += sizeof(iff::FONTGLYPHBLOCK)+ 4 + sizeof(LFontGlyph_t)*256;
 	iff::PutDWORD	(f,(DWORD)fsize);
-// Пошли записывать блоки-чанки
+// РџРѕС€Р»Рё Р·Р°РїРёСЃС‹РІР°С‚СЊ Р±Р»РѕРєРё-С‡Р°РЅРєРё
 	iff::PutTAG		(f,iff::FONTFORMATNAME.i);
-	// Записываем блок имени шрифта (чисто для информации или на будущее)
+	// Р—Р°РїРёСЃС‹РІР°РµРј Р±Р»РѕРє РёРјРµРЅРё С€СЂРёС„С‚Р° (С‡РёСЃС‚Рѕ РґР»СЏ РёРЅС„РѕСЂРјР°С†РёРё РёР»Рё РЅР° Р±СѓРґСѓС‰РµРµ)
 	iff::PutTAG		(f,iff::FONTNAME.i);
 	iff::PutDWORD	(f,(DWORD)strlen(RenderVars.Font.Name) +
 		iff::TestString(RenderVars.Font.Name,(DWORD)strlen(RenderVars.Font.Name)));
 	iff::PutString	(f,RenderVars.Font.Name,(DWORD)strlen(RenderVars.Font.Name));
-	// Записываем блок размера шрифта (тоже для информации)
+	// Р—Р°РїРёСЃС‹РІР°РµРј Р±Р»РѕРє СЂР°Р·РјРµСЂР° С€СЂРёС„С‚Р° (С‚РѕР¶Рµ РґР»СЏ РёРЅС„РѕСЂРјР°С†РёРё)
 	iff::PutTAG		(f,iff::FONTSIZE.i);
 	iff::PutDWORD	(f,4);
 	iff::PutDWORD	(f,FontSize);
-	// Записываем блок текстуры
+	// Р—Р°РїРёСЃС‹РІР°РµРј Р±Р»РѕРє С‚РµРєСЃС‚СѓСЂС‹
 	iff::PutTAG		(f,iff::FONTTEXTURE.i);
 	iff::PutDWORD	(f,TLength);
 	iff::PutBuffer	(f,Texture,TLength);
-	// Записываем блок глифов как массив
+	// Р—Р°РїРёСЃС‹РІР°РµРј Р±Р»РѕРє РіР»РёС„РѕРІ РєР°Рє РјР°СЃСЃРёРІ
 	iff::PutTAG		(f,iff::FONTGLYPHBLOCK.i);
 	iff::PutDWORD	(f,256*sizeof(LFontGlyph_t));
 	iff::PutBuffer	(f,lfg,256*sizeof(LFontGlyph_t));
@@ -424,7 +424,7 @@ void	UpdatePreview	(void)
 	SelectObject( dc, hFont );
 	SetTextColor( dc, RGB(0,0,0) );
 	SetBkColor(   dc, 0x00000000 );
-	// выключаем заливку фон для текста.
+	// РІС‹РєР»СЋС‡Р°РµРј Р·Р°Р»РёРІРєСѓ С„РѕРЅ РґР»СЏ С‚РµРєСЃС‚Р°.
 	SetBkMode(dc, TRANSPARENT);
 
 	DrawText(dc,TestString,(int)strlen(TestString),&rect,DT_CENTER|DT_VCENTER|DT_SINGLELINE);

@@ -1,23 +1,23 @@
 #pragma once
 
-//====== Общие файлы
+//====== РћР±С‰РёРµ С„Р°Р№Р»С‹
 #include "./texture.h"
 #include "./globals.h"
 
-class SkyBox				// Объект неба
+class SkyBox				// РћР±СЉРµРєС‚ РЅРµР±Р°
 {
 protected:
-	TextureClass	t;							// Текстура для неба
-	GLuint	listID;								// ID списка
+	TextureClass	t;							// РўРµРєСЃС‚СѓСЂР° РґР»СЏ РЅРµР±Р°
+	GLuint	listID;								// ID СЃРїРёСЃРєР°
 public:
-			SkyBox			();					// Конструктор
-			~SkyBox			();					// Деструктор
-	void	LoadTextures	(					// Загрузка текстур неба
-					ILenum	Type,			// Тип файла
-					char 	*NameOfTex		// Массив имён текстур
+			SkyBox			();					// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+			~SkyBox			();					// Р”РµСЃС‚СЂСѓРєС‚РѕСЂ
+	void	LoadTextures	(					// Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂ РЅРµР±Р°
+					ILenum	Type,			// РўРёРї С„Р°Р№Р»Р°
+					char 	*NameOfTex		// РњР°СЃСЃРёРІ РёРјС‘РЅ С‚РµРєСЃС‚СѓСЂ
 							);
-	void	operator()		();					// Отрисовать небо
-	void	Render			();					// тоже самое только для красоты
+	void	operator()		();					// РћС‚СЂРёСЃРѕРІР°С‚СЊ РЅРµР±Рѕ
+	void	Render			();					// С‚РѕР¶Рµ СЃР°РјРѕРµ С‚РѕР»СЊРєРѕ РґР»СЏ РєСЂР°СЃРѕС‚С‹
 };
 
-extern SkyBox	MSB;							// Главный объект неба
+extern SkyBox	MSB;							// Р“Р»Р°РІРЅС‹Р№ РѕР±СЉРµРєС‚ РЅРµР±Р°

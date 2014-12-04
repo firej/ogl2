@@ -8,7 +8,7 @@
 #define	DISPLAY_LINES			40.0
 #define	STRING(str_number)		(str_number-1)/DISPLAY_LINES
 
-#ifndef _WIN32						// переобъявление вне форточек
+#ifndef _WIN32						// РїРµСЂРµРѕР±СЉСЏРІР»РµРЅРёРµ РІРЅРµ С„РѕСЂС‚РѕС‡РµРє
 typedef struct _ABC { 
   int     abcA; 
   UINT    abcB; 
@@ -20,11 +20,11 @@ namespace Text
 {
 	enum	Align
 	{
-		left,						// Выравнивание по горизонтали по левому краю
-		center,						// по центру (h/v)
-		right,						// по правому краю
-		top,						// по вертикали по верху
-		bottom						// по низу
+		left,						// Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё РїРѕ Р»РµРІРѕРјСѓ РєСЂР°СЋ
+		center,						// РїРѕ С†РµРЅС‚СЂСѓ (h/v)
+		right,						// РїРѕ РїСЂР°РІРѕРјСѓ РєСЂР°СЋ
+		top,						// РїРѕ РІРµСЂС‚РёРєР°Р»Рё РїРѕ РІРµСЂС…Сѓ
+		bottom						// РїРѕ РЅРёР·Сѓ
 	};
 	enum	RESULT
 	{
@@ -35,28 +35,28 @@ namespace Text
 };
 struct	LFontGlyph_t
 {
-	float	A;			// Смещение до символа
-	float	B;			// Смещение после символа
+	float	A;			// РЎРјРµС‰РµРЅРёРµ РґРѕ СЃРёРјРІРѕР»Р°
+	float	B;			// РЎРјРµС‰РµРЅРёРµ РїРѕСЃР»Рµ СЃРёРјРІРѕР»Р°
 };
 	class Font
 	{
 	protected:
-//		bool			list_builded	;	// Флаг наличия созданных списков
-		Text::Align		ha				;	// Горизонтальное выравнвание
-		Text::Align		va				;	// Вертикальное
-		GLuint			Base			;	// Начало списков с буковками
-		Vector3f		Color			;	// Цвет шрифта
-		float			alfa			;	// Прозрачность
-		LFontGlyph_t	lfg[256]		;	// Массив с информацией о нашем шрифте
-		double			Size			;	// Размер шрифта (относительный)
-	TexturePointer		T				;	// Текстура шрифта
-	static	GLdouble	scr_width		;	// Зависит от соотношений сторон экрана
+//		bool			list_builded	;	// Р¤Р»Р°Рі РЅР°Р»РёС‡РёСЏ СЃРѕР·РґР°РЅРЅС‹С… СЃРїРёСЃРєРѕРІ
+		Text::Align		ha				;	// Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРµ РІС‹СЂР°РІРЅРІР°РЅРёРµ
+		Text::Align		va				;	// Р’РµСЂС‚РёРєР°Р»СЊРЅРѕРµ
+		GLuint			Base			;	// РќР°С‡Р°Р»Рѕ СЃРїРёСЃРєРѕРІ СЃ Р±СѓРєРѕРІРєР°РјРё
+		Vector3f		Color			;	// Р¦РІРµС‚ С€СЂРёС„С‚Р°
+		float			alfa			;	// РџСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ
+		LFontGlyph_t	lfg[256]		;	// РњР°СЃСЃРёРІ СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ Рѕ РЅР°С€РµРј С€СЂРёС„С‚Рµ
+		double			Size			;	// Р Р°Р·РјРµСЂ С€СЂРёС„С‚Р° (РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№)
+	TexturePointer		T				;	// РўРµРєСЃС‚СѓСЂР° С€СЂРёС„С‚Р°
+	static	GLdouble	scr_width		;	// Р—Р°РІРёСЃРёС‚ РѕС‚ СЃРѕРѕС‚РЅРѕС€РµРЅРёР№ СЃС‚РѕСЂРѕРЅ СЌРєСЂР°РЅР°
 	public:
 		Font(void);
 		~Font(void);
-static	void	SetAspectRatio();			// Установка соотношений сторон экрана
-		void	Print	(GLdouble X, GLdouble Y, const char *fmt, ...);	// Печатать текст
-Text::RESULT	LOAD	(const char *name);	// Грузить шрифт
+static	void	SetAspectRatio();			// РЈСЃС‚Р°РЅРѕРІРєР° СЃРѕРѕС‚РЅРѕС€РµРЅРёР№ СЃС‚РѕСЂРѕРЅ СЌРєСЂР°РЅР°
+		void	Print	(GLdouble X, GLdouble Y, const char *fmt, ...);	// РџРµС‡Р°С‚Р°С‚СЊ С‚РµРєСЃС‚
+Text::RESULT	LOAD	(const char *name);	// Р“СЂСѓР·РёС‚СЊ С€СЂРёС„С‚
 		void	ULOAD	();
 		void	SetStyle(Text::Align halign, Text::Align valign, double size);
 Text::Align		GetHA	(void)	{return ha;};

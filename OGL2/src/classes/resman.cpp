@@ -1,7 +1,7 @@
 #include "LocusAFX.h"
 #include "./ResMan.h"
 
-ResMan	rm;							// Îáúåêò ìåíåäæåðà ðåñóðñîâ (íàñòîÿùèé)
+ResMan	rm;							// ÐžÐ±ÑŠÐµÐºÑ‚ Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€Ð° Ñ€ÐµÑÑƒÑ€ÑÐ¾Ð² (Ð½Ð°ÑÑ‚Ð¾ÑÑ‰Ð¸Ð¹)
 
 ResMan::ResMan()
 {
@@ -23,10 +23,10 @@ void		ResMan::INIT(	char*	DefFont,
 }
 void		ResMan::DEINIT(void)
 {
-	mapH.clear();		//	Î÷èñòêà ìàññèâà âûñîêîãî óðîâíÿ
+	mapH.clear();		//	ÐžÑ‡Ð¸ÑÑ‚ÐºÐ° Ð¼Ð°ÑÑÐ¸Ð²Ð° Ð²Ñ‹ÑÐ¾ÐºÐ¾Ð³Ð¾ ÑƒÑ€Ð¾Ð²Ð½Ñ
 	while	(!mapL.empty())
 	{
-		mapLi = mapL.begin();	// Ïîëó÷àåì àäðåñ íà÷àëà ñëîâàðÿ
+		mapLi = mapL.begin();	// ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð°Ð´Ñ€ÐµÑ Ð½Ð°Ñ‡Ð°Ð»Ð° ÑÐ»Ð¾Ð²Ð°Ñ€Ñ
 		ResourceObject RO = mapLi->second;
 		switch	(RO.RType)
 		{
@@ -53,21 +53,21 @@ void		ResMan::DEINIT(void)
 		}
 		mapL.erase(mapLi);
 	}
-	mapL.clear();		//	Î÷èñòêà ìàññèâà íèçêîãî óðîâíÿ, õîòÿ îí è äîëæåí áûòü ïóñòûì
+	mapL.clear();		//	ÐžÑ‡Ð¸ÑÑ‚ÐºÐ° Ð¼Ð°ÑÑÐ¸Ð²Ð° Ð½Ð¸Ð·ÐºÐ¾Ð³Ð¾ ÑƒÑ€Ð¾Ð²Ð½Ñ, Ñ…Ð¾Ñ‚Ñ Ð¾Ð½ Ð¸ Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ‹Ñ‚ÑŒ Ð¿ÑƒÑÑ‚Ñ‹Ð¼
 }
 
 void	ResMan::LOAD_Font(char* ResName,char* FontName)
 {
 	PFont	F;
 	Text::RESULT res;
-	mapLi = mapL.find(string(FontName));			// Ïîèñê åëåìåíòà â ñëîâàðå (Åñòü ëè îí òàì?)
+	mapLi = mapL.find(string(FontName));			// ÐŸÐ¾Ð¸ÑÐº ÐµÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð² ÑÐ»Ð¾Ð²Ð°Ñ€Ðµ (Ð•ÑÑ‚ÑŒ Ð»Ð¸ Ð¾Ð½ Ñ‚Ð°Ð¼?)
 	if (mapLi != mapL.end())
 	{
 		mapLi->second.used++;
 		mapHi = mapH.find(string(ResName));
 		if (mapHi != mapH.end())
 		{
-			LF.Logf("ResourceManager","Øðèôò ñ èìåíåì %s óæå çàãðóæåí",ResName);
+			LF.Logf("ResourceManager","Ð¨Ñ€Ð¸Ñ„Ñ‚ Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ %s ÑƒÐ¶Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½",ResName);
 			return;
 		}
 		mapH[string(ResName)].Res = mapLi->second.Res;
@@ -93,7 +93,7 @@ void	ResMan::LOAD_Font(char* ResName,char* FontName)
 	mapHi = mapH.find(string(ResName));
 	if (mapHi != mapH.end())
 	{
-		LF.Logf("ResourceManager","Øðèôò ñ èìåíåì %s óæå çàãðóæåí",ResName);
+		LF.Logf("ResourceManager","Ð¨Ñ€Ð¸Ñ„Ñ‚ Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ %s ÑƒÐ¶Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½",ResName);
 		return;
 	}
 	if (res == Text::OK)
@@ -101,9 +101,9 @@ void	ResMan::LOAD_Font(char* ResName,char* FontName)
 		mapH[string(ResName)].Res				=	F;
 	}
 	else
-	{	//	Çàãðóçêà íå óäàëàñü, ïîòîìó ïèøåì óêàçàòåëü íà ñòàíäàðòíûé îáúåêò
+	{	//	Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° Ð½Ðµ ÑƒÐ´Ð°Ð»Ð°ÑÑŒ, Ð¿Ð¾Ñ‚Ð¾Ð¼Ñƒ Ð¿Ð¸ÑˆÐµÐ¼ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ð° ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ð¹ Ð¾Ð±ÑŠÐµÐºÑ‚
 		mapH[string(ResName)].Res = defFont;
-		LF.Logf("ResourceManager","Íå íàéäåí øðèôò %s",FontName);
+		LF.Logf("ResourceManager","ÐÐµ Ð½Ð°Ð¹Ð´ÐµÐ½ ÑˆÑ€Ð¸Ñ„Ñ‚ %s",FontName);
 	}
 }
 
@@ -127,7 +127,7 @@ void	ResMan::ULOAD_Font(char* ResName)
 	mapH.erase(mapHi);
 	if (ret.need_pass	==	true)
 	{
-		return;	//	Íå óäàëÿòü ñòàíäàðòíûé ðåñóðñ
+		return;	//	ÐÐµ ÑƒÐ´Ð°Ð»ÑÑ‚ÑŒ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ð¹ Ñ€ÐµÑÑƒÑ€Ñ
 	}
 	if (mapLi->second.used > 1)
 	{
@@ -148,14 +148,14 @@ void	ResMan::LOAD_Texture(char *ResName, char *FileName)
 {
 	TexturePointer	T;
 	bool res;
-	mapLi = mapL.find(string(FileName));			// Ïîèñê åëåìåíòà â ñëîâàðå (Åñòü ëè îí òàì?)
+	mapLi = mapL.find(string(FileName));			// ÐŸÐ¾Ð¸ÑÐº ÐµÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð² ÑÐ»Ð¾Ð²Ð°Ñ€Ðµ (Ð•ÑÑ‚ÑŒ Ð»Ð¸ Ð¾Ð½ Ñ‚Ð°Ð¼?)
 	if (mapLi != mapL.end())
 	{
 		mapLi->second.used++;
 		mapHi = mapH.find(string(ResName));
 		if (mapHi != mapH.end())
 		{
-			LF.Logf("ResourceManager","Òåêñòóðà ñ èìåíåì %s óæå çàãðóæåíà",ResName);
+			LF.Logf("ResourceManager","Ð¢ÐµÐºÑÑ‚ÑƒÑ€Ð° Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ %s ÑƒÐ¶Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ð°",ResName);
 			return;
 		}
 		mapH[string(ResName)].Res = mapLi->second.Res;
@@ -175,13 +175,13 @@ void	ResMan::LOAD_Texture(char *ResName, char *FileName)
 			RO.used		=	1;
 			RO.Res		=	(void*)T;
 			mapL[string(FileName)] = RO;
-			LF.Logf("ResourceManager","Çàãðóæåíà òåêñòóðà \"%s\"",ResName);
+			LF.Logf("ResourceManager","Ð—Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ð° Ñ‚ÐµÐºÑÑ‚ÑƒÑ€Ð° \"%s\"",ResName);
 		}
 	}
 	mapHi = mapH.find(string(ResName));
 	if (mapHi != mapH.end())
 	{
-		LF.Logf("ResourceManager","Òåêñòóðà ñ èìåíåì %s óæå çàãðóæåíà",ResName);
+		LF.Logf("ResourceManager","Ð¢ÐµÐºÑÑ‚ÑƒÑ€Ð° Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ %s ÑƒÐ¶Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ð°",ResName);
 		return;
 	}
 	if (res == false)
@@ -189,8 +189,8 @@ void	ResMan::LOAD_Texture(char *ResName, char *FileName)
 		mapH[string(ResName)].Res = T;
 	}
 	else
-	{	//	Çàãðóçêà íå óäàëàñü, ïîòîìó ïèøåì óêàçàòåëü íà ñòàíäàðòíûé îáúåêò
-		LF.Logf("ResourceManager","Íå íàéäåíà òåêñòóðà %s",FileName);
+	{	//	Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° Ð½Ðµ ÑƒÐ´Ð°Ð»Ð°ÑÑŒ, Ð¿Ð¾Ñ‚Ð¾Ð¼Ñƒ Ð¿Ð¸ÑˆÐµÐ¼ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ð° ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ð¹ Ð¾Ð±ÑŠÐµÐºÑ‚
+		LF.Logf("ResourceManager","ÐÐµ Ð½Ð°Ð¹Ð´ÐµÐ½Ð° Ñ‚ÐµÐºÑÑ‚ÑƒÑ€Ð° %s",FileName);
 		mapH[string(ResName)].Res				=	defTexture;
 	}
 }
@@ -234,14 +234,14 @@ void	ResMan::LOAD_Mesh(char *ResName, char *FileName)
 {
 	Mesh::RESULT res;
 	meshPointer	M = 0;
-	mapLi = mapL.find(string(FileName));			// Ïîèñê åëåìåíòà â ñëîâàðå (Åñòü ëè îí òàì?)
+	mapLi = mapL.find(string(FileName));			// ÐŸÐ¾Ð¸ÑÐº ÐµÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð² ÑÐ»Ð¾Ð²Ð°Ñ€Ðµ (Ð•ÑÑ‚ÑŒ Ð»Ð¸ Ð¾Ð½ Ñ‚Ð°Ð¼?)
 	if (mapLi != mapL.end())
 	{
 		mapLi->second.used++;
 		mapHi = mapH.find(string(ResName));
 		if (mapHi != mapH.end())
 		{
-			LF.Logf("ResourceManager","Ìåø ñ èìåíåì %s óæå çàãðóæåí",ResName);
+			LF.Logf("ResourceManager","ÐœÐµÑˆ Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ %s ÑƒÐ¶Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½",ResName);
 			return;
 		}
 		mapH[string(ResName)].Res = mapLi->second.Res;
@@ -261,13 +261,13 @@ void	ResMan::LOAD_Mesh(char *ResName, char *FileName)
 			RO.used		=	1;
 			RO.Res		=	(void*)M;
 			mapL[string(FileName)] = RO;
-			LF.Logf("ResourceManager","Loaded mesh \"%s\" èç %s",ResName,FileName);
+			LF.Logf("ResourceManager","Loaded mesh \"%s\" Ð¸Ð· %s",ResName,FileName);
 		}
 	}
 	mapHi = mapH.find(string(ResName));
 	if (mapHi != mapH.end())
 	{
-		LF.Logf("ResourceManager","Ìåø ñ èìåíåì %s óæå çàãðóæåí",ResName);
+		LF.Logf("ResourceManager","ÐœÐµÑˆ Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ %s ÑƒÐ¶Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½",ResName);
 		return;
 	}
 	if (res == Mesh::OK)
@@ -275,8 +275,8 @@ void	ResMan::LOAD_Mesh(char *ResName, char *FileName)
 		mapH[string(ResName)].Res = M;
 	}
 	else
-	{	//	Çàãðóçêà íå óäàëàñü, ïîòîìó ïèøåì óêàçàòåëü íà ñòàíäàðòíûé îáúåêò
-		LF.Logf("ResourceManager","Ôàéë %s íå íàéäåí!!! Èñïîëüçóåì ñòàíäàðòíûé ðåñóðñ",FileName);
+	{	//	Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° Ð½Ðµ ÑƒÐ´Ð°Ð»Ð°ÑÑŒ, Ð¿Ð¾Ñ‚Ð¾Ð¼Ñƒ Ð¿Ð¸ÑˆÐµÐ¼ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ð° ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ð¹ Ð¾Ð±ÑŠÐµÐºÑ‚
+		LF.Logf("ResourceManager","Ð¤Ð°Ð¹Ð» %s Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½!!! Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ð¹ Ñ€ÐµÑÑƒÑ€Ñ",FileName);
 		mapH[string(ResName)].Res				=	defMesh;
 	}
 }
@@ -301,7 +301,7 @@ void	ResMan::ULOAD_Mesh(char *ResName)
 	mapH.erase(mapHi);
 	if (ret.need_pass	==	true)
 	{
-		return;	//	Íå óäàëÿòü ñòàíäàðòíûé ðåñóðñ
+		return;	//	ÐÐµ ÑƒÐ´Ð°Ð»ÑÑ‚ÑŒ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ð¹ Ñ€ÐµÑÑƒÑ€Ñ
 	}
 	if (mapLi->second.used > 1)
 	{

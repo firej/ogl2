@@ -7,7 +7,7 @@
 {
 }
 
-void	SkyBox::LoadTextures(ILenum	Type,char 	*NameOfTex)		// Загрузка текстур неба
+void	SkyBox::LoadTextures(ILenum	Type,char 	*NameOfTex)		// Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂ РЅРµР±Р°
 {
 	//t.Load(FJC_TEX_ANISOTROPIC_FILTERING,Type,NameOfTex);
 	t.Load(FJC_TEX_NO_FILTERING,Type,NameOfTex);
@@ -48,7 +48,7 @@ float SkyA[] = {
 void SkyBox::operator ()()
 {
 	glPushAttrib(GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT);
-	glDisable(GL_DEPTH_TEST);		// Выключаем тест глубины для того чтобы нарисовать небо
+	glDisable(GL_DEPTH_TEST);		// Р’С‹РєР»СЋС‡Р°РµРј С‚РµСЃС‚ РіР»СѓР±РёРЅС‹ РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РЅР°СЂРёСЃРѕРІР°С‚СЊ РЅРµР±Рѕ
 	glDisable(GL_LIGHTING);
 	glCullFace(GL_FRONT);
 	glEnable(GL_TEXTURE_2D);
@@ -66,5 +66,5 @@ void SkyBox::operator ()()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glPopAttrib();
-	glClear(GL_DEPTH_BUFFER_BIT);   // Очистка буфера глубины
+	glClear(GL_DEPTH_BUFFER_BIT);   // РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° РіР»СѓР±РёРЅС‹
 }

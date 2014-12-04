@@ -6,11 +6,11 @@
 #define TEN_BITS_MASK	0x03FF
 #define	BAD_LAYER		0xFFFFFFFF
 static iff::DWORD	filesize;
-static iff::DWORD	sizeb;							// Буффер для считывания 4-х байтового размера
+static iff::DWORD	sizeb;							// Р‘СѓС„С„РµСЂ РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ 4-С… Р±Р°Р№С‚РѕРІРѕРіРѕ СЂР°Р·РјРµСЂР°
 static iff::tag_t	tagb;
-static iff::DWORD	iLayerCur;						// Текущий слой
-static iff::DWORD	iSurfCur;						// Текущий сурфейс
-// Функции для парсинга файла
+static iff::DWORD	iLayerCur;						// РўРµРєСѓС‰РёР№ СЃР»РѕР№
+static iff::DWORD	iSurfCur;						// РўРµРєСѓС‰РёР№ СЃСѓСЂС„РµР№СЃ
+// Р¤СѓРЅРєС†РёРё РґР»СЏ РїР°СЂСЃРёРЅРіР° С„Р°Р№Р»Р°
 void			read_unknow_chunk(FILE * f);
 
 Mesh::LWOMesh::LWOMesh()
@@ -22,17 +22,17 @@ Mesh::LWOMesh::LWOMesh()
 
 Mesh::RESULT	Mesh::LWOMesh::Load(char *FileName)
 {
-	iLayerCur			=		BAD_LAYER;			// Устанавливаем начальный номер слоя!
+	iLayerCur			=		BAD_LAYER;			// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РЅР°С‡Р°Р»СЊРЅС‹Р№ РЅРѕРјРµСЂ СЃР»РѕСЏ!
 	FILE *fModel;
-	fModel=fopen(FileName,"rb");					// Открываем файл на чтение в бинарном виде
+	fModel=fopen(FileName,"rb");					// РћС‚РєСЂС‹РІР°РµРј С„Р°Р№Р» РЅР° С‡С‚РµРЅРёРµ РІ Р±РёРЅР°СЂРЅРѕРј РІРёРґРµ
 	if(!fModel) return Mesh::FILE_NOT_FOUND;
 
 // file ::= FORM { 'LWO2'[ID4], data[CHUNK] * }
 	tagb.i = iff::GetTAG(fModel);
-	if (tagb.i != ID_FORM)							// Первые 4 символа должны быть FORM
+	if (tagb.i != ID_FORM)							// РџРµСЂРІС‹Рµ 4 СЃРёРјРІРѕР»Р° РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ FORM
 		return Mesh::INVALID_FORMAT;
-	filesize = iff::GetDWORD(fModel);				// Здесь находим размер всего файла с модельками + 8
-	tagb.i = iff::GetTAG(fModel);					// Читаем буковки LWO2
+	filesize = iff::GetDWORD(fModel);				// Р—РґРµСЃСЊ РЅР°С…РѕРґРёРј СЂР°Р·РјРµСЂ РІСЃРµРіРѕ С„Р°Р№Р»Р° СЃ РјРѕРґРµР»СЊРєР°РјРё + 8
+	tagb.i = iff::GetTAG(fModel);					// Р§РёС‚Р°РµРј Р±СѓРєРѕРІРєРё LWO2
 	if (tagb.i != ID_LWO2)
 		return Mesh::INVALID_FORMAT;
 	do
@@ -57,11 +57,11 @@ Mesh::RESULT	Mesh::LWOMesh::Load(char *FileName)
 }
 bool	Mesh::LWOMesh::ReadPNTSChunk(	FILE	*	f	)
 {
-	sizeb = iff::GetDWORD(f);						// Прочитали размер блока PNTS
-	if (((sizeb/3)*3)!=(sizeb))	return	FJC_ERROR;	// Маненькая проверка
-	sizeb /= 12;									// Получаем количество точек
+	sizeb = iff::GetDWORD(f);						// РџСЂРѕС‡РёС‚Р°Р»Рё СЂР°Р·РјРµСЂ Р±Р»РѕРєР° PNTS
+	if (((sizeb/3)*3)!=(sizeb))	return	FJC_ERROR;	// РњР°РЅРµРЅСЊРєР°СЏ РїСЂРѕРІРµСЂРєР°
+	sizeb /= 12;									// РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕС‡РµРє
 	Layers[iLayerCur].iVertexes	=	sizeb;
-	Layers[iLayerCur].Vertexes	=	new lwVertex_t[sizeb];		// Выделяем память под массив вершин
+	Layers[iLayerCur].Vertexes	=	new lwVertex_t[sizeb];		// Р’С‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ РјР°СЃСЃРёРІ РІРµСЂС€РёРЅ
 	for (DWORD i = 0 ; i < sizeb ; i++ )
 	{
 		Layers[iLayerCur].Vertexes[i].v.d.c.x = iff::GetFloat(f);
@@ -72,42 +72,42 @@ bool	Mesh::LWOMesh::ReadPNTSChunk(	FILE	*	f	)
 }
 bool	Mesh::LWOMesh::ReadPOLSChunk(	FILE	*	f	)
 {
-	long	posPOLS;								// Запоминаем позицию в файле на начале секции полигонов
-	DWORD	pols = 0;								// Количество полигонов для подсчёта
-	WORD	lvertexes;								// Вершин на полигон
+	long	posPOLS;								// Р—Р°РїРѕРјРёРЅР°РµРј РїРѕР·РёС†РёСЋ РІ С„Р°Р№Р»Рµ РЅР° РЅР°С‡Р°Р»Рµ СЃРµРєС†РёРё РїРѕР»РёРіРѕРЅРѕРІ
+	DWORD	pols = 0;								// РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»РёРіРѕРЅРѕРІ РґР»СЏ РїРѕРґСЃС‡С‘С‚Р°
+	WORD	lvertexes;								// Р’РµСЂС€РёРЅ РЅР° РїРѕР»РёРіРѕРЅ
 	sizeb	= iff::GetDWORD(f);
-	tagb.i	= iff::GetTAG(f);								// считываем FACE
+	tagb.i	= iff::GetTAG(f);								// СЃС‡РёС‚С‹РІР°РµРј FACE
 	if (tagb.i	!=	ID_FACE)
 		return FJC_ERROR;
-	sizeb -= 4;										// Получили размер без букв FACE
-	__asm shr sizeb,1;								// Делим на 2 и получаем количество 2-хбайтных элементов
+	sizeb -= 4;										// РџРѕР»СѓС‡РёР»Рё СЂР°Р·РјРµСЂ Р±РµР· Р±СѓРєРІ FACE
+	__asm shr sizeb,1;								// Р”РµР»РёРј РЅР° 2 Рё РїРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ 2-С…Р±Р°Р№С‚РЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ
 	posPOLS = ftell(f);
 	for (UINT i = 0; i < sizeb ;)
 	{
-		lvertexes = iff::GetWORD(f);				// Читаем количество вершин
+		lvertexes = iff::GetWORD(f);				// Р§РёС‚Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ
 		lvertexes &= TEN_BITS_MASK;
-		i+=1+lvertexes;								// Учитываем размер вершин
+		i+=1+lvertexes;								// РЈС‡РёС‚С‹РІР°РµРј СЂР°Р·РјРµСЂ РІРµСЂС€РёРЅ
 		__asm shl lvertexes,1;
-		fseek(f,lvertexes,SEEK_CUR);				// Сдвигаем указатель в файле на количество вершин
-		pols++;										// Считаем полигоны
+		fseek(f,lvertexes,SEEK_CUR);				// РЎРґРІРёРіР°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РІ С„Р°Р№Р»Рµ РЅР° РєРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ
+		pols++;										// РЎС‡РёС‚Р°РµРј РїРѕР»РёРіРѕРЅС‹
 	}
-	fseek(f,posPOLS,SEEK_SET);						// Откат указателя назад (в начало POLS)
+	fseek(f,posPOLS,SEEK_SET);						// РћС‚РєР°С‚ СѓРєР°Р·Р°С‚РµР»СЏ РЅР°Р·Р°Рґ (РІ РЅР°С‡Р°Р»Рѕ POLS)
 
 	Layers[iLayerCur].iPols	=	pols;
-	Layers[iLayerCur].Pols	=	new Mesh::Poly_t[pols];			// Выделяем память под полигоны
+	Layers[iLayerCur].Pols	=	new Mesh::Poly_t[pols];			// Р’С‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ РїРѕР»РёРіРѕРЅС‹
 
 	for (UINT i = 0; i < pols ;i++)
 	{
-		lvertexes = iff::GetWORD(f);				// Читаем количество вершин
+		lvertexes = iff::GetWORD(f);				// Р§РёС‚Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ
 		lvertexes &= TEN_BITS_MASK;
 		Layers[iLayerCur].Pols[i].v	=	lvertexes;
 		Layers[iLayerCur].Pols[i].vi	=	new WORD	[lvertexes];
-		Layers[iLayerCur].Pols[i].ns	=	new bool	[lvertexes];	// Выделяем память под флаги
+		Layers[iLayerCur].Pols[i].ns	=	new bool	[lvertexes];	// Р’С‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ С„Р»Р°РіРё
 		memset(Layers[iLayerCur].Pols[i].ns,0,sizeof(bool)*lvertexes);
 		for (int j = 0; j<lvertexes ; j++ )
 		{
 			WORD vi = iff::GetWORD(f);
-			Layers[iLayerCur].Pols[i].vi[j]	= vi;		// Читаем полигоны в память
+			Layers[iLayerCur].Pols[i].vi[j]	= vi;		// Р§РёС‚Р°РµРј РїРѕР»РёРіРѕРЅС‹ РІ РїР°РјСЏС‚СЊ
 		}
 	}
 	return FJC_NO_ERROR;
@@ -117,7 +117,7 @@ bool	Mesh::LWOMesh::ReadLAYRChunk(FILE *f)
 	iLayers++;
 	iLayerCur	=	iLayers	-	1;
 	lwLayer_t	tempL;
-	sizeb = iff::GetDWORD(f);						// Читаем размер блока
+	sizeb = iff::GetDWORD(f);						// Р§РёС‚Р°РµРј СЂР°Р·РјРµСЂ Р±Р»РѕРєР°
 	tempL.number			=	iff::GetWORD(f);
 	sizeb -= 2;
 	tempL.flags				=	iff::GetWORD(f);
@@ -131,7 +131,7 @@ bool	Mesh::LWOMesh::ReadLAYRChunk(FILE *f)
 	tmp	= iff::GetString(f,&strsize);
 	tempL.name = tmp;
 	delete	[]	tmp;
-	sizeb -= strsize;								// Пропускаем всё что осталось :)
+	sizeb -= strsize;								// РџСЂРѕРїСѓСЃРєР°РµРј РІСЃС‘ С‡С‚Рѕ РѕСЃС‚Р°Р»РѕСЃСЊ :)
 	fseek(f,sizeb,SEEK_CUR);
 	Layers.push_back(tempL);
 	return FJC_NO_ERROR;
@@ -141,8 +141,8 @@ bool	Mesh::LWOMesh::ReadTAGSChunk	(	FILE	*	f	)
 {
 	sizeb	=	iff::GetDWORD(f);
 	char	*	strb	=	new	char	[sizeb];
-	iff::GetBuffer(f,strb,sizeb);					// Записали в буффер все строки (теги)
-	tag_t		tmps;								// Временная переменная строки
+	iff::GetBuffer(f,strb,sizeb);					// Р—Р°РїРёСЃР°Р»Рё РІ Р±СѓС„С„РµСЂ РІСЃРµ СЃС‚СЂРѕРєРё (С‚РµРіРё)
+	tag_t		tmps;								// Р’СЂРµРјРµРЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ СЃС‚СЂРѕРєРё
 	tmps.tn	=	strb;
 	TagList.tag.push_back(tmps);
 	for ( WORD i = 0 ; i < sizeb - 1 ; i++ )
@@ -166,7 +166,7 @@ bool	Mesh::LWOMesh::ReadSURFChunk	(	FILE	*	f	)
 	DWORD	SurfChunkSize = iff::GetDWORD(f);
 	DWORD	ReadedSize	=	0;
 	DWORD	StringSize	=	0;
-	DWORD	&ChunkSize = StringSize;			// Старая переменная с новым именем
+	DWORD	&ChunkSize = StringSize;			// РЎС‚Р°СЂР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ СЃ РЅРѕРІС‹Рј РёРјРµРЅРµРј
 	char	*tmp;
 	tmp = iff::GetString(f,&StringSize);
 	SurfList[iSurfCur].name			=	tmp;
@@ -178,8 +178,8 @@ bool	Mesh::LWOMesh::ReadSURFChunk	(	FILE	*	f	)
 	ReadedSize += StringSize;
 	for (  ; ReadedSize < SurfChunkSize ; ReadedSize += ChunkSize )
 	{
-		tagb.i = iff::GetTAG(f);			// Получаем тег субчанка
-		ReadedSize += 6;					// Прибавляем размер ID чанка и его размер
+		tagb.i = iff::GetTAG(f);			// РџРѕР»СѓС‡Р°РµРј С‚РµРі СЃСѓР±С‡Р°РЅРєР°
+		ReadedSize += 6;					// РџСЂРёР±Р°РІР»СЏРµРј СЂР°Р·РјРµСЂ ID С‡Р°РЅРєР° Рё РµРіРѕ СЂР°Р·РјРµСЂ
 		switch(tagb.i)
 		{
 		case ID_COLR:	ChunkSize	=	ReadSURFCOLRSubChunk(f);	break;
@@ -188,7 +188,7 @@ bool	Mesh::LWOMesh::ReadSURFChunk	(	FILE	*	f	)
 		case ID_TRAN:	sizeb = iff::GetWORD(f);
 			float	alfa;
 			alfa	=	1.0f - iff::GetFloat(f);
-			if (alfa > 1) alfa = 1.0f;				// Маленькие ограничения на прозрачность
+			if (alfa > 1) alfa = 1.0f;				// РњР°Р»РµРЅСЊРєРёРµ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ РЅР° РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ
 			if (alfa < 0) alfa = 0.0f;
 			SurfList[iSurfCur].color.d.c.a	=	alfa;
 			iff::GetVX(f,NULL);
@@ -213,7 +213,7 @@ WORD	Mesh::LWOMesh::ReadSURFCOLRSubChunk	(	FILE	*	f	)
 	this->SurfList[iSurfCur].color.d.c.r	=	iff::GetFloat(f);
 	this->SurfList[iSurfCur].color.d.c.g	=	iff::GetFloat(f);
 	this->SurfList[iSurfCur].color.d.c.b	=	iff::GetFloat(f);
-	iff::GetVX(f,NULL);				//	envelope смещение
+	iff::GetVX(f,NULL);				//	envelope СЃРјРµС‰РµРЅРёРµ
 	return	s;
 }
 WORD	Mesh::LWOMesh::ReadSURFDIFFSubChunk	(	FILE	*	f	)
@@ -222,7 +222,7 @@ WORD	Mesh::LWOMesh::ReadSURFDIFFSubChunk	(	FILE	*	f	)
 	Color4f	diff	=	SurfList[iSurfCur].color;
 	diff			=	diff * iff::GetFloat(f);
 	SurfList[iSurfCur].Diffuse	=	diff;
-	iff::GetVX(f,NULL);				//	envelope смещение
+	iff::GetVX(f,NULL);				//	envelope СЃРјРµС‰РµРЅРёРµ
 	return	s;
 }
 
@@ -232,7 +232,7 @@ WORD	Mesh::LWOMesh::ReadSURFSPECSubChunk	(	FILE	*	f	)
 	Color4f	spec	=	SurfList[iSurfCur].color;
 	spec			=	spec * iff::GetFloat(f);
 	SurfList[iSurfCur].Specular	=	spec;
-	iff::GetVX(f,NULL);				//	envelope смещение
+	iff::GetVX(f,NULL);				//	envelope СЃРјРµС‰РµРЅРёРµ
 	return	s;
 }
 
@@ -247,7 +247,7 @@ bool	Mesh::LWOMesh::ReadPTAGChunk	(	FILE	*	f	)
 	sizeb	=	iff::GetDWORD(f);
 	tagb.i	=	iff::GetTAG(f);
 	sizeb	-=	4;
-	if (tagb.i != ID_SURF)			// Нам не нужны всякие странные птэги
+	if (tagb.i != ID_SURF)			// РќР°Рј РЅРµ РЅСѓР¶РЅС‹ РІСЃСЏРєРёРµ СЃС‚СЂР°РЅРЅС‹Рµ РїС‚СЌРіРё
 	{
 		fseek(f,sizeb,SEEK_CUR);
 		return	FJC_NO_ERROR;
@@ -259,7 +259,7 @@ bool	Mesh::LWOMesh::ReadPTAGChunk	(	FILE	*	f	)
 		indexSize = 0;
 		polyindex	=	iff::GetVX(f,&indexSize);
 		this->Layers[iLayerCur].Pols[polyindex].iSurf	=	iff::GetWORD(f);
-		sizeb	-=	indexSize + 2;	// Вычитаем размер 2х индексов
+		sizeb	-=	indexSize + 2;	// Р’С‹С‡РёС‚Р°РµРј СЂР°Р·РјРµСЂ 2С… РёРЅРґРµРєСЃРѕРІ
 	}
 	return FJC_NO_ERROR;
 }
@@ -270,21 +270,21 @@ void	Mesh::LWOMesh::PostLoadProcessing	(	void	)
 	{
 		SurfList[i].Diffuse.d.c.a = SurfList[i].color.d.c.a;
 	}
-// Смотрим соответствие имени в теге и имени сурфейса и соответственно пишем тегу номер сурфейса
-	for ( WORD i = 0 ; i < TagList.tag.size() ; i++ )	// Цикл по тегам
+// РЎРјРѕС‚СЂРёРј СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ РёРјРµРЅРё РІ С‚РµРіРµ Рё РёРјРµРЅРё СЃСѓСЂС„РµР№СЃР° Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕ РїРёС€РµРј С‚РµРіСѓ РЅРѕРјРµСЂ СЃСѓСЂС„РµР№СЃР°
+	for ( WORD i = 0 ; i < TagList.tag.size() ; i++ )	// Р¦РёРєР» РїРѕ С‚РµРіР°Рј
 	{
-		for ( WORD j = 0 ; j < SurfList.size() ; j++ )	// Внутри цикл по сурфейсам
-		{	// Если название сурфейса и тега совпадают
+		for ( WORD j = 0 ; j < SurfList.size() ; j++ )	// Р’РЅСѓС‚СЂРё С†РёРєР» РїРѕ СЃСѓСЂС„РµР№СЃР°Рј
+		{	// Р•СЃР»Рё РЅР°Р·РІР°РЅРёРµ СЃСѓСЂС„РµР№СЃР° Рё С‚РµРіР° СЃРѕРІРїР°РґР°СЋС‚
 			if ( (SurfList[j].name) == (TagList.tag[i].tn) )
 			{
-				TagList.tag[i].iSurf	=	j;			// Записываем номер сурфеса тегу
+				TagList.tag[i].iSurf	=	j;			// Р—Р°РїРёСЃС‹РІР°РµРј РЅРѕРјРµСЂ СЃСѓСЂС„РµСЃР° С‚РµРіСѓ
 				break;
 			}//if ( SurfList[j] == TagList.tag[i].tn )
 		}//for ( WORD j++ ; j < SurfList.size() ; j++ )
 	}//for ( WORD i = 0 ; i < TagList.tag.size() ; i++ )
 
 
-	// Прописываем каждому полигону вместо номера тега номер сурфейса
+	// РџСЂРѕРїРёСЃС‹РІР°РµРј РєР°Р¶РґРѕРјСѓ РїРѕР»РёРіРѕРЅСѓ РІРјРµСЃС‚Рѕ РЅРѕРјРµСЂР° С‚РµРіР° РЅРѕРјРµСЂ СЃСѓСЂС„РµР№СЃР°
 	for (DWORD ind = 0 ; ind < iLayers ; ind++ )
 	{
 		lwLayer_t *l = &Layers[ind];
@@ -293,7 +293,7 @@ void	Mesh::LWOMesh::PostLoadProcessing	(	void	)
 			l->Pols[i].iSurf = TagList.tag[l->Pols[i].iSurf].iSurf;
 		}
 	}
-	// Просчитываем для каждого полигона нормаль
+	// РџСЂРѕСЃС‡РёС‚С‹РІР°РµРј РґР»СЏ РєР°Р¶РґРѕРіРѕ РїРѕР»РёРіРѕРЅР° РЅРѕСЂРјР°Р»СЊ
 	for (DWORD ind = 0 ; ind < iLayers ; ind++ )
 	{
 		lwLayer_t *l = &Layers[ind];
@@ -308,19 +308,19 @@ void	Mesh::LWOMesh::PostLoadProcessing	(	void	)
 		}
 	}
 	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-	// Сглаживание нормалей / Normal smoothing
-	// Первым делом для каждой вершины слоя создаём список полигонов, которым она принадлежит
+	// РЎРіР»Р°Р¶РёРІР°РЅРёРµ РЅРѕСЂРјР°Р»РµР№ / Normal smoothing
+	// РџРµСЂРІС‹Рј РґРµР»РѕРј РґР»СЏ РєР°Р¶РґРѕР№ РІРµСЂС€РёРЅС‹ СЃР»РѕСЏ СЃРѕР·РґР°С‘Рј СЃРїРёСЃРѕРє РїРѕР»РёРіРѕРЅРѕРІ, РєРѕС‚РѕСЂС‹Рј РѕРЅР° РїСЂРёРЅР°РґР»РµР¶РёС‚
 	for (DWORD ind = 0 ; ind < iLayers ; ind++ )
 	{
 		lwLayer_t *l = &Layers[ind];
-		// Для текущего слоя создаём массив вершин типа NormalSmoothVertex_t
+		// Р”Р»СЏ С‚РµРєСѓС‰РµРіРѕ СЃР»РѕСЏ СЃРѕР·РґР°С‘Рј РјР°СЃСЃРёРІ РІРµСЂС€РёРЅ С‚РёРїР° NormalSmoothVertex_t
 		NormalSmoothVertex_t* vert = new NormalSmoothVertex_t[l->iVertexes];
-		// Указываем каждой вершинке её номер
+		// РЈРєР°Р·С‹РІР°РµРј РєР°Р¶РґРѕР№ РІРµСЂС€РёРЅРєРµ РµС‘ РЅРѕРјРµСЂ
 		for	(DWORD j = 0 ; j < l->iVertexes ; j++ ) vert[j].n = j;
-		// Записываем для каждой вершины её полигоны
+		// Р—Р°РїРёСЃС‹РІР°РµРј РґР»СЏ РєР°Р¶РґРѕР№ РІРµСЂС€РёРЅС‹ РµС‘ РїРѕР»РёРіРѕРЅС‹
 		for (DWORD i = 0 ; i < l->iPols ; i++)
 		{
-			if (l->Pols[i].v < 3) continue; // полигоны меньше 3х точек нам не нужны
+			if (l->Pols[i].v < 3) continue; // РїРѕР»РёРіРѕРЅС‹ РјРµРЅСЊС€Рµ 3С… С‚РѕС‡РµРє РЅР°Рј РЅРµ РЅСѓР¶РЅС‹
 			for (WORD j = 0 ; j < l->Pols[i].v ; j++ )
 			{
 				NormalSmoothPolygonPointer_t	somepol;
@@ -330,25 +330,25 @@ void	Mesh::LWOMesh::PostLoadProcessing	(	void	)
 				vert[index].polys.push_back(somepol);
 			}
 		}
-		// Сглаживание нормалей
-		for (DWORD i = 0 ; i < l->iVertexes ; i++)	// Цикл по всем вершинам
+		// РЎРіР»Р°Р¶РёРІР°РЅРёРµ РЅРѕСЂРјР°Р»РµР№
+		for (DWORD i = 0 ; i < l->iVertexes ; i++)	// Р¦РёРєР» РїРѕ РІСЃРµРј РІРµСЂС€РёРЅР°Рј
 		{
-			// Попарное сравнение всех полигонов в которые входит данная вершина
+			// РџРѕРїР°СЂРЅРѕРµ СЃСЂР°РІРЅРµРЅРёРµ РІСЃРµС… РїРѕР»РёРіРѕРЅРѕРІ РІ РєРѕС‚РѕСЂС‹Рµ РІС…РѕРґРёС‚ РґР°РЅРЅР°СЏ РІРµСЂС€РёРЅР°
 			for ( DWORD k = 0 ; k < vert[i].polys.size() ; k++ )
 			{
 				for ( DWORD li = k ; li < vert[i].polys.size() ; li++ )
 				{
 					if ( li == k ) continue;
-	// Если полигоны принадлежат разным материалам или материал без сглаживания мы их не обрабатываем
+	// Р•СЃР»Рё РїРѕР»РёРіРѕРЅС‹ РїСЂРёРЅР°РґР»РµР¶Р°С‚ СЂР°Р·РЅС‹Рј РјР°С‚РµСЂРёР°Р»Р°Рј РёР»Рё РјР°С‚РµСЂРёР°Р» Р±РµР· СЃРіР»Р°Р¶РёРІР°РЅРёСЏ РјС‹ РёС… РЅРµ РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј
 					if (vert[i].polys[k].p->iSurf != vert[i].polys[li].p->iSurf ||
 						SurfList[vert[i].polys[li].p->iSurf].Smoothing == false)
 						continue;
-	// Теперь находим угол между нормалями полигонов (этот угол используется для решения - сглажывать или нет)
+	// РўРµРїРµСЂСЊ РЅР°С…РѕРґРёРј СѓРіРѕР» РјРµР¶РґСѓ РЅРѕСЂРјР°Р»СЏРјРё РїРѕР»РёРіРѕРЅРѕРІ (СЌС‚РѕС‚ СѓРіРѕР» РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СЂРµС€РµРЅРёСЏ - СЃРіР»Р°Р¶С‹РІР°С‚СЊ РёР»Рё РЅРµС‚)
 					float	surfAngle = SurfList[vert[i].polys[li].p->iSurf].nSmoothAngle;
 					float	polyAngle = (float)vert[i].polys[k].p->normal.angle(vert[i].polys[li].p->normal);
 					if ( polyAngle > 0 && polyAngle < surfAngle )
-					{// Угол между нормалями меньше максимального для текущего материала
-						// Значит этот полигон ещё не внёс свой вклад в результирующую нормаль
+					{// РЈРіРѕР» РјРµР¶РґСѓ РЅРѕСЂРјР°Р»СЏРјРё РјРµРЅСЊС€Рµ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РјР°С‚РµСЂРёР°Р»Р°
+						// Р—РЅР°С‡РёС‚ СЌС‚РѕС‚ РїРѕР»РёРіРѕРЅ РµС‰С‘ РЅРµ РІРЅС‘СЃ СЃРІРѕР№ РІРєР»Р°Рґ РІ СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰СѓСЋ РЅРѕСЂРјР°Р»СЊ
 						if( vert[i].polys[k].s == false )
 						{
 							vert[i].normal									+=	vert[i].polys[k].p->normal;
@@ -367,9 +367,9 @@ void	Mesh::LWOMesh::PostLoadProcessing	(	void	)
 			vert[i].normal.normalize();
 			l->Vertexes[i].n = vert [i].normal;
 		}// for (DWORD i = 0 ; i < l->iVertexes ; i++)
-		// Очищаем массивы полигонов у каждой вершины
+		// РћС‡РёС‰Р°РµРј РјР°СЃСЃРёРІС‹ РїРѕР»РёРіРѕРЅРѕРІ Сѓ РєР°Р¶РґРѕР№ РІРµСЂС€РёРЅС‹
 		for	(DWORD j = 0 ; j < l->iVertexes ; j++ ) vert[j].polys.clear();
-		// Удаляем массив вершин
+		// РЈРґР°Р»СЏРµРј РјР°СЃСЃРёРІ РІРµСЂС€РёРЅ
 		delete [] vert;
 	}
 
@@ -387,7 +387,7 @@ void	Mesh::LWOMesh::CompileList		(	)
 }
 
 void	Mesh::LWOMesh::DrawFromSource	(void)
-{	// Выправление системы координат
+{	// Р’С‹РїСЂР°РІР»РµРЅРёРµ СЃРёСЃС‚РµРјС‹ РєРѕРѕСЂРґРёРЅР°С‚
 	DWORD	CurrentSurface;
 	CurrentSurface = 0xFFFFFFFF;
 	for (DWORD ind = 0 ; ind < this->iLayers ; ind++ )
@@ -419,7 +419,7 @@ void	Mesh::LWOMesh::DrawFromSource	(void)
 
 void	Mesh::LWOMesh::Render	(void)
 {
-	glPushAttrib(GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// Сохранение настроек
+	glPushAttrib(GL_DEPTH_BUFFER_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);		// РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	if (Globals.ERS.m	== ERS::Mesh::WIRE)
@@ -442,7 +442,7 @@ void	Mesh::LWOMesh::Render	(void)
 		else	glDisable(GL_CULL_FACE);
 	}
 	glCallList(list);
-	glPopAttrib();											// Возврат
+	glPopAttrib();											// Р’РѕР·РІСЂР°С‚
 }
 void	Mesh::LWOMesh::ULoad	(void)
 {
