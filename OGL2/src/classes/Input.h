@@ -3,8 +3,13 @@
 
 #define _CRT_SECURE_NO_DEPRECATE
 #include <string.h>
+#include <stdio.h>
 
+#ifdef WIN32
 typedef _W64 unsigned int WPARAM;			// From basetsd.h & windef.h
+#else
+typedef unsigned long WPARAM;				// macOS/Linux version (должно совпадать с globals.h)
+#endif
 typedef	WPARAM				KeyID;
 namespace Input
 {

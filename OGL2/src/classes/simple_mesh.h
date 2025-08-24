@@ -3,20 +3,13 @@
 
 #include "./globals.h"
 #include "./oGL.h"
-#include "./texture.h"
+#include "./Texture.h"
+#include "./mesh_common.h"
 
 int glLoadModel(char *filename,GLuint *ListNum);
 
 namespace Mesh
 {
-	enum	RESULT
-	{
-		OK,
-		FILE_NOT_FOUND,
-		NO_MEMORY,
-		INVALID_FORMAT,
-		NO_LISTS
-	};
 
 	struct	material_t
 	{

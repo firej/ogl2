@@ -6,9 +6,10 @@
 #endif
 //#define ENABLE_TEXTURE_RENDERING
 
-#include "./shared/mymath.h"
-#include "./shared/ASSERT.h"
-#include "./files.h"
+#include "./shared/MyMath.h"
+#include "./shared/assert.h"
+#include "./Files.h"
+#include <cstring>  // Для strcpy в конструкторе GlobalsStruct
 
 extern	LogFile	LF;								// Лог-файл
 extern	CFGFile	CF;								// Файл с настройками
@@ -50,15 +51,10 @@ typedef void (*KeyFunc)(void);								// Тип указателя на косо
 #ifndef WIN32
 typedef unsigned int				UINT;
 typedef unsigned char				BYTE;
-typedef unsigned char				bool;
-typedef unsigned long long			QWORD
-#if		sizeof(UINT) == 4
-typedef unsigned int				DWORD
-#elif	sizeof(unsigned long int) == 4
-typedef unsigned long int			DWORD
-#else
-#error Could not find bilt-in type for DWORD
-#endif
+typedef unsigned long long			QWORD;
+typedef unsigned int				DWORD;
+typedef unsigned long				WPARAM;
+typedef long						LPARAM;
 #endif
 
 struct CameraSet								// Настройки камеры
@@ -119,6 +115,40 @@ namespace	AR							// Aspect Ratio  - соотношение сторон экр
 }
 struct GlobalsStruct								// Глобальные настройки и переменные
 {
+	GlobalsStruct()  // Конструктор для инициализации по умолчанию
+	{
+		// Инициализация VP
+		VP.IsFullScreen = false;
+		VP.Width = 1024;
+		VP.Height = 768;
+		VP.Bits = 32;
+		VP.Hzs = 85;
+		VP.Vsync = 1;
+		VP.ScreenStrings = 40;
+		VP.AR = AR::NORMAL;
+		
+		// Инициализация других полей
+		TextureFiltering = FJC_TEX_ANISOTROPIC_FILTERING;
+		
+		// Инициализация RES
+		strcpy(RES.TEXTURE_DIR, "data/textures/");
+		strcpy(RES.FONT_DIR, "data/fonts/");
+		strcpy(RES.MESH_DIR, "data/obj/");
+		
+		// Инициализация ERS
+		ERS.d = ERS::Draw::SCENE;
+		ERS.m = ERS::Mesh::NORMAL;
+		
+		// Инициализация EFl
+		EFl.show_stat = true;
+		EFl.show_gui = false;
+		EFl.LWOCullFace = true;
+		
+		// Инициализация других полей
+		es = EStates::RENDER_3D;
+		Exiting = false;
+	}
+	
 	struct
 	{
 		bool		IsFullScreen;					// Индикатор полноэкранного режима

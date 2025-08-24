@@ -1,4 +1,5 @@
 #define	_CRT_SECURE_NO_DEPRECATE
+#ifdef WIN32
 #include "LocusAFX.h"
 //#include "../OGL.h"
 //#include <windows.h>
@@ -7,10 +8,17 @@
 //#include <conio.h>
 //#include <string.h>
 //#include <io.h>
+#else
+// macOS/Linux includes
+#include <cstdio>
+#include <cstring>
+#include <OpenGL/gl.h>
+#define MAX_PATH 260
+#endif
 #include <stdio.h>
 
 #include "./simple_mesh.h"
-#include "../ResMan.h"
+#include "./ResMan.h"
 
 char szString[128];
 // Macro for finding string in file.

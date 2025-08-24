@@ -2,7 +2,22 @@
 //====== Общие файлы
 #include "./globals.h"
 
+#ifdef WIN32
 #include <windows.h>
+#else
+#include <limits.h>
+#define _MAX_PATH PATH_MAX
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+// DevIL типы для macOS/Linux
+typedef unsigned int ILenum;
+typedef unsigned int ILuint;
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 

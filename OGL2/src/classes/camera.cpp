@@ -1,7 +1,32 @@
+#ifdef WIN32
 #include "LocusAFX.h"
+#else
+#include <cstring>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+#endif
+
 #include "./camera.h"
 #include "./time.h"
 #include "./sound/sound.h"
+
+#ifndef WIN32
+// Заглушки для Windows API на macOS
+typedef struct {
+    long x, y;
+} POINT;
+
+void SetCursorPos(int x, int y) {}
+void GetCursorPos(POINT* point) {
+    point->x = 0;
+    point->y = 0;
+}
+#endif
 
 
 //Конструктор по умолчанию - просто обнуляет позицию и направление взгляда
@@ -23,9 +48,9 @@ Camera::~Camera(void)
 
 void Camera::Init	(void)
 {
-	center.d.c.x = Globals.VP.Width  >> 1;					// Находим середину длины
-	center.d.c.y = Globals.VP.Height >> 1;					// Находим серелину высоты
-	SetCursorPos(center.d.c.x, center.d.c.y);				// Установка указателя в "спокойное" состояние
+	center.x = Globals.VP.Width  >> 1;					// Находим середину длины
+	center.y = Globals.VP.Height >> 1;					// Находим серелину высоты
+	SetCursorPos(center.x, center.y);				// Установка указателя в "спокойное" состояние
 	Position = CamS.CamStartPosition;						// Стартовая позиция камеры
 }
 
@@ -77,14 +102,14 @@ void Camera::MouseLook(void)
 	GetCursorPos(&mousePos);								// Get the mouse's current X,Y position
 	
 	// If our cursor is still in the middle, we never moved... so don't update the screen
-	if( (mousePos.x == center.d.c.x) && (mousePos.y == center.d.c.y) ) return;
+	if( (mousePos.x == center.x) && (mousePos.y == center.y) ) return;
 
 	// Set the mouse position to the middle of our window
-	SetCursorPos(center.d.c.x, center.d.c.y);							
+	SetCursorPos(center.x, center.y);
 
 	// Get the direction the mouse moved in, but bring the number down to a reasonable amount
-	Angles.d.c.x	+= (float) CamS.Sensitivity*((mousePos.y - center.d.c.y)  / 25.0f);		
-	Angles.d.c.y	-= (float) CamS.Sensitivity*((mousePos.x - center.d.c.x)  / 25.0f);
+	Angles.d.c.x	+= (float) CamS.Sensitivity*((mousePos.y - center.y)  / 25.0f);
+	Angles.d.c.y	-= (float) CamS.Sensitivity*((mousePos.x - center.x)  / 25.0f);
 	Angles.d.c.z	= 0;
 	Angles.d.c.y	=	fmod(Angles.d.c.y,360.0);
 	if (Angles.d.c.x > 90.0f)		Angles.d.c.x =  90.0f;

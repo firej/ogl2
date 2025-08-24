@@ -4,20 +4,34 @@
 //							(Windows Graphics Programming: Win32 GDI and DirectDraw)	//
 //--------------------------------------------------------------------------------------//
 
+#ifdef WIN32
 #pragma warning(disable : 4035)
+#endif
 #include "./globals.h"
 
-inline unsigned __int64 GetCycleCount(void)
+#ifdef WIN32
+typedef unsigned __int64 uint64_t;
+inline uint64_t GetCycleCount(void)
 {
     _asm    _emit 0x0F
     _asm    _emit 0x31
 }
+#else
+#include <cstdint>
+#include <chrono>
+inline uint64_t GetCycleCount(void)
+{
+    // Для macOS/Linux используем высокоточный таймер
+    auto now = std::chrono::high_resolution_clock::now();
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+}
+#endif
 
 class Timer
 {
 protected:
-	unsigned __int64	last_cycle;					// Последний отслеженый цикл
-	unsigned __int64	now_cycle;					// "Сейчасный" отслеженый цикл
+	uint64_t			last_cycle;					// Последний отслеженый цикл
+	uint64_t			now_cycle;					// "Сейчасный" отслеженый цикл
 	double				q;							// Коэффициент умножения
 
     double				FrameTime;					// Время между последними кадрами

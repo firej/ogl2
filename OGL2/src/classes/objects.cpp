@@ -1,4 +1,10 @@
+#ifdef WIN32
 #include "LocusAFX.h"
+#else
+// macOS/Linux includes
+#include <OpenGL/gl.h>
+#endif
+
 #include "./objects.h"
 		SkyBox::SkyBox		()
 {

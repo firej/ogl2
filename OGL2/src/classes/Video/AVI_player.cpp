@@ -1,12 +1,23 @@
-#include "LocusAFX.h"
-#include "../globals.h"
-#include "../time.h"
-#include "AVI_player.h"
+#ifdef WIN32
+#include "../../LocusAFX.h"
 #pragma comment( lib, "vfw32.lib" )								// Search For VFW32.lib While Linking
+#else
+// На macOS/Linux AVI плеер не поддерживается
+#include <cstdlib>
+#include <cstring>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+#endif
+#include "../globals.h"
+#include "../Time.h"
+#include "AVI_player.h"
 
 bool				end_of_file		=	false;
 
-bool				OpenAVI				(char* szFile);// Opens An AVI File (szFile)
+#ifdef WIN32
 void flipIt(void* b,int texS)							// Flips The Red And Blue Bytes (256x256)
 {
 	__asm												// Assembler Code To Follow
@@ -24,20 +35,41 @@ void flipIt(void* b,int texS)							// Flips The Red And Blue Bytes (256x256)
 			jnz label									// If Not Zero Jump Back To Label
 	}
 }
+#else
+void flipIt(void* b,int texS)							// Заглушка для macOS/Linux
+{
+	// Не реализовано на macOS/Linux
+}
+#endif
+
+AVI_player::AVI_player(void)
+{
+#ifndef WIN32
+	// Инициализация заглушек для macOS/Linux
+	twidth = theight = width = height = 0;
+	lastframe = mpf = next = frame = 0;
+	pdata = nullptr;
+	data = nullptr;
+	psi = pavi = pgf = bmih = hdd = hBitmap = hdc = nullptr;
+#endif
+}
+
+AVI_player::~AVI_player(void)
+{}
 
 bool	AVI_player::Open(TCHAR *FileName,int Width, int Height)
 {
 	this->twidth		=	Width;
 	this->theight		=	Height;
+#ifdef WIN32
 	return OpenAVI(FileName);
+#else
+	// Заглушка для macOS/Linux - AVI не поддерживается
+	return FJC_ERROR;
+#endif
 }
 
-AVI_player::AVI_player(void)
-{}
-
-AVI_player::~AVI_player(void)
-{}
-
+#ifdef WIN32
 bool AVI_player::OpenAVI(char* szFile)								// Opens An AVI File (szFile)
 {
 	hdc = CreateCompatibleDC(0);
@@ -64,7 +96,7 @@ bool AVI_player::OpenAVI(char* szFile)								// Opens An AVI File (szFile)
 	mpf		=	AVIStreamSampleToTime(pavi,lastframe)/lastframe;	// Calculate Rough Milliseconds Per Frame
 
 	bmih.biSize = sizeof (BITMAPINFOHEADER);						// Size Of The BitmapInfoHeader
-	bmih.biPlanes = 1;												// Bitplanes	
+	bmih.biPlanes = 1;												// Bitplanes
 	bmih.biBitCount = 24;											// Bits Format We Want (24 Bit, 3 Bytes)
 	bmih.biWidth = twidth;											// Width We Want (256 Pixels)
 	bmih.biHeight = theight;										// Height We Want (256 Pixels)
@@ -105,7 +137,7 @@ void AVI_player::GrabAVIFrame()						// Grabs A Frame From The Stream
 	// Update The Texture
 	glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, twidth, theight, GL_BGR, GL_UNSIGNED_BYTE, data);
 }
-// Специально для возможности кеширования
+
 void AVI_player::GrabAVIFrame(int frame)				// Grabs A Frame From The Stream
 {
 	this->frame = frame;
@@ -120,6 +152,7 @@ void AVI_player::GrabAVIFrame(int frame)				// Grabs A Frame From The Stream
 	// Update The Texture
 	glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, twidth, theight, GL_BGR, GL_UNSIGNED_BYTE, data);
 }
+
 void AVI_player::CloseAVI()								// Properly Closes The Avi File
 {
 	DeleteObject(hBitmap);							// Delete The Device Dependant Bitmap Object
@@ -128,6 +161,13 @@ void AVI_player::CloseAVI()								// Properly Closes The Avi File
 	AVIStreamRelease(pavi);							// Release The Stream
 	AVIFileExit();										// Release The File
 }
+#else
+// Заглушки для macOS/Linux
+bool AVI_player::OpenAVI(char* szFile) { return FJC_ERROR; }
+void AVI_player::GrabAVIFrame() {}
+void AVI_player::GrabAVIFrame(int frame) {}
+void AVI_player::CloseAVI() {}
+#endif
 
 bool AVI_player::End()
 {

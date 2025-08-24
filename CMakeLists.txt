@@ -1,112 +1,125 @@
-cmake_minimum_required(VERSION 2.8.4)
+cmake_minimum_required(VERSION 3.5)
 project(OGL2)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES
-    OGL2/src/classes/cons/CCFuncs.cpp
-    OGL2/src/classes/cons/CCFuncs.h
-    OGL2/src/classes/cons/FuncsMap.cpp
-    OGL2/src/classes/cons/FuncsMap.h
-    OGL2/src/classes/shared/assert.cpp
-    OGL2/src/classes/shared/assert.h
-    OGL2/src/classes/shared/MyMath.cpp
-    OGL2/src/classes/shared/MyMath.h
-    OGL2/src/classes/sound/Sound.cpp
-    OGL2/src/classes/sound/Sound.h
-    OGL2/src/classes/Video/AVI_player.cpp
-    OGL2/src/classes/Video/AVI_player.h
-    OGL2/src/classes/ApplicationClass.cpp
-    OGL2/src/classes/ApplicationClass.h
-    OGL2/src/classes/camera.cpp
-    OGL2/src/classes/camera.h
-    OGL2/src/classes/Console.cpp
-    OGL2/src/classes/Console.h
-    OGL2/src/classes/ConsoleFunctions.cpp
-    OGL2/src/classes/ConsoleFunctions.h
-    OGL2/src/classes/Files.cpp
-    OGL2/src/classes/Files.h
-    OGL2/src/classes/globals.h
-    OGL2/src/classes/Input.h
-    OGL2/src/classes/Logo.h
-    OGL2/src/classes/lwo_mesh.cpp
-    OGL2/src/classes/lwo_mesh.h
-    OGL2/src/classes/objects.cpp
-    OGL2/src/classes/objects.h
-    OGL2/src/classes/ParticleSystem.cpp
-    OGL2/src/classes/ParticleSystem.h
-    OGL2/src/classes/PhysiX.h
-    OGL2/src/classes/resman.cpp
-    OGL2/src/classes/ResMan.h
-    OGL2/src/classes/simple_mesh.cpp
-    OGL2/src/classes/simple_mesh.h
-    OGL2/src/classes/Text.cpp
-    OGL2/src/classes/Text.h
-    OGL2/src/classes/Texture.cpp
-    OGL2/src/classes/Texture.h
-    OGL2/src/classes/Time.h
-    OGL2/src/Ex/AL/al.h
-    OGL2/src/Ex/AL/alc.h
-    OGL2/src/Ex/AL/alctypes.h
-    OGL2/src/Ex/AL/altypes.h
-    OGL2/src/Ex/AL/alut.h
-    OGL2/src/Ex/IL/config.h
-    OGL2/src/Ex/IL/devil_internal_exports.h
-    OGL2/src/Ex/IL/il.h
-    OGL2/src/Ex/IL/il_wrap.h
-    OGL2/src/Ex/IL/ilu.h
-    OGL2/src/Ex/IL/ilu_region.h
-    OGL2/src/Ex/IL/ilut.h
-    OGL2/src/Ex/MesaGL/linux/gl.h
-    OGL2/src/Ex/MesaGL/linux/glext.h
-    OGL2/src/Ex/MesaGL/linux/glu.h
-    OGL2/src/Ex/MesaGL/linux/GLwDrawA.h
-    OGL2/src/Ex/MesaGL/linux/GLwDrawAP.h
-    OGL2/src/Ex/MesaGL/linux/GLwMDrawA.h
-    OGL2/src/Ex/MesaGL/linux/GLwMDrawAP.h
-    OGL2/src/Ex/MesaGL/linux/glx.h
-    OGL2/src/Ex/MesaGL/linux/glxext.h
-    OGL2/src/Ex/MesaGL/linux/glxint.h
-    OGL2/src/Ex/MesaGL/linux/glxmd.h
-    OGL2/src/Ex/MesaGL/linux/glxproto.h
-    OGL2/src/Ex/MesaGL/linux/glxtokens.h
-    OGL2/src/Ex/MesaGL/linux/osmesa.h
-    OGL2/src/Ex/MesaGL/GL.H
-    OGL2/src/Ex/MesaGL/GLAUX.H
-    OGL2/src/Ex/MesaGL/glew.h
-    OGL2/src/Ex/MesaGL/GLEXT.H
-    OGL2/src/Ex/MesaGL/GLU.H
-    OGL2/src/Ex/MesaGL/GLUT.H
-    OGL2/src/Ex/MesaGL/wglew.h
-    OGL2/src/Ex/MesaGL/WGLEXT.H
-    OGL2/src/Ex/ode/collision.h
-    OGL2/src/Ex/ode/collision_space.h
-    OGL2/src/Ex/ode/collision_trimesh.h
-    OGL2/src/Ex/ode/common.h
-    OGL2/src/Ex/ode/compatibility.h
-    OGL2/src/Ex/ode/config.h
-    OGL2/src/Ex/ode/contact.h
-    OGL2/src/Ex/ode/error.h
-    OGL2/src/Ex/ode/export-dif.h
-    OGL2/src/Ex/ode/mass.h
-    OGL2/src/Ex/ode/matrix.h
-    OGL2/src/Ex/ode/memory.h
-    OGL2/src/Ex/ode/misc.h
-    OGL2/src/Ex/ode/objects.h
-    OGL2/src/Ex/ode/ode.h
-    OGL2/src/Ex/ode/odecpp.h
-    OGL2/src/Ex/ode/odecpp_collision.h
-    OGL2/src/Ex/ode/odecpp_old.h
-    OGL2/src/Ex/ode/odemath.h
-    OGL2/src/Ex/ode/rotation.h
-    OGL2/src/Ex/ode/timer.h
-    OGL2/src/LocusAFX.cpp
-    OGL2/src/LocusAFX.h
-    OGL2/src/MAIN.cpp
-    OGL2/src/main.h
-    OGL2/src/RenderScene.cpp
-    OGL2/resource.h
-    OGL2/unused.cpp
+# Определяем базовые файлы
+set(BASE_SOURCE_FILES
+    ogl2/src/classes/cons/CCFuncs.cpp
+    ogl2/src/classes/cons/FuncsMap.cpp
+    ogl2/src/classes/shared/assert.cpp
+    ogl2/src/classes/shared/MyMath.cpp
+    ogl2/src/classes/Files.cpp
+    ogl2/src/renderscene.cpp
+    ogl2/src/main.cpp
     ssrc/iff.h)
 
+# Добавляем платформо-специфичные файлы
+if(WIN32)
+    set(SOURCE_FILES ${BASE_SOURCE_FILES}
+        ogl2/src/classes/sound/Sound.cpp
+        ogl2/src/classes/Video/AVI_player.cpp
+        ogl2/src/classes/ApplicationClass.cpp
+        ogl2/src/classes/camera.cpp
+        ogl2/src/classes/Console.cpp
+        ogl2/src/classes/ConsoleFunctions.cpp
+        ogl2/src/classes/lwo_mesh.cpp
+        ogl2/src/classes/objects.cpp
+        ogl2/src/classes/ParticleSystem.cpp
+        ogl2/src/classes/resman.cpp
+        ogl2/src/classes/simple_mesh.cpp
+        ogl2/src/classes/Text.cpp
+        ogl2/src/classes/Texture.cpp
+        ogl2/src/LocusAFX.cpp
+        ogl2/src/renderscene.cpp)
+else()
+    # Для macOS/Linux добавляем необходимые файлы
+    set(SOURCE_FILES ${BASE_SOURCE_FILES}
+        ogl2/src/classes/ApplicationClass.cpp
+        ogl2/src/classes/sound/Sound.cpp
+        ogl2/src/classes/Video/AVI_player.cpp
+        ogl2/src/classes/camera.cpp
+        ogl2/src/classes/Console.cpp
+        ogl2/src/classes/ConsoleFunctions.cpp
+        ogl2/src/classes/lwo_mesh.cpp
+        ogl2/src/classes/objects.cpp
+        ogl2/src/classes/ParticleSystem.cpp
+        ogl2/src/classes/resman.cpp
+        ogl2/src/classes/simple_mesh.cpp
+        ogl2/src/classes/Text.cpp
+        ogl2/src/classes/Texture.cpp)
+endif()
+
 add_executable(OGL2 ${SOURCE_FILES})
+
+# Добавляем библиотеки для разных платформ
+if(APPLE)
+    # macOS библиотеки
+    find_library(OPENGL_LIBRARY OpenGL)
+    find_library(OPENAL_LIBRARY OpenAL)
+    
+    # Добавляем GLFW для создания окон и OpenGL контекста
+    find_library(GLFW_LIBRARY glfw PATHS /opt/homebrew/lib /usr/local/lib)
+    
+    # Добавляем DevIL библиотеки (если установлены через Homebrew) - опционально
+    find_library(IL_LIBRARY IL PATHS /opt/homebrew/lib /usr/local/lib)
+    find_library(ILU_LIBRARY ILU PATHS /opt/homebrew/lib /usr/local/lib)
+    find_library(ILUT_LIBRARY ILUT PATHS /opt/homebrew/lib /usr/local/lib)
+    
+    # Основные библиотеки
+    if(GLFW_LIBRARY)
+        target_link_libraries(OGL2
+            ${OPENGL_LIBRARY}
+            ${OPENAL_LIBRARY}
+            ${GLFW_LIBRARY}
+        )
+        add_definitions(-DUSE_GLFW)
+        message(STATUS "GLFW library found - OpenGL context creation enabled")
+    else()
+        target_link_libraries(OGL2
+            ${OPENGL_LIBRARY}
+            ${OPENAL_LIBRARY}
+        )
+        message(WARNING "GLFW library not found - install with: brew install glfw")
+    endif()
+    
+    # DevIL библиотеки только если найдены
+    if(IL_LIBRARY AND ILU_LIBRARY AND ILUT_LIBRARY)
+        target_link_libraries(OGL2
+            ${IL_LIBRARY}
+            ${ILU_LIBRARY}
+            ${ILUT_LIBRARY}
+        )
+        message(STATUS "DevIL libraries found and linked")
+    else()
+        message(WARNING "DevIL libraries not found - texture loading may not work")
+    endif()
+    
+    # Добавляем пути к заголовкам GLFW и DevIL
+    target_include_directories(OGL2 PRIVATE
+        /opt/homebrew/include
+        /usr/local/include
+    )
+elseif(WIN32)
+    # Windows библиотеки (если нужно)
+    target_link_libraries(OGL2
+        opengl32
+        glu32
+        # Добавить другие Windows библиотеки по необходимости
+    )
+else()
+    # Linux библиотеки
+    find_package(OpenGL REQUIRED)
+    find_library(OPENAL_LIBRARY openal)
+    find_library(IL_LIBRARY IL)
+    find_library(ILU_LIBRARY ILU)
+    find_library(ILUT_LIBRARY ILUT)
+    
+    target_link_libraries(OGL2
+        ${OPENGL_LIBRARIES}
+        ${OPENAL_LIBRARY}
+        ${IL_LIBRARY}
+        ${ILU_LIBRARY}
+        ${ILUT_LIBRARY}
+    )
+endif()

@@ -2,23 +2,21 @@
 #define LWO_MESH_H
 
 #include "./globals.h"
-#include "./texture.h"
+#include "./Texture.h"
+#include "./mesh_common.h"
 // Вектор контейнер для слоёв
 #include <vector>
 #include <map>
 #include <string>
 #include <set>
 using namespace std;
+
+#ifndef WIN32
+// Windows типы для macOS/Linux
+typedef unsigned short WORD;
+#endif
 namespace Mesh
 {
-	typedef	enum
-	{
-		OK,
-		FILE_NOT_FOUND,
-		NO_MEMORY,
-		INVALID_FORMAT,
-		NO_LISTS
-	} RESULT;
 
 	typedef	struct	lwSurface_tt
 	{

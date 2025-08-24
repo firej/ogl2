@@ -1,4 +1,11 @@
+#ifdef WIN32
 #include "LocusAFX.h"
+#else
+// macOS/Linux includes
+#include <cstdlib>
+#include <OpenGL/gl.h>
+#endif
+
 #include "./ParticleSystem.h"
 #include "./Time.h"
 
@@ -16,7 +23,7 @@ ParticleSystem::~ParticleSystem()
 
 void	ParticleSystem::INIT()
 {
-	for (WORD i = 0 ; i < Particles; i++ )
+	for (unsigned short i = 0 ; i < Particles; i++ )
 	{
 		Poss[i].d.c.x = rand()/(float)RAND_MAX * 1000.0f - 500.0f;
 		Poss[i].d.c.y = rand()/(float)RAND_MAX * 1000.0f;
@@ -34,7 +41,7 @@ void	ParticleSystem::ANIM()
 {
 	Point3f		windA;
 	Point3f		tmp;
-	for (WORD i = 0 ; i < Particles; i++ )
+	for (unsigned short i = 0 ; i < Particles; i++ )
 	{
 		Vels[i] += grav*(float)GT.GetFrameTime() +
 			grav*(rand()/(float)RAND_MAX * 2.0f - 1.0f)/250.0f;		// Ускорение
@@ -71,7 +78,7 @@ void	ParticleSystem::DRAW()
 	glEnable(GL_BLEND);
 	glColor4d(1.0,1.0,1.0,0.95);
 	glBegin(GL_POINTS);
-	for (WORD i = 0 ; i < Particles; i++ )
+	for (unsigned short i = 0 ; i < Particles; i++ )
 	{
 		glVertex3fv(Poss[i].d.v);
 	}

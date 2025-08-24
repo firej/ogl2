@@ -7,7 +7,7 @@ class ParticleSystem
 {
 	Point3f		*Poss;		// Позиции
 	Vector3f	*Vels;		// Скорости
-	WORD		Particles;	// Количество частиц
+	unsigned short	Particles;	// Количество частиц
 public:
 	Point3f		wind;		// Ветер
 	Point3f		windSource;

@@ -1,14 +1,21 @@
 #ifndef _IFF_IO_HEADER
 #define	_IFF_IO_HEADER
 //	Interchange Format Files
+#include <cstdio>
+#include <cstddef>
+
 namespace iff	{
     typedef unsigned char	UBYTE;		/*  8 bits unsigned		*/
 	typedef	char			BYTE;		/*  8 bits signed		*/
     typedef short			WORD;		/* 16 bits signed		*/
     typedef unsigned short	UWORD;		/* 16 bits unsigned		*/
     typedef long			LONG;		/* 32 bits signed		*/
-	typedef	unsigned long	DWORD;		/* 32 buts unsigned		*/
-	typedef	float			FLOAT4;		/* 32 bits IEEE float	*/
+#ifdef WIN32
+ typedef	unsigned long	DWORD;		/* 32 bits unsigned		*/
+#else
+ typedef	unsigned int	DWORD;		/* 32 bits unsigned		*/
+#endif
+ typedef	float			FLOAT4;		/* 32 bits IEEE float	*/
 
 /*
 TODO:
@@ -31,6 +38,7 @@ TODO:
 		DWORD	i;
 	};
 
+#ifdef WIN32
 inline	DWORD	SwapBytesDW(const	DWORD	s)	// Обмен порядка байтов
 	{
 		__asm{
@@ -61,6 +69,20 @@ inline	WORD	SwapBytesW(const	WORD	s)	// Изменение порядка бай
 			or	AX,BX					;
 		}
 	}
+#else
+// macOS/Linux byte swapping functions
+inline	DWORD	SwapBytesDW(const	DWORD	s)	// Обмен порядка байтов
+	{
+		return ((s & 0xFF000000) >> 24) |
+		       ((s & 0x00FF0000) >> 8)  |
+		       ((s & 0x0000FF00) << 8)  |
+		       ((s & 0x000000FF) << 24);
+	}
+inline	WORD	SwapBytesW(const	WORD	s)	// Изменение порядка байтов
+	{
+		return ((s & 0xFF00) >> 8) | ((s & 0x00FF) << 8);
+	}
+#endif
 inline	DWORD	GetDWORD(FILE	*	f)
 	{
 		static	DWORD	s;

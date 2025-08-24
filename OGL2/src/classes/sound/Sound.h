@@ -1,5 +1,20 @@
 #pragma once
 
+#ifdef WIN32
+// Windows OpenAL headers будут включены через LocusAFX.h
+#else
+#ifdef __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#include <OpenAL/alut.h>
+#else
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
+#endif
+#include "../shared/MyMath.h"
+#endif
+
 class SoundController;								// Управление звуком
 class soundSource;									// Источник звука
 class SoundBuf;										// Звуковой буфер

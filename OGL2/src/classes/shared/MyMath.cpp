@@ -1,5 +1,11 @@
-#include "LocusAFX.h"
 #include "MyMath.h"
+
+#ifdef WIN32
+#include "../../LocusAFX.h"
+#else
+#include <cmath>
+typedef unsigned int DWORD;
+#endif
 
 float _sint [361];
 float _cost [361];
@@ -57,6 +63,7 @@ double tant	(double angle)
 static float _0_47 = 0.47f;
 static float _1_47 = 1.47f;
 
+#ifdef WIN32
 float __fastcall ulrsqrt(float x)		// Обратный корень
 {
   DWORD y;
@@ -89,10 +96,21 @@ float __fastcall ulrsqrt(float x)		// Обратный корень
   r = (3.0f - x * (r * r)) * r * 0.5f; // remove for low accuracy
   return r;
 }
-/*
-    sqrt(x) = x / sqrt(x)
-*/
+
 float __fastcall ulsqrt(float x)		// Настоящий корень
 {
   return x * ulrsqrt(x);
 }
+#else
+// Для macOS/Linux используем стандартные функции
+float ulrsqrt(float x)		// Обратный корень
+{
+  return 1.0f / sqrt(x);
+}
+
+float ulsqrt(float x)		// Настоящий корень
+{
+  return sqrt(x);
+}
+
+#endif

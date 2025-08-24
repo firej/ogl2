@@ -22,16 +22,31 @@
 
 #ifdef WIN32
 #include "./../../resource.h"
-#else
-#include "../Ex/MesaGL/linux/glx.h"
-#endif
-
-#ifdef WIN32
 #define MY_WINDOW_CLASS_NAME	("FJC_OGL_Window_CLASS")
 #define MY_WINDOW_NAME			("FJC_OGL_Window")
 typedef BOOL (APIENTRY *wglSwapIntervalEXT_Func)(int);
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);	// Функция окна
 #else
+// macOS/Linux заглушки для типов данных
+#ifdef __APPLE__
+// macOS использует GLFW для кроссплатформенности
+#define USE_GLFW
+#include <GLFW/glfw3.h>
+// Заглушки для X11 типов (для совместимости со старым кодом)
+typedef void* Display;
+typedef void* XVisualInfo;
+typedef unsigned long Colormap;
+typedef struct { int dummy; } XSetWindowAttributes;
+typedef unsigned long Window;
+typedef void* GLXContext;
+typedef struct { int type; } XEvent;
+typedef int Bool;
+#define MapNotify 19
+#else
+// Linux версия - включаем X11/GLX заголовки
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <GL/glx.h>
 	int attributeList[] =
 		{
 			GLX_USE_GL,
@@ -39,9 +54,9 @@ LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);	// Функция окна
 			GLX_DOUBLEBUFFER
 		};
 
-	static Bool WaitForNotify(Display *d,	XEvent *e, char	*arg) 
+	static Bool WaitForNotify(Display *d,	XEvent *e, char	*arg)
 	{	return (e->type == MapNotify) && (e->xmap.window == (Window)arg);	}
-
+#endif
 #endif
 // Глобальные переменные
 extern GLfloat LightAmbient[4];			// Значения фонового света

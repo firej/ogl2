@@ -23,25 +23,27 @@ bool	ConsoleFuncsMap::AddFunc(string Name,ConFunc Func)
 	if (MMap.find(Name)==MMap.end()) // Если такого элемента ещё небыло
 	{
 		MMap[Name]=Func; // Добавление в словарь
-	} else {return false};
+	} else {return false;}
 	return true;
 };
 
-bool	ConsoleFuncsMap::DelFunc (string Name, ConFunc Func=NULL);
+/*
+bool	ConsoleFuncsMap::DelFunc (string Name, ConFunc Func)
 {
 	if (MMap.find(Name)!=MMap.end()) // Если такой элемент уже есть
 	{
 		MMap.erase(Name); // Удаление из словаря
-	} else {return false};
+	} else {return false;}
 	return true;
-};
+}
 
 int		ConsoleFuncsMap::GetQuantity(void)
 {
 	int Q;
 	ConFuncsMap::iterator i;
-	for (Q=0,i=MMap.begin;i!=MMap.end;i++,Q++){};
+	for (Q=0,i=MMap.begin();i!=MMap.end();i++,Q++){};
     return Q;
 }
+*/
 ConsoleFuncsMap::~ConsoleFuncsMap()
 {};

@@ -13,7 +13,6 @@
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
-#endif
 #include "LocusAFX.h"
 //====== Подключение Header'ов
 #include "./MAIN.h"
@@ -31,4 +30,18 @@ int APIENTRY WinMain( HINSTANCE,
 	MyApplication.Work();								// Цикл обработки сообщений
 	MyApplication.Suicide();							// Убивание приложения
 	return 0;
-};
+}
+#else
+// macOS/Linux версия
+#include "./classes/ApplicationClass.h"
+
+Application MyApplication;
+
+int main(int argc, char* argv[])
+{
+	MyApplication.Birth();								// Инициализация приложения
+	MyApplication.Work();								// Цикл обработки сообщений
+	MyApplication.Suicide();							// Убивание приложения
+	return 0;
+}
+#endif

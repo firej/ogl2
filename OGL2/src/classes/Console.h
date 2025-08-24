@@ -101,7 +101,7 @@ protected:
 	bool					CurVisible;				// Видим ли курсор
 	string					Commands[60];			// Список команд для повторения
 	DWORD					CurCommand;				// Текущая выбранная команда для повторения
-	WORD					iAComp;					// Количество слов для вывода в автодополнении
+	unsigned short			iAComp;					// Количество слов для вывода в автодополнении
 	std::list<string>			CommandsHistory;		// История введённых команд
 	std::list<string>::iterator	iCndHistory;			// Итератор в истории
 public:

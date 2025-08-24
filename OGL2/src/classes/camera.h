@@ -3,7 +3,9 @@
 \\==============================================================================================*/
 #pragma once
 #define _CRT_SECURE_NO_DEPRECATE
+#ifdef WIN32
 #include <windows.h>
+#endif
 #include <stdio.h>
 #include "./globals.h"
 #include "./input.h"

@@ -1,6 +1,11 @@
+#ifdef WIN32
 #include "LocusAFX.h"
-#include "./Classes/ApplicationClass.h"
-#include "./Classes/time.h"
+#else
+// macOS/Linux stubs for Windows-specific includes
+#endif
+
+#include "./classes/ApplicationClass.h"
+#include "./classes/Time.h"
 
 bool	TextBenchmark = false;
 
@@ -13,7 +18,12 @@ bool Application::RenderScene()
 //	РИСОВАНИЕ 
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
-	rm.SELECT_Mesh("someMesh")->Render();
+	auto mesh = rm.SELECT_Mesh("someMesh");
+	if (mesh != nullptr) {
+		mesh->Render();
+	} else {
+		printf("ERROR: SELECT_Mesh('someMesh') returned null!\n");
+	}
 	glTranslated(0,0,-2);
 	//rm.SELECT_Mesh("someMesh")->Render();
 	glTranslated(0,0,-2);

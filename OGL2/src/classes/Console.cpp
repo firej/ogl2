@@ -1,4 +1,27 @@
+#ifdef WIN32
 #include "LocusAFX.h"
+#else
+// macOS/Linux includes
+#include <cstdio>
+#include <cstdarg>
+#include <cstring>
+#include <string>
+#include <OpenGL/gl.h>
+// Windows virtual key codes for macOS
+#define VK_LEFT 37
+#define VK_RIGHT 39
+#define VK_UP 38
+#define VK_DOWN 40
+#define VK_RETURN 13
+#define VK_BACK 8
+#define VK_DELETE 46
+#define VK_TAB 9
+#define VK_HOME 36
+#define VK_END 35
+// Stub for IsBadStringPtr
+inline bool IsBadStringPtr(const char* ptr, size_t size) { return ptr == nullptr; }
+#endif
+
 #include "./Console.h"
 #include "./ResMan.h"
 #include "./Time.h"
@@ -37,35 +60,12 @@ char	upcase	(	char	a	)
 	if (a == 'y') return 'Y';
 	if (a == 'z') return 'Z';
 
-	if (a == 'а') return 'А';
-	if (a == 'б') return 'Б';
-	if (a == 'в') return 'В';
-	if (a == 'г') return 'Г';
-	if (a == 'д') return 'Д';
-	if (a == 'е') return 'Е';
-	if (a == 'ё') return 'Ё';
-	if (a == 'ж') return 'Ж';
-	if (a == 'з') return 'З';
-	if (a == 'и') return 'И';
-	if (a == 'й') return 'Й';
-	if (a == 'к') return 'К';
-	if (a == 'л') return 'Л';
-	if (a == 'м') return 'М';
-	if (a == 'н') return 'Н';
-	if (a == 'о') return 'О';
-	if (a == 'п') return 'П';
-	if (a == 'р') return 'Р';
-	if (a == 'с') return 'С';
-	if (a == 'т') return 'Т';
-	if (a == 'у') return 'У';
-	if (a == 'ф') return 'Ф';
-	if (a == 'х') return 'Х';
-	if (a == 'ц') return 'Ц';
-	if (a == 'ч') return 'Ч';
-	if (a == 'ы') return 'Ы';
-	if (a == 'э') return 'Э';
-	if (a == 'ю') return 'Ю';
-	if (a == 'я') return 'Я';
+	// Russian character conversion - using byte values for Cyrillic characters
+	// This is a simplified version that works with single-byte encoding
+	if ((unsigned char)a >= 0xE0 && (unsigned char)a <= 0xFF) {
+		// Convert lowercase Russian letters to uppercase
+		return (char)((unsigned char)a - 0x20);
+	}
 		return a;
 }
 

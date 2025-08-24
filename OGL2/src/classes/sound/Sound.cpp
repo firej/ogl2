@@ -1,5 +1,20 @@
-#include "LocusAFX.h"
-#include "./sound.h"
+#ifdef WIN32
+#include "../../LocusAFX.h"
+#else
+#include <cstring>
+#include <cstdlib>
+#include "../globals.h"
+#ifdef __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#include <OpenAL/alut.h>
+#else
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
+#endif
+#endif
+#include "./Sound.h"
 
 SoundController Sound;
 SoundBuf		TestBuf;
@@ -170,7 +185,7 @@ ALboolean SoundBuf::LoadWav(const char *FileName)			// Загрузка WAV фа
 	
 	alGenBuffers(1,&id);
 
-	alutLoadWAVFile( (ALbyte *)FileName, &format, &data, &size, &freq, &loop);	// Загрузка собственно файла
+	alutLoadWAVFile( (ALbyte *)FileName, &format, &data, &size, &freq);	// Загрузка собственно файла
 	err = alGetError();
 	if (err != AL_NO_ERROR) LF.Logf("Snd::LoadWAV","Error %d",err);
 

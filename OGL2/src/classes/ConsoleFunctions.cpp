@@ -1,4 +1,12 @@
+#ifdef WIN32
 #include "LocusAFX.h"
+#else
+// macOS/Linux includes
+#include <string>
+#include <OpenGL/gl.h>
+using namespace std;
+#endif
+
 #include "./ConsoleFunctions.h"
 #include "./Console.h"
 #include "./Time.h"
