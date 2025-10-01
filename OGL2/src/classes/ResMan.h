@@ -1,4 +1,4 @@
-#pramga once
+#pragma once
 
 #include "./Text.h"
 #include "./Texture.h"
@@ -90,5 +90,3 @@ class ResMan {
 extern ResMan rm;
 bool InitFonts();
 bool DeInitFonts();
-
-#endif

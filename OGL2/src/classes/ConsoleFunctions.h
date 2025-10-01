@@ -1,4 +1,4 @@
 #pragma once
-//#include "./Console.h"
+// #include "./Console.h"
 
-void	INIT_CONSOLE_FUNCTIONS	();
+void INIT_CONSOLE_FUNCTIONS();
