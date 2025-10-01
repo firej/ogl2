@@ -15,7 +15,7 @@
 #define VC_EXTRALEAN
 #include "LocusAFX.h"
 //====== Подключение Header'ов
-#include "./MAIN.h"
+#include "./main.h"
 
 Application MyApplication;
 // Главная функция приложения!

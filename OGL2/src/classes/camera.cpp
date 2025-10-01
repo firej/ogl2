@@ -72,7 +72,7 @@ void Camera::Look	(void)
 
 	Sound.SetLPosition(Point3f((float)Position.d.c.x,(float)Position.d.c.y,(float)Position.d.c.z));
 	Sound.SetLOrientation(Vector3f((float)Direction.d.c.x,(float)Direction.d.c.y,(float)Direction.d.c.z), Vector3f(0.0f,1.0f,0.0f));
-	
+
 }
 
 void Camera::Move(char MODE,double speed)
@@ -98,9 +98,10 @@ void Camera::Move(char MODE,double speed)
 
 void Camera::MouseLook(void)
 {
+#ifdef WIN32
 	static POINT		mousePos;			// This is a window structure that holds an X and Y
 	GetCursorPos(&mousePos);								// Get the mouse's current X,Y position
-	
+
 	// If our cursor is still in the middle, we never moved... so don't update the screen
 	if( (mousePos.x == center.x) && (mousePos.y == center.y) ) return;
 
@@ -114,6 +115,10 @@ void Camera::MouseLook(void)
 	Angles.d.c.y	=	fmod(Angles.d.c.y,360.0);
 	if (Angles.d.c.x > 90.0f)		Angles.d.c.x =  90.0f;
 	else if (Angles.d.c.x < -90)	Angles.d.c.x = -90.0f;
+#else
+	// Для macOS/Linux с GLFW обработка мыши происходит в cursor_position_callback
+	// Эта функция не нужна, так как углы обновляются в callback'е
+#endif
 }
 Vector3d Camera::GetDirection	(void)
 {

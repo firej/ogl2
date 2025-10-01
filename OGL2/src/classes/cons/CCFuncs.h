@@ -13,5 +13,5 @@
 
 using namespace std;
 
-void bind				(string);								// Связывание клавиши и действия
-void SetVar				(string);								// Установка значения системной переменной
+void bind(string);    // Связывание клавиши и действия
+void SetVar(string);  // Установка значения системной переменной

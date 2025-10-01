@@ -328,7 +328,7 @@ extern void *glutBitmapHelvetica18;
 /* glutLayerGet parameters. */
 #define GLUT_OVERLAY_POSSIBLE           800
 #define GLUT_LAYER_IN_USE		801
-#define GLUT_HAS_OVERLAY		802
+#define GLUT_HAS_OVERLAY		802
 #define GLUT_TRANSPARENT_INDEX		803
 #define GLUT_NORMAL_DAMAGED		804
 #define GLUT_OVERLAY_DAMAGED		805
