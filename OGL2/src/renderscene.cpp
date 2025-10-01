@@ -17,7 +17,7 @@ bool Application::RenderScene() {
     //	РИСОВАНИЕ
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    //   rm.SELECT_Mesh("someMesh")->Render();
+    rm.SELECT_Mesh("someMesh")->Render();
 
     //   PS.DRAW();
 
@@ -99,8 +99,10 @@ bool Application::RenderScene() {
             uif->SetColor(0.0f, 0.0f, 0.0f, 1.0f);
             uif->Print(0.0, 0.0, "Current position is (%5.1f,%5.1f,%5.1f)", Cam.Position.d.c.x, Cam.Position.d.c.y,
                        Cam.Position.d.c.z);
-            uif->Print(0.0f, 0.025, "FPS:    %5.1f", GT.GetFPS());
-            uif->Print(0.0f, 0.05, "CPU speed is %d", SysInfo.cpu.speed);
+            uif->Print(0.0, 0.025, "Angles are (%5.1f,%5.1f,%5.1f)", Cam.Angles.d.c.x, Cam.Angles.d.c.y,
+                       Cam.Angles.d.c.z);
+            uif->Print(0.0f, 0.05, "FPS:    %5.1f", GT.GetFPS());
+            uif->Print(0.0f, 0.075, "CPU speed is %d", SysInfo.cpu.speed);
             //			rm.SELECT_Font("Console")->Print(0.0f,0.075,"Cursor
             // at %d",CCons.cursor);
             // rm.SELECT_Font("Console")->Print(0.0f,0.1,"Chars in string

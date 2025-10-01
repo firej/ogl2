@@ -54,18 +54,21 @@ add_executable(OGL2 ${SOURCE_FILES})
 
 # Добавляем библиотеки для разных платформ
 if(APPLE)
+    # Подавляем предупреждения о deprecated OpenGL на macOS
+    add_definitions(-DGL_SILENCE_DEPRECATION)
+
     # macOS библиотеки
     find_library(OPENGL_LIBRARY OpenGL)
     find_library(OPENAL_LIBRARY OpenAL)
-    
+
     # Добавляем GLFW для создания окон и OpenGL контекста
     find_library(GLFW_LIBRARY glfw PATHS /opt/homebrew/lib /usr/local/lib)
-    
+
     # Добавляем DevIL библиотеки (если установлены через Homebrew) - опционально
     find_library(IL_LIBRARY IL PATHS /opt/homebrew/lib /usr/local/lib)
     find_library(ILU_LIBRARY ILU PATHS /opt/homebrew/lib /usr/local/lib)
     find_library(ILUT_LIBRARY ILUT PATHS /opt/homebrew/lib /usr/local/lib)
-    
+
     # Основные библиотеки
     if(GLFW_LIBRARY)
         target_link_libraries(OGL2
@@ -82,19 +85,7 @@ if(APPLE)
         )
         message(WARNING "GLFW library not found - install with: brew install glfw")
     endif()
-    
-    # DevIL библиотеки только если найдены
-    if(IL_LIBRARY AND ILU_LIBRARY AND ILUT_LIBRARY)
-        target_link_libraries(OGL2
-            ${IL_LIBRARY}
-            ${ILU_LIBRARY}
-            ${ILUT_LIBRARY}
-        )
-        message(STATUS "DevIL libraries found and linked")
-    else()
-        message(WARNING "DevIL libraries not found - texture loading may not work")
-    endif()
-    
+
     # Добавляем пути к заголовкам GLFW и DevIL
     target_include_directories(OGL2 PRIVATE
         /opt/homebrew/include
@@ -114,7 +105,7 @@ else()
     find_library(IL_LIBRARY IL)
     find_library(ILU_LIBRARY ILU)
     find_library(ILUT_LIBRARY ILUT)
-    
+
     target_link_libraries(OGL2
         ${OPENGL_LIBRARIES}
         ${OPENAL_LIBRARY}

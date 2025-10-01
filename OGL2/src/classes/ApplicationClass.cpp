@@ -195,7 +195,7 @@ void cursor_position_callback(GLFWwindow *window, double xpos, double ypos) {
 
     // Обновляем углы камеры
     MainApplication->Cam.Angles.d.c.y -= (float)xoffset;
-    MainApplication->Cam.Angles.d.c.x += (float)yoffset;
+    MainApplication->Cam.Angles.d.c.x -= (float)yoffset;  // Инвертируем направление вверх-вниз
 
     // Ограничиваем угол по вертикали
     if (MainApplication->Cam.Angles.d.c.x > 90.0f) MainApplication->Cam.Angles.d.c.x = 90.0f;
@@ -301,9 +301,6 @@ bool Application::InitOpenGL() {
         wglSwapIntervalEXT(Globals.VP.Vsync);  // 1 - чтобы включить
     else
         FASSERT(wglSwapIntervalEXT);
-#else
-    // macOS/Linux версия - заглушка
-    return NO_ERROR;
 #endif
     LF.Logf("InitOpenGL", "Vsync status : %d", Globals.VP.Vsync);
     //===[ Инициализация всякой фигни
@@ -588,8 +585,8 @@ bool Application::ReadConfig() {
 bool Application::SaveConfig() { return NO_ERROR; };
 
 bool Application::LoadResources() {
-    // MSB.LoadTextures(IL_PNG, "data/textures/sky/Sky.png");
-    MSB.LoadTextures(IL_PNG, "data/textures/sky/Skybox.png");
+    MSB.LoadTextures(IL_PNG, "data/textures/sky/Sky.png");
+    // MSB.LoadTextures(IL_PNG, "data/textures/sky/Skybox.png");
 
     NVLogo.init(IL_PNG, "data/textures/Logos/NewLOGO.png");
 
@@ -820,7 +817,7 @@ bool Application::Birth() {
     InitOpenIL();  // Поддержка изображений - OpenIL(DevIL)
     LF.Log("BIRTH", "Init OpenIL complete");
     // инициализация менеджера ресурсов
-    rm.INIT("Consolas.LFont", "default.png", "cube.lwo");
+    rm.INIT("Consolas.LFont", "default.png", "bmw325.lwo");
     CCons.SetFont(rm.SELECT_Font("Console"));
     SimpleLogo.init((void *)SwapBuffersEXT, IL_PNG, "data/textures/Logos/NewLOGO.PNG");
     SimpleLogo.render_logo(FJC_STARTUP_LOGO_MODE_BEGIN);
@@ -890,14 +887,27 @@ bool Application::Work() {
 
 bool Application::ReshapeWindow(int width, int height) {
     if (height == 0) height = 1;      // Чтобы избежать деления на ноль
-    glViewport(0, 0, width, height);  // Создание "вюпорта"
-    Globals.VP.Width = width;
+
+    // Получаем реальный размер framebuffer'а для Retina дисплеев
+    int framebufferWidth = width;
+    int framebufferHeight = height;
+
+#ifdef USE_GLFW
+    if (glfwWindow) {
+        glfwGetFramebufferSize(glfwWindow, &framebufferWidth, &framebufferHeight);
+        LF.Logf("", "ReshapeWindow: window(%d, %d) framebuffer(%d, %d)",
+                width, height, framebufferWidth, framebufferHeight);
+    }
+#endif
+
+    glViewport(0, 0, framebufferWidth, framebufferHeight);  // Создание "вюпорта"
+    Globals.VP.Width = width;  // Сохраняем размер окна в точках
     Globals.VP.Height = height;
 
     glMatrixMode(GL_PROJECTION);  // Матрица проэкций
     glLoadIdentity();             // Загрузка единичной матрицы
     // Умное создание Frustum'a (или глупое - кому как)
-    gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.5f, 1000000.0f);
+    gluPerspective(45.0f, (GLfloat)framebufferWidth / (GLfloat)framebufferHeight, 0.005f, 10000.0f);
     // glFrustum(,,,,,);
 
     glMatrixMode(GL_MODELVIEW);  // Видовая матрица

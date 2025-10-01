@@ -5,6 +5,14 @@
 #include <OpenGL/gl.h>
 #endif
 
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "../Ex/stb/stb_image.h"
+#include "./objects.h"
+
+using namespace std;
 #include "./objects.h"
 SkyBox::SkyBox() {}
 SkyBox::~SkyBox() {}
@@ -53,7 +61,7 @@ float skyboxVertices[] = {
     -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f,
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f};
 
-unsigned int loadCubemap(vector<std::string> faces) {
+unsigned int loadCubemap(vector<string> faces) {
     unsigned int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -66,7 +74,7 @@ unsigned int loadCubemap(vector<std::string> faces) {
                          data);
             stbi_image_free(data);
         } else {
-            std::cout << "Cubemap failed to load at path: " << faces[i] << std::endl;
+            cout << "Cubemap failed to load at path: " << faces[i] << endl;
             stbi_image_free(data);
         }
     }
@@ -80,50 +88,31 @@ unsigned int loadCubemap(vector<std::string> faces) {
 }
 
 void SkyBox::operator()() {
-    // Перед рендером мира
-    glDepthFunc(GL_LEQUAL);  // важно! иначе skybox может отсечься
-    skyboxShader.use();
-    glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));  // убираем позицию камеры
-    skyboxShader.setMat4("view", view);
-    skyboxShader.setMat4("projection", projection);
 
-    // Рисуем
-    glBindVertexArray(skyboxVAO);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
-    glDepthFunc(GL_LESS);
+    glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT);
+    glDisable(GL_DEPTH_TEST);  // Выключаем тест глубины для того чтобы нарисовать небо
+    glDisable(GL_LIGHTING);
+    glCullFace(GL_FRONT);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    t.bind();
+    glColor3d(1, 1, 1);
 
-    //   glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT);
-    //   glDisable(
-    //       GL_DEPTH_TEST); // Выключаем тест глубины для того чтобы нарисовать
-    //       небо
-    //   glDisable(GL_LIGHTING);
-    //   glCullFace(GL_FRONT);
-    //   glEnable(GL_TEXTURE_2D);
-    //   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    //   t.bind();
-    //   glColor3d(1, 1, 1);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    //   glEnableClientState(GL_VERTEX_ARRAY);
-    //   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 5 * sizeof(float), SkyA + 2);
+    glTexCoordPointer(2, GL_FLOAT, 5 * sizeof(float), SkyA);
 
-    //   glVertexPointer(3, GL_FLOAT, 5 * sizeof(float), SkyA + 2);
-    //   glTexCoordPointer(2, GL_FLOAT, 5 * sizeof(float), SkyA);
+    glDrawArrays(GL_QUADS, 0, 24);
 
-    //   glDrawArrays(GL_QUADS, 0, 24);
-
-    //   // Рисуем жирные границы skybox'а
-    //   glDisable(GL_TEXTURE_2D);
-    //   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    //   glLineWidth(4.0f);
-    //   glColor3d(0.0, 0.0, 0.0); // Черные границы
-
-    //   glDrawArrays(GL_QUADS, 0, 24);
-
-    //   glDisableClientState(GL_VERTEX_ARRAY);
-    //   glDisableClientState(GL_COLOR_ARRAY);
-    //   glPopAttrib();
-    //   glClear(GL_DEPTH_BUFFER_BIT); // Очистка буфера глубины
+    // Рисуем жирные границы skybox'а - используем отдельную геометрию
+    glDisable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glLineWidth(40.0f);
+    glColor3d(0.0, 0.0, 0.0);  // Черные границы
+    // Возвращаем режим заливки
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPopAttrib();
+    glClear(GL_DEPTH_BUFFER_BIT);  // Очистка буфера глубины
 }

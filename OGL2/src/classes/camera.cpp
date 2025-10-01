@@ -55,7 +55,7 @@ void Camera::Look(void) {
     glLoadIdentity();
     MouseLook();
     glRotated(Angles.d.c.x, 1.0f, 0.0f, 0.0f);
-    glRotated(360 - Angles.d.c.y, 0.0f, 1.0f, 0.0f);
+    glRotated(-Angles.d.c.y, 0.0f, 1.0f, 0.0f);  // Упрощаем формулу поворота
     glRotated(Angles.d.c.z, 0.0f, 0.0f, 1.0f);
 
     MSB();  // Отрисовка неба
@@ -112,21 +112,25 @@ void Camera::MouseLook(void) {
     // Эта функция не нужна, так как углы обновляются в callback'е
 #endif
 }
+
 Vector3d Camera::GetDirection(void) {
-    Direction.d.c.x = +cost(Angles.d.c.x) * sint(Angles.d.c.y); /*cost((const short int)Angles.y);*/
-    Direction.d.c.y = +sint(Angles.d.c.x);                      /*sint((const short int)Angles.x);*/
-    Direction.d.c.z = +cost(Angles.d.c.x) * cost(Angles.d.c.y); /*sint((const short int)Angles.y);*/
+    Direction.d.c.x = cost(Angles.d.c.x) * sint(Angles.d.c.y);
+    Direction.d.c.y = sint(Angles.d.c.x);
+    Direction.d.c.z = cost(Angles.d.c.x) * cost(Angles.d.c.y);
     Direction.normalize();
     return Direction;
 }
+
 Vector3d Camera::GetStrafeLeft(void) {
-    Strafe.d.c.x = +sint(Angles.d.c.y + 90);
+    Strafe.d.c.x = sint(Angles.d.c.y + 90);
     Strafe.d.c.y = 0;
-    Strafe.d.c.z = +cost(Angles.d.c.y + 90);
+    Strafe.d.c.z = cost(Angles.d.c.y + 90);
     Strafe.normalize();
     return Strafe;
 }
+
 Point3d Camera::GetPosition(void) { return Camera::Position; }
+
 void Camera::SetPosition(Point3d Pos) { Position = Pos; }
 
 void Camera::KeybMove(void) {
@@ -166,8 +170,6 @@ void Camera::KeybMove(void) {
     if (Input::I->get(KeySet.CamBackToCenter)) Camera::SetPosition(CamS.CamStartPosition);
 }
 
-// FJ_INPUT интерфейс камеры
-
 void Camera::RecalculateDirection(void)  // Пересчёт вектора вперёд
 {
     Direction.d.c.x = +cost(Angles.d.c.x) * sint(Angles.d.c.y); /*cost((const short int)Angles.y);*/
@@ -190,6 +192,6 @@ void Camera::MoveModelViewMatrix(void)  // Перемещение системы
 void Camera::RotateModelViewMatrix(void)  // Поворот системы координат
 {
     glRotated(Angles.d.c.x, 1.0f, 0.0f, 0.0f);
-    glRotated(360 - Angles.d.c.y, 0.0f, 1.0f, 0.0f);
+    glRotated(-Angles.d.c.y, 0.0f, 1.0f, 0.0f);  // Упрощаем формулу поворота
     glRotated(Angles.d.c.z, 0.0f, 0.0f, 1.0f);
 }
