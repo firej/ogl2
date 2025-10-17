@@ -72,6 +72,7 @@ void SwapBuffersEXT();  // Смена кадров - одна для быстр�
 // Forward declarations
 struct GLFWwindow;
 void cursor_position_callback(GLFWwindow *window, double xpos, double ypos);
+void char_callback(GLFWwindow *window, unsigned int codepoint);
 
 // Класс описывающий работу всего графического приложения
 class Application {

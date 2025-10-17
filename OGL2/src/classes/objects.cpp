@@ -111,6 +111,7 @@ void SkyBox::operator()() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glLineWidth(40.0f);
     glColor3d(0.0, 0.0, 0.0);  // Черные границы
+
     // Возвращаем режим заливки
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glPopAttrib();

@@ -64,11 +64,6 @@ if(APPLE)
     # Добавляем GLFW для создания окон и OpenGL контекста
     find_library(GLFW_LIBRARY glfw PATHS /opt/homebrew/lib /usr/local/lib)
 
-    # Добавляем DevIL библиотеки (если установлены через Homebrew) - опционально
-    find_library(IL_LIBRARY IL PATHS /opt/homebrew/lib /usr/local/lib)
-    find_library(ILU_LIBRARY ILU PATHS /opt/homebrew/lib /usr/local/lib)
-    find_library(ILUT_LIBRARY ILUT PATHS /opt/homebrew/lib /usr/local/lib)
-
     # Основные библиотеки
     if(GLFW_LIBRARY)
         target_link_libraries(OGL2
@@ -101,6 +96,8 @@ elseif(WIN32)
 else()
     # Linux библиотеки
     find_package(OpenGL REQUIRED)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GLFW REQUIRED glfw3)
     find_library(OPENAL_LIBRARY openal)
     find_library(IL_LIBRARY IL)
     find_library(ILU_LIBRARY ILU)
@@ -112,5 +109,10 @@ else()
         ${IL_LIBRARY}
         ${ILU_LIBRARY}
         ${ILUT_LIBRARY}
+        ${GLFW_LIBRARIES}
     )
+
+    target_include_directories(OGL2 PRIVATE ${GLFW_INCLUDE_DIRS})
+    target_compile_options(OGL2 PRIVATE ${GLFW_CFLAGS_OTHER})
+    add_definitions(-DUSE_GLFW)
 endif()

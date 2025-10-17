@@ -65,6 +65,40 @@ typedef unsigned long Colormap;
 GLFWwindow *glfwWindow = nullptr;
 
 // GLFW callback functions
+void char_callback(GLFWwindow *window, unsigned int codepoint) {
+    // Передаем символ в консоль
+    if (MainApplication && MainApplication->CCons.Visible()) {
+        // Преобразуем Unicode код в UTF-8 байты
+        char utf8_bytes[4] = {0};
+        int byte_count = 0;
+
+        if (codepoint < 0x80) {
+            // ASCII (1 байт)
+            utf8_bytes[0] = (char)codepoint;
+            byte_count = 1;
+        } else if (codepoint < 0x800) {
+            // 2 байта
+            utf8_bytes[0] = 0xC0 | ((codepoint >> 6) & 0x1F);
+            utf8_bytes[1] = 0x80 | (codepoint & 0x3F);
+            byte_count = 2;
+        } else if (codepoint < 0x10000) {
+            // 3 байта
+            utf8_bytes[0] = 0xE0 | ((codepoint >> 12) & 0x0F);
+            utf8_bytes[1] = 0x80 | ((codepoint >> 6) & 0x3F);
+            utf8_bytes[2] = 0x80 | (codepoint & 0x3F);
+            byte_count = 3;
+        } else {
+            // 4 байта (не поддерживаем)
+            return;
+        }
+
+        // Передаем каждый байт в консоль
+        for (int i = 0; i < byte_count; i++) {
+            MainApplication->CCons.ProcessChar(utf8_bytes[i]);
+        }
+    }
+}
+
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     // Преобразование GLFW кодов клавиш в Windows Virtual Key коды
     WPARAM vk_key = 0;
@@ -118,6 +152,21 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
             case GLFW_KEY_GRAVE_ACCENT:
                 vk_key = 0xC0;
                 break;  // VK_OEM_3 (тильда/`)
+            case GLFW_KEY_BACKSPACE:
+                vk_key = 0x08;
+                break;  // VK_BACK
+            case GLFW_KEY_DELETE:
+                vk_key = 0x2E;
+                break;  // VK_DELETE
+            case GLFW_KEY_TAB:
+                vk_key = 0x09;
+                break;  // VK_TAB
+            case GLFW_KEY_HOME:
+                vk_key = 0x24;
+                break;  // VK_HOME
+            case GLFW_KEY_END:
+                vk_key = 0x23;
+                break;  // VK_END
             default:
                 return;  // Неизвестная клавиша
         }
@@ -126,6 +175,10 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
     if (vk_key != 0 && Input::I) {
         if (action == GLFW_PRESS || action == GLFW_REPEAT) {
             Input::I->KeyDown(vk_key);
+            // Передаем клавишу в консоль
+            if (MainApplication && MainApplication->CCons.Visible()) {
+                MainApplication->CCons.ProcessKey((DWORD)vk_key);
+            }
         } else if (action == GLFW_RELEASE) {
             Input::I->KeyUp(vk_key);
         }
@@ -780,6 +833,7 @@ bool Application::Birth() {
 
     // Установка callback функций
     glfwSetKeyCallback(glfwWindow, key_callback);
+    glfwSetCharCallback(glfwWindow, char_callback);
     glfwSetWindowCloseCallback(glfwWindow, window_close_callback);
     glfwSetMouseButtonCallback(glfwWindow, mouse_button_callback);
     glfwSetScrollCallback(glfwWindow, scroll_callback);
