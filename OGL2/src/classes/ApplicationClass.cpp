@@ -855,19 +855,55 @@ bool Application::Birth() {
 #endif
 #endif
     GetSysInfo();
-#ifndef _DEBUG
-    if (AVIp.Open("data/VIDEO/logo.avi") == FJC_NO_ERROR) {
-        AVIp.Caching();
-        GT.Start();
-        ShowMovie(true);
-        AVIp.CloseAVI();
-    } else {
-        LF.Logf("BIRTH", "Невозможно загрузить и проиграть заставку");
-    }
-#endif
     // Инициализация библиотек и глобальных объектов
     InitOpenGL();  // Графика - OpenGL
     LF.Log("BIRTH", "Init OpenGL complete");
+
+    // Воспроизводим видео после инициализации OpenGL
+    // Попробуем сначала ваш видеофайл, потом MP4 с аудио, потом обычный MP4, если нет - AVI
+    char* videoFiles[] = {
+        (char*)"data/VIDEO/testvideo.mp4",
+        (char*)"data/VIDEO/test_with_audio.mp4",
+        (char*)"data/VIDEO/test.mp4",
+        (char*)"data/VIDEO/logo.avi"
+    };
+    const char* videoNames[] = {
+        "testvideo.mp4",
+        "MP4 video with audio",
+        "MP4 video",
+        "AVI video"
+    };
+
+    bool videoPlayed = false;
+    for (int i = 0; i < 4; i++) {
+        if (AVIp.Open(videoFiles[i]) == FJC_NO_ERROR) {
+            LF.Logf("BIRTH", "Playing %s", videoNames[i]);
+            // Убираем Caching() - он декодирует все кадры сразу
+            // AVIp.Caching();
+
+            // ВАЖНО: Сбрасываем таймер перед воспроизведением видео
+            GT.Start();
+            GT.NewFrame();  // Обнуляем время
+
+            // Устанавливаем режим рендеринга в TEXTURE для отображения видео
+            ERS::Draw::type oldDrawMode = Globals.ERS.d;
+            Globals.ERS.d = ERS::Draw::TEXTURE;
+
+            ShowMovie(true);
+
+            // Восстанавливаем предыдущий режим
+            Globals.ERS.d = oldDrawMode;
+
+            AVIp.CloseAVI();
+            videoPlayed = true;
+            break;
+        }
+    }
+
+    if (!videoPlayed) {
+        LF.Logf("BIRTH", "Невозможно загрузить и проиграть заставку");
+    }
+
     InitOpenIL();  // Поддержка изображений - OpenIL(DevIL)
     LF.Log("BIRTH", "Init OpenIL complete");
     // инициализация менеджера ресурсов
@@ -1120,65 +1156,147 @@ void SwapBuffersEXT() {
 }
 
 void Application::RenderTexture() {
+    // Сохраняем текущее состояние OpenGL
     glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Отключаем ненужные функции
     glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_GEN_S);
-    glDisable(GL_TEXTURE_GEN_T);
-    glDisable(GL_TEXTURE_GEN_R);
-    glDisable(GL_TEXTURE_GEN_Q);
+    glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                // Чёрный фон
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Очистка буфера цвета
-    glDepthFunc(GL_NOTEQUAL);                            // Настроим глубину
-    glDepthMask(false);
-    glDisable(GL_DEPTH_TEST);
+    // Очищаем экран
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // Настраиваем ортогональную проекцию для 2D
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
     glLoadIdentity();
-    glOrtho(0, 1, 0, 1, -1, 1);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
 
-    glBegin(GL_QUADS);  // Отрисовываем текущую текстурку
-    glTexCoord2d(0, 1);
-    glVertex2d(0, 1);
-    glTexCoord2d(1, 1);
-    glVertex2d(1, 1);
-    glTexCoord2d(1, 0);
-    glVertex2d(1, 0);
-    glTexCoord2d(0, 0);
-    glVertex2d(0, 0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Привязываем текстуру видеоплеера
+    GLuint texID = AVIp.GetTextureID();
+    glBindTexture(GL_TEXTURE_2D, texID);
+
+    // Отладочная информация
+    static int renderCount = 0;
+    renderCount++;
+    if (renderCount % 30 == 0) {
+        printf("[RenderTexture] Rendering video frame %d, textureID: %u\n", renderCount, texID);
+    }
+
+    // Рисуем полноэкранный квад с текстурой (переворачиваем по Y)
+    glColor3f(1.0f, 1.0f, 1.0f);  // Белый цвет для правильного отображения текстуры
+    glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f, 0.0f);  // Нижний левый
+        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 0.0f);  // Нижний правый
+        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 1.0f);  // Верхний правый
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0f, 1.0f);  // Верхний левый
     glEnd();
 
-    glPopAttrib();
+    // Отвязываем текстуру
+    glBindTexture(GL_TEXTURE_2D, 0);
 
-    glMatrixMode(GL_TEXTURE);
+    // Восстанавливаем матрицы
+    glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // Восстанавливаем состояние OpenGL
+    glPopAttrib();
 }
 
 void Application::ShowMovie(bool CanBreak) {
     MSG msg;
     ZeroMemory(&msg, sizeof(MSG));
+    int frameCount = 0;
+    const int MAX_FRAMES = 2000; // Защита от бесконечного цикла (больше чем ожидаемое количество кадров)
+
+    // Получаем информацию о видео для правильного определения конца
+    int totalFrames = AVIp.GetTotalFrames();
+    if (totalFrames <= 0) totalFrames = 120; // По умолчанию для logo.avi
+
+    LF.Logf("ShowMovie", "Starting movie playback: %d total frames expected", totalFrames);
+
     do {  // Обработка всех сообщений
+#ifdef WIN32
         while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
             if (GetMessage(&msg, NULL, 0, 0)) {
                 // TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
         }
+#else
+#ifdef USE_GLFW
+        // Обработка сообщений GLFW
+        glfwPollEvents();
+        if (glfwWindowShouldClose(glfwWindow)) {
+            Globals.Exiting = true;
+            break;
+        }
+#endif
+#endif
         GT.NewFrame();
+
+        // Добавляем отладочную информацию
+        if (frameCount % 30 == 0) { // Логируем каждые 30 кадров
+            LF.Logf("ShowMovie", "Frame %d/%d, time: %.2f sec", frameCount, totalFrames, GT.GetWorldTime());
+        }
+
         AVIp.GrabAVIFrame();
+
         RenderTexture();
         SwapBuffersEXT();
+
+        frameCount++;
+
+        // ВАЖНО: Ждем правильное время для следующего кадра
+        // Вычисляем когда должен быть показан следующий кадр
+        double targetTime = (frameCount * 1000.0) / 25.0;  // 25 fps
+        double currentTime = GT.GetWorldTime() * 1000.0;
+
+        if (currentTime < targetTime) {
+            // Ждем до нужного времени
+            int sleepTime = (int)(targetTime - currentTime);
+            if (sleepTime > 0 && sleepTime < 100) {  // Разумная задержка
+                usleep(sleepTime * 1000);  // Конвертируем в микросекунды
+            }
+        }
+
+        // Проверяем конец видео - используем метод End() плеера
+        if (AVIp.End()) {
+            LF.Logf("ShowMovie", "Video ended at frame %d (player reported end)", frameCount);
+            break;
+        }
+
+        // Дополнительная защита по количеству кадров
+        if (frameCount >= totalFrames) {
+            LF.Logf("ShowMovie", "Video ended by frame count at frame %d/%d", frameCount, totalFrames);
+            break;
+        }
+
+        // Защита от бесконечного цикла
+        if (frameCount >= MAX_FRAMES) {
+            LF.Logf("ShowMovie", "Reached maximum frame limit (%d), breaking", MAX_FRAMES);
+            break;
+        }
+
         if (CanBreak) {
             if (Input::I->get(' ') || Input::I->get(VK_RETURN) || Input::I->get(VK_ESCAPE)) {
+                LF.Logf("ShowMovie", "User break at frame %d", frameCount);
                 break;
             }
         }
-    } while (!AVIp.End());
+
+        // Небольшая задержка для правильной скорости воспроизведения
+        usleep(1000); // 1ms для стабильности
+    } while (true);
+
+    LF.Logf("ShowMovie", "Movie playback finished after %d frames", frameCount);
 }
