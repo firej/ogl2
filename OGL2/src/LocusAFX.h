@@ -55,6 +55,6 @@
 #pragma comment (lib, "src/ex/al/OpenAL32.lib")
 #pragma comment (lib, "src/ex/al/ALut.lib")
 
-#include "./classes/shared/ASSERT.h"
+#include "./classes/shared/assert.h"
 #include "./classes/shared/MyMath.h"
 #include "./classes/files.h"

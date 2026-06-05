@@ -5,7 +5,7 @@
 #endif
 
 #include "./classes/ApplicationClass.h"
-#include "./classes/Time.h"
+#include "./classes/time.h"
 
 bool TextBenchmark = false;
 
@@ -116,7 +116,7 @@ bool Application::RenderScene() {
             memset(str, 0, sizeof(str));
             strcpy(str, "Buttons pressed : ");
             for (WPARAM i = 0; i < 256; i++) {
-                if (Input::I->get(i)) sprintf(str, "%s %d", str, i);
+                if (Input::I->get(i)) sprintf(str, "%s %lu", str, i);
             }
             uif->Print(0.0f, 0.95, "%s ", str);
             uif->Print(0.0f, 0.925, "Wheel shift: %d ", Input::I->wheel);

@@ -22,7 +22,7 @@ extern "C" {
 #include <algorithm>
 #endif
 
-#include "../Time.h"
+#include "../time.h"
 #include "../globals.h"
 #include "AVI_player.h"
 

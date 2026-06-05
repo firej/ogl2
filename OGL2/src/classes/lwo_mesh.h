@@ -1,7 +1,7 @@
 #ifndef LWO_MESH_H
 #define LWO_MESH_H
 
-#include "./Texture.h"
+#include "./texture.h"
 #include "./globals.h"
 #include "./mesh_common.h"
 // Вектор контейнер для слоёв

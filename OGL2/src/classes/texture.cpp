@@ -16,7 +16,7 @@ inline int MessageBox(void *hwnd, const char *text, const char *caption, int typ
 }
 #define NO_ERROR 0
 #endif
-#include "./Texture.h"
+#include "./texture.h"
 
 #ifdef WIN32
 #include "../Ex/IL/il.h"

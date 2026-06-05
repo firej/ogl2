@@ -1,4 +1,4 @@
-#include "./ASSERT.h"
+#include "./assert.h"
 
 #pragma warning(disable : 4996)
 
@@ -9,7 +9,7 @@ char __stdcall _FASSERT(void* expr, void* filename, unsigned int linenum, const 
         sprintf(buf,
                 "Не выполняется утверждение в программе!\nУтверждение:%s\nФайл:\"%s\"\nСтрока №%u\n\tПрервать - "
                 "выход\n\tПовторить - перейти в Debug\n\tОтменить - игнорировать",
-                FunctionName, filename, linenum);
+                FunctionName, (const char*)filename, linenum);
         //		int ret = MessageBox(0, buf, MY_APP_ERROR_HDR, MB_ABORTRETRYIGNORE | MB_ICONWARNING | MB_DEFBUTTON2);
         //		switch(ret)
         //		{

@@ -2,7 +2,7 @@
 #define TEXT_H
 
 // OpenGL Header Files
-#include "./Texture.h"
+#include "./texture.h"
 #include "./globals.h"
 
 #define DISPLAY_LINES 40.0

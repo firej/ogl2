@@ -8,7 +8,7 @@
 #endif
 
 #include "./ParticleSystem.h"
-#include "./Time.h"
+#include "./time.h"
 
 ParticleSystem::ParticleSystem() {
     Particles = 10000;

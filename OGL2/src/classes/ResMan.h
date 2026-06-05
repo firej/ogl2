@@ -1,7 +1,7 @@
 #pragma once
 
-#include "./Text.h"
-#include "./Texture.h"
+#include "./text.h"
+#include "./texture.h"
 #include "./globals.h"
 #include "./lwo_mesh.h"
 

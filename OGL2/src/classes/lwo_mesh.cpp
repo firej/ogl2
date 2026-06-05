@@ -412,12 +412,6 @@ void Mesh::LWOMesh::DrawFromSource(void) {  // Выправление систе
 }
 
 void Mesh::LWOMesh::Render(void) {
-    // Проверяем валидность this указателя
-    if (this == nullptr) {
-        printf("ERROR: this is null!\n");
-        return;
-    }
-
     glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT);  // Сохранение настроек
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);

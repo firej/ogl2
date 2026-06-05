@@ -1,5 +1,5 @@
 #pragma once
-#include "./Text.h"
+#include "./text.h"
 #include "./globals.h"
 // #include "./ApplicationClass.h"
 #include <list>

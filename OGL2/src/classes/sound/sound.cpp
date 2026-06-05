@@ -15,7 +15,7 @@
 #include <AL/alut.h>
 #endif
 #endif
-#include "./Sound.h"
+#include "./sound.h"
 
 SoundController Sound;
 SoundBuf TestBuf;

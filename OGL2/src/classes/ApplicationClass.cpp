@@ -13,7 +13,7 @@
 #endif
 #endif
 #include "./ApplicationClass.h"
-#include "./Time.h"
+#include "./time.h"
 
 #ifndef WIN32
 #include <unistd.h>

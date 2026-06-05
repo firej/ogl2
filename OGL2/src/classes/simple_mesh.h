@@ -1,7 +1,7 @@
 #ifndef SIMPLE_MESH_H
 #define SIMPLE_MESH_H
 
-#include "./Texture.h"
+#include "./texture.h"
 #include "./globals.h"
 #include "./mesh_common.h"
 #include "./oGL.h"

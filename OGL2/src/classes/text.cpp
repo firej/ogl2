@@ -14,7 +14,7 @@ inline bool IsBadStringPtr(const char *ptr, size_t len) { return ptr == nullptr;
 #include "../../../ssrc/iff.h"
 #include "../Ex/IL/il.h"
 #include "./ResMan.h"
-#include "./Text.h"
+#include "./text.h"
 
 Font::Font(void) {
     // Инициализируем поля по отдельности вместо memset
@@ -40,7 +40,7 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
     if (fmt == NULL || IsBadStringPtr(fmt, 200))  // Если нет текста
         return;                                   // Ничего не делать
     va_start(ap, fmt);                            // Разбор строки переменных
-    vsprintf(text, fmt, ap);                      // И конвертирование символов в реальные коды
+    vsnprintf(text, sizeof(text), fmt, ap);       // И конвертирование символов в реальные коды
     va_end(ap);                                   // Результат помещается в строку
 
     glPushAttrib(GL_LIST_BIT | GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT);  // Сохранение настроек
@@ -97,8 +97,8 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
 Text::RESULT Font::LOAD(const char *FileName) {
     iff::tag_t tagb;       // Буферная переменная
     DWORD sizeb;           // Буфер для чтения размера
-    void *texture = NULL;  // Буфер для хранения текстуры
-    DWORD tsize = NULL;
+    char *texture = NULL;  // Буфер для хранения текстуры
+    DWORD tsize = 0;
 
     FILE *f = fopen(FileName, "rb");
     if (!f) return Text::FILE_NOT_EXIST;
@@ -180,12 +180,6 @@ void Font::ULOAD(void) {
 
 void Font::SetColor(Vector3f C) { Color = C; }
 void Font::SetColor(float r, float g, float b) {
-    // Проверяем валидность указателя this
-    if (this == nullptr) {
-        printf("ERROR: this pointer is null in Font::SetColor!\n");
-        return;
-    }
-
     Vector3f temp_color(r, g, b);
     Color = temp_color;
 }

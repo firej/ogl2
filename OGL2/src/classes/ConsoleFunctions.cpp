@@ -10,7 +10,7 @@ using namespace std;
 
 #include "./Console.h"
 #include "./ConsoleFunctions.h"
-#include "./Time.h"
+#include "./time.h"
 // mmmmmmmmmmmmmmmmmmmm Здесь перечислены функции которые можно вызывать из консоли
 void Exit(string s);      // Выход
 void FPS(string s);       // Показывает текучее значение FPS

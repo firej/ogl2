@@ -26,7 +26,7 @@ inline bool IsBadStringPtr(const char *ptr, size_t size) { return ptr == nullptr
 #include "./Console.h"
 #include "./ConsoleFunctions.h"
 #include "./ResMan.h"
-#include "./Time.h"
+#include "./time.h"
 // #include "./Application.h"
 
 ConVarsMap CVmap;  // Карта изменяемых переменных

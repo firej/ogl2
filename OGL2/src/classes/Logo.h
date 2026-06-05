@@ -45,7 +45,10 @@ class TextureLogo {
         glDepthMask(false);
         glDisable(GL_DEPTH_TEST);
 
-        if (glActiveTextureARB) {
+#ifdef _WIN32
+        if (glActiveTextureARB)  // на Windows — указатель расширения, может быть NULL
+#endif
+        {
             glActiveTextureARB(GL_TEXTURE1_ARB);
             glDisable(GL_TEXTURE_2D);
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_NONE);
@@ -155,7 +158,10 @@ class StartUPLogo {
         glDepthMask(false);
         glDisable(GL_DEPTH_TEST);
 
-        if (glActiveTextureARB) {
+#ifdef _WIN32
+        if (glActiveTextureARB)  // на Windows — указатель расширения, может быть NULL
+#endif
+        {
             glActiveTextureARB(GL_TEXTURE1_ARB);
             glDisable(GL_TEXTURE_2D);
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_NONE);

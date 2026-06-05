@@ -135,11 +135,11 @@ Mesh::RESULT Mesh::simpleMesh::Load(char *FileName) {
         // Если в процессе поиска уткнулись в конец, то нам хватит
         if (feof(fModel)) break;
         // Определим число вершин
-        sscanf(szString, "\t\t*MESH_NUMVERTEX %d", &Vertices);
+        sscanf(szString, "\t\t*MESH_NUMVERTEX %lu", &Vertices);
 
         // Определим число полигонов
         FindStr("\t\t*MESH_NUMFACES", fModel);
-        sscanf(szString, "\t\t*MESH_NUMFACES %d", &Faces);
+        sscanf(szString, "\t\t*MESH_NUMFACES %lu", &Faces);
 
         // Выделим память
         vx = new GLfloat[Vertices];
@@ -172,17 +172,17 @@ Mesh::RESULT Mesh::simpleMesh::Load(char *FileName) {
         for (i = 0; i < Vertices; i++) {
             long tp;
             FindStr("\t\t\t*MESH_VERTEX", fModel);
-            sscanf(szString, "\t\t\t*MESH_VERTEX %d %f %f %f", &tp, &(vx[i]), &(vy[i]), &(vz[i]));
+            sscanf(szString, "\t\t\t*MESH_VERTEX %ld %f %f %f", &tp, &(vx[i]), &(vy[i]), &(vz[i]));
         }
 
         for (i = 0; i < Faces; i++) {
             long tp;
             FindStr("\t\t\t*MESH_FACE", fModel);
-            sscanf(szString, "\t\t\t*MESH_FACE %d:    A: %d B: %d C: %d", &tp, &(fa[i]), &(fb[i]), &(fc[i]));
+            sscanf(szString, "\t\t\t*MESH_FACE %ld:    A: %lu B: %lu C: %lu", &tp, &(fa[i]), &(fb[i]), &(fc[i]));
         }
 
         FindStr("\t\t*MESH_NUMTVERTEX", fModel);
-        sscanf(szString, "\t\t*MESH_NUMTVERTEX %d", &TVert);
+        sscanf(szString, "\t\t*MESH_NUMTVERTEX %lu", &TVert);
 
         u = new GLfloat[TVert];
         v = new GLfloat[TVert];
@@ -193,13 +193,13 @@ Mesh::RESULT Mesh::simpleMesh::Load(char *FileName) {
         }
 
         for (i = 0; i < TVert; i++) {
-            long tp1, tp2;
+            long tp1; float tp2;
             FindStr("\t\t\t*MESH_TVERT", fModel);
-            sscanf(szString, "\t\t\t*MESH_TVERT %d %f %f %f", &tp1, &(u[i]), &(v[i]), &tp2);
+            sscanf(szString, "\t\t\t*MESH_TVERT %ld %f %f %f", &tp1, &(u[i]), &(v[i]), &tp2);
         }
 
         FindStr("\t\t*MESH_NUMTVFACES", fModel);
-        sscanf(szString, "\t\t*MESH_NUMTVFACES %d", &TFaces);
+        sscanf(szString, "\t\t*MESH_NUMTVFACES %lu", &TFaces);
 
         if (Faces != TFaces)  // Cannot be, but .......
         {
@@ -226,13 +226,13 @@ Mesh::RESULT Mesh::simpleMesh::Load(char *FileName) {
         for (i = 0; i < TFaces; i++) {
             long tp;
             FindStr("\t\t\t*MESH_TFACE", fModel);
-            sscanf(szString, "\t\t\t*MESH_TFACE %d %d %d %d", &tp, &(tfa[i]), &(tfb[i]), &(tfc[i]));
+            sscanf(szString, "\t\t\t*MESH_TFACE %ld %lu %lu %lu", &tp, &(tfa[i]), &(tfb[i]), &(tfc[i]));
         }
 
         for (i = 0; i < Faces; i++) {
             long tp;
             FindStr("\t\t\t*MESH_FACENORMAL", fModel);
-            sscanf(szString, "\t\t\t*MESH_FACENORMAL %d %f %f %f", &tp, &(nx[i]), &(ny[i]), &(nz[i]));
+            sscanf(szString, "\t\t\t*MESH_FACENORMAL %ld %f %f %f", &tp, &(nx[i]), &(ny[i]), &(nz[i]));
         }
 
         // Обработаем материал / цвет

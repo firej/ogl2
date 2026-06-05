@@ -8,7 +8,6 @@ if(APPLE)
     # Пути для Homebrew (Apple Silicon и Intel)
     link_directories(
         /opt/homebrew/lib
-        /opt/homebrew/Cellar/ffmpeg/8.0.1_2/lib
         /opt/homebrew/opt/ffmpeg/lib
         /usr/local/lib
         /usr/local/opt/ffmpeg/lib
@@ -19,49 +18,49 @@ endif()
 
 # Определяем базовые файлы
 set(BASE_SOURCE_FILES
-    ogl2/src/classes/cons/CCFuncs.cpp
-    ogl2/src/classes/cons/FuncsMap.cpp
-    ogl2/src/classes/shared/assert.cpp
-    ogl2/src/classes/shared/MyMath.cpp
-    ogl2/src/classes/Files.cpp
-    ogl2/src/renderscene.cpp
-    ogl2/src/main.cpp
+    OGL2/src/classes/cons/CCFuncs.cpp
+    OGL2/src/classes/cons/FuncsMap.cpp
+    OGL2/src/classes/shared/assert.cpp
+    OGL2/src/classes/shared/MyMath.cpp
+    OGL2/src/classes/Files.cpp
+    OGL2/src/renderscene.cpp
+    OGL2/src/main.cpp
     ssrc/iff.h)
 
 # Добавляем платформо-специфичные файлы
 if(WIN32)
     set(SOURCE_FILES ${BASE_SOURCE_FILES}
-        ogl2/src/classes/sound/Sound.cpp
-        ogl2/src/classes/Video/AVI_player.cpp
-        ogl2/src/classes/ApplicationClass.cpp
-        ogl2/src/classes/camera.cpp
-        ogl2/src/classes/Console.cpp
-        ogl2/src/classes/ConsoleFunctions.cpp
-        ogl2/src/classes/lwo_mesh.cpp
-        ogl2/src/classes/objects.cpp
-        ogl2/src/classes/ParticleSystem.cpp
-        ogl2/src/classes/resman.cpp
-        ogl2/src/classes/simple_mesh.cpp
-        ogl2/src/classes/Text.cpp
-        ogl2/src/classes/Texture.cpp
-        ogl2/src/LocusAFX.cpp
-        ogl2/src/renderscene.cpp)
+        OGL2/src/classes/sound/sound.cpp
+        OGL2/src/classes/Video/AVI_player.cpp
+        OGL2/src/classes/ApplicationClass.cpp
+        OGL2/src/classes/camera.cpp
+        OGL2/src/classes/Console.cpp
+        OGL2/src/classes/ConsoleFunctions.cpp
+        OGL2/src/classes/lwo_mesh.cpp
+        OGL2/src/classes/objects.cpp
+        OGL2/src/classes/ParticleSystem.cpp
+        OGL2/src/classes/resman.cpp
+        OGL2/src/classes/simple_mesh.cpp
+        OGL2/src/classes/text.cpp
+        OGL2/src/classes/texture.cpp
+        OGL2/src/LocusAFX.cpp
+        OGL2/src/renderscene.cpp)
 else()
     # Для macOS/Linux добавляем необходимые файлы (FFmpeg встроен в AVI_player.cpp)
     set(SOURCE_FILES ${BASE_SOURCE_FILES}
-        ogl2/src/classes/ApplicationClass.cpp
-        ogl2/src/classes/sound/Sound.cpp
-        ogl2/src/classes/Video/AVI_player.cpp
-        ogl2/src/classes/camera.cpp
-        ogl2/src/classes/Console.cpp
-        ogl2/src/classes/ConsoleFunctions.cpp
-        ogl2/src/classes/lwo_mesh.cpp
-        ogl2/src/classes/objects.cpp
-        ogl2/src/classes/ParticleSystem.cpp
-        ogl2/src/classes/resman.cpp
-        ogl2/src/classes/simple_mesh.cpp
-        ogl2/src/classes/Text.cpp
-        ogl2/src/classes/Texture.cpp)
+        OGL2/src/classes/ApplicationClass.cpp
+        OGL2/src/classes/sound/sound.cpp
+        OGL2/src/classes/Video/AVI_player.cpp
+        OGL2/src/classes/camera.cpp
+        OGL2/src/classes/Console.cpp
+        OGL2/src/classes/ConsoleFunctions.cpp
+        OGL2/src/classes/lwo_mesh.cpp
+        OGL2/src/classes/objects.cpp
+        OGL2/src/classes/ParticleSystem.cpp
+        OGL2/src/classes/resman.cpp
+        OGL2/src/classes/simple_mesh.cpp
+        OGL2/src/classes/text.cpp
+        OGL2/src/classes/texture.cpp)
 endif()
 
 add_executable(OGL2 ${SOURCE_FILES})
@@ -94,14 +93,12 @@ if(APPLE)
         # Если pkg-config не нашел, ищем вручную
         set(FFMPEG_SEARCH_PATHS
             /opt/homebrew/lib
-            /opt/homebrew/Cellar/ffmpeg/8.0.1_2/lib
             /opt/homebrew/opt/ffmpeg/lib
             /usr/local/lib
             /usr/local/opt/ffmpeg/lib
         )
         set(FFMPEG_INCLUDE_PATHS
             /opt/homebrew/include
-            /opt/homebrew/Cellar/ffmpeg/8.0.1_2/include
             /opt/homebrew/opt/ffmpeg/include
             /usr/local/include
             /usr/local/opt/ffmpeg/include

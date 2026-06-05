@@ -1,7 +1,7 @@
 #pragma once
 
 //====== Общие файлы
-#include "./Texture.h"
+#include "./texture.h"
 #include "./globals.h"
 
 class SkyBox  // Объект неба
