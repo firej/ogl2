@@ -1,0 +1,9 @@
+# Каталог сборки CMake
+/build/
+
+# На случай in-source сборки
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
