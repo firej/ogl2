@@ -50,10 +50,10 @@ int main() {
 
     // (2) GpuMesh: зелёный треугольник справа (статический VBO)
     const float tri[] = {
-        // x     y     z    u    v    r    g    b    a
-        0.55f, 0.25f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f,
-        0.95f, 0.25f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f,
-        0.75f, 0.75f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f,
+        // x     y     z    u    v    r    g    b    a    nx   ny   nz
+        0.55f, 0.25f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f,
+        0.95f, 0.25f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f,
+        0.75f, 0.75f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f,
     };
     gl::GpuMesh mesh;
     mesh.upload(tri, 3);
@@ -91,6 +91,19 @@ int main() {
     gl::imVertex2f(0.05f, 0.85f);
     gl::imVertex2f(0.35f, 0.85f);
     gl::imEnd();
+
+    // (6) Освещённый меш: белый треугольник, нормаль (0,0,1), свет (1,0,0) ->
+    // dot=0 -> остаётся только ambient(0.35); белый должен стать серым ~89
+    gl::setLight(1.f, 0.f, 0.f, 0.35f);
+    const float litTri[] = {
+        0.62f, 0.02f, 0.f, 0, 0, 1, 1, 1, 1, 0, 0, 1,
+        0.95f, 0.02f, 0.f, 0, 0, 1, 1, 1, 1, 0, 0, 1,
+        0.78f, 0.18f, 0.f, 0, 0, 1, 1, 1, 1, 0, 0, 1,
+    };
+    gl::GpuMesh litMesh;
+    litMesh.upload(litTri, 3);
+    litMesh.setLit(true);
+    litMesh.draw();
     glFinish();
 
     unsigned char L[3] = {}, R[3] = {}, T[3] = {}, P[3] = {}, Pofs[3] = {}, W[3] = {}, Wof[3] = {}, edge[3] = {9, 9, 9};
@@ -101,6 +114,8 @@ int main() {
     glReadPixels(32, 56, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, T);    // верх — magenta (текстура)
     glReadPixels(32, 6, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, P);     // центр точки — жёлтый
     glReadPixels(34, 6, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, Pofs);  // +2px — жёлтый, если size>1
+    unsigned char Lit[3] = {};
+    glReadPixels(50, 6, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, Lit);   // освещённый меш — серый ~89
     glReadPixels(2, 2, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, edge);   // угол — чёрный
     printf("red=%d,%d,%d green=%d,%d,%d magenta=%d,%d,%d point=%d,%d,%d point+2=%d,%d,%d thick=%d,%d,%d thick+2=%d,%d,%d corner=%d,%d,%d\n",
            L[0], L[1], L[2], R[0], R[1], R[2], T[0], T[1], T[2], P[0], P[1], P[2], Pofs[0], Pofs[1], Pofs[2],
@@ -113,7 +128,9 @@ int main() {
     bool okPointSize = Pofs[0] > 200 && Pofs[1] > 200;      // точка крупнее 1px
     bool okThick = W[0] > 200 && W[1] > 200 && W[2] > 200;  // линия видна
     bool okThickW = Wof[0] > 200 && Wof[1] > 200;           // и она толстая (+2px)
-    bool ok = okIm && okMesh && okTex && okPoint && okPointSize && okThick && okThickW &&
+    bool okLit = Lit[0] > 60 && Lit[0] < 120 && Lit[1] > 60 && Lit[1] < 120;  // серый ~89 (ambient)
+    printf("litmesh=%d,%d,%d (ожид. ~89 = ambient*255)\n", Lit[0], Lit[1], Lit[2]);
+    bool ok = okIm && okMesh && okTex && okPoint && okPointSize && okThick && okThickW && okLit &&
               edge[0] < 40 && edge[1] < 40;
 
     printf("%s\n", ok ? "PASS: батчер (VAO+GLSL330) рисует всё в Core 3.3" : "FAIL");

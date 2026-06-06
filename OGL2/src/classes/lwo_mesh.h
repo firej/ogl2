@@ -162,13 +162,18 @@ class LWOMesh {
     void PostLoadProcessing(void);
     void BuildGpuMesh(void);
     void CompileList(void);
-    gl::GpuMesh gpuMesh;  // статический VBO модели (современный путь)
+    gl::GpuMesh gpuMesh;       // статический VBO модели (современный путь)
+    Point3f bsCenter;          // центр габаритов модели
+    float bsRadius = 1.0f;     // радиус габаритов (для орбиты источника света)
 
    public:
     LWOMesh();
     Mesh::RESULT Load(char *FileName);
     GLvoid ULoad(GLvoid);
     GLvoid Render(GLvoid);
+    void GetBounds(float &x, float &y, float &z, float &r) const {
+        x = bsCenter.d.c.x; y = bsCenter.d.c.y; z = bsCenter.d.c.z; r = bsRadius;
+    }
     WORD GetLayers();
     DWORD GetPoints();
     DWORD GetPolygons();

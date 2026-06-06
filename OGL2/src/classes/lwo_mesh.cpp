@@ -13,6 +13,8 @@
 
 #include <stdio.h>
 
+#include <cmath>
+
 #include "../../../ssrc/iff.h"
 #include "./lwo_mesh.h"
 
@@ -383,9 +385,12 @@ void Mesh::LWOMesh::CompileList() {
 }
 
 // Один раз собираем геометрию в статический VBO: полигоны триангулируем веером,
-// цвет вершины = Diffuse сурфейса (освещение в движке выключено, нормали не нужны).
+// цвет вершины = Diffuse сурфейса. Нормали — родные из импорта (PostLoadProcessing):
+// если у вершины полигона выставлен флаг сглаживания ns[] — берём усреднённую
+// нормаль вершины (гладкое затенение), иначе нормаль грани полигона (плоское).
 void Mesh::LWOMesh::BuildGpuMesh(void) {
-    std::vector<float> verts;  // 9 float/вершина: pos(3) uv(2) color(4)
+    std::vector<float> verts;  // 12 float/вершина: pos(3) uv(2) color(4) normal(3)
+    float mn[3] = {1e30f, 1e30f, 1e30f}, mx[3] = {-1e30f, -1e30f, -1e30f};
     for (DWORD ind = 0; ind < this->iLayers; ind++) {
         lwLayer_t *l = &Layers[ind];
         for (DWORD i = 0; i < l->iPols; i++) {
@@ -394,18 +399,40 @@ void Mesh::LWOMesh::BuildGpuMesh(void) {
             for (int k = 1; k + 1 < p.v; k++) {                // веер: (0, k, k+1)
                 const int idx[3] = {0, k, k + 1};
                 for (int t = 0; t < 3; t++) {
-                    const float *pos = l->Vertexes[p.vi[idx[t]]].v.d.v;
+                    WORD vi = p.vi[idx[t]];
+                    const float *pos = l->Vertexes[vi].v.d.v;
+                    // Сглаженная нормаль вершины, если она усреднялась при импорте,
+                    // иначе нормаль грани полигона.
+                    const float *nrm = (p.ns && p.ns[idx[t]]) ? l->Vertexes[vi].n.d.v
+                                                              : p.normal.d.v;
                     verts.insert(verts.end(), {pos[0], pos[1], pos[2], 0.0f, 0.0f,
-                                               col[0], col[1], col[2], col[3]});
+                                               col[0], col[1], col[2], col[3],
+                                               nrm[0], nrm[1], nrm[2]});
+                    for (int c = 0; c < 3; c++) {
+                        if (pos[c] < mn[c]) mn[c] = pos[c];
+                        if (pos[c] > mx[c]) mx[c] = pos[c];
+                    }
                 }
             }
         }
     }
-    gpuMesh.upload(verts.data(), (int)(verts.size() / 9));
+    gpuMesh.upload(verts.data(), (int)(verts.size() / 12));
+    gpuMesh.setLit(true);  // меш освещается точечным светом
+    // Габариты модели (для орбиты источника света)
+    if (!verts.empty()) {
+        bsCenter.d.c.x = (mn[0] + mx[0]) * 0.5f;
+        bsCenter.d.c.y = (mn[1] + mx[1]) * 0.5f;
+        bsCenter.d.c.z = (mn[2] + mx[2]) * 0.5f;
+        float dx = mx[0] - mn[0], dy = mx[1] - mn[1], dz = mx[2] - mn[2];
+        bsRadius = 0.5f * std::sqrt(dx * dx + dy * dy + dz * dz);
+        if (bsRadius < 0.001f) bsRadius = 1.0f;
+    }
 }
 
 void Mesh::LWOMesh::Render(void) {
     glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);   // запись глубины (стартовый логотип оставляет её выключенной)
+    glDepthFunc(GL_LESS);   // ближе — рисуется
     glEnable(GL_BLEND);
     if (Globals.ERS.m == ERS::Mesh::WIRE) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

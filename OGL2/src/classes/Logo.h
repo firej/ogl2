@@ -186,6 +186,11 @@ class StartUPLogo {
         gl::matrixMode(gl::MODELVIEW);
         gl::popMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
+        // Восстанавливаем depth-состояние, которое поменяли выше, чтобы не ломать
+        // последующую отрисовку сцены (иначе запись глубины остаётся выключенной).
+        glDepthFunc(GL_LESS);
+        glDepthMask(GL_TRUE);
+        glEnable(GL_DEPTH_TEST);
     }
 };
 extern StartUPLogo SimpleLogo;

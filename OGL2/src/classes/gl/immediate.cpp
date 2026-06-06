@@ -14,27 +14,42 @@ static const char* VS_SRC =
     "in vec3 aPos;\n"
     "in vec2 aUV;\n"
     "in vec4 aColor;\n"
+    "in vec3 aNormal;\n"
     "uniform mat4 uMVP;\n"
     "uniform float uPointSize;\n"
     "out vec2 vUV;\n"
     "out vec4 vColor;\n"
+    "out vec3 vNormal;\n"
+    "out vec3 vWorldPos;\n"
     "void main() {\n"
     "    gl_Position = uMVP * vec4(aPos, 1.0);\n"
     "    gl_PointSize = uPointSize;\n"
     "    vUV = aUV;\n"
     "    vColor = aColor;\n"
+    "    vNormal = aNormal;\n"     // меш без model-матрицы -> уже мировая нормаль
+    "    vWorldPos = aPos;\n"      // и мировая позиция
     "}\n";
 
 static const char* FS_SRC =
     "#version 330 core\n"
     "uniform sampler2D uTex;\n"
     "uniform int uUseTexture;\n"
+    "uniform int uLit;\n"          // 0 = без освещения (UI/текст), 1 = точечный свет
+    "uniform vec3 uLightPos;\n"    // позиция источника (в мире)
+    "uniform float uAmbient;\n"    // доля фонового света [0..1]
     "in vec2 vUV;\n"
     "in vec4 vColor;\n"
+    "in vec3 vNormal;\n"
+    "in vec3 vWorldPos;\n"
     "out vec4 fragColor;\n"
     "void main() {\n"
     "    vec4 c = vColor;\n"
     "    if (uUseTexture == 1) c *= texture(uTex, vUV);\n"
+    "    if (uLit == 1) {\n"
+    "        vec3 L = normalize(uLightPos - vWorldPos);\n"
+    "        float d = abs(dot(normalize(vNormal), L));\n"  // двусторонний диффуз
+    "        c.rgb *= uAmbient + (1.0 - uAmbient) * d;\n"
+    "    }\n"
     "    fragColor = c;\n"
     "}\n";
 
@@ -43,20 +58,30 @@ struct State {
     GLenum mode = GL_TRIANGLES;
     float u = 0, v = 0;
     float r = 1, g = 1, b = 1, a = 1;
+    float nx = 0, ny = 0, nz = 1;  // текущая нормаль
     float pointSize = 1.0f;
     float lineWidth = 1.0f;
     GLuint tex = 0;
-    std::vector<float> buf;  // 9 float на вершину
+    std::vector<float> buf;  // 12 float на вершину: pos(3) uv(2) color(4) normal(3)
     GLuint vbo = 0;
     GLuint vao = 0;       // в Core нужен привязанный VAO для любой отрисовки
     GLuint whiteTex = 0;  // 1x1 белая — подставляется, когда текстуры нет
     Shader shader;
     bool shaderReady = false;
+    // Глобальный точечный свет: позиция в мире + доля фонового света
+    float lightPos[3] = {3.0f, 3.0f, 3.0f};
+    float ambient = 0.3f;
 };
 State S;
-const int FLOATS = 9;
+const int FLOATS = 12;
 const int STRIDE = FLOATS * sizeof(float);
+const int OFF_NORMAL = 9;  // смещение нормали в вершине (в float)
 }  // namespace
+
+void setLight(float x, float y, float z, float ambient) {
+    S.lightPos[0] = x; S.lightPos[1] = y; S.lightPos[2] = z;
+    S.ambient = ambient;
+}
 
 static void ensureShader() {
     if (S.shaderReady) return;
@@ -76,12 +101,15 @@ static void ensureShader() {
 }
 
 // Общая draw-логика для imEnd и GpuMesh.
-static void setupShaderAndMVP(const Mat4& mvp, GLuint tex) {
+static void setupShaderAndMVP(const Mat4& mvp, GLuint tex, bool lit) {
     S.shader.use();
     S.shader.setMat4("uMVP", mvp.m);
     S.shader.setFloat("uPointSize", S.pointSize);
     S.shader.setInt("uUseTexture", tex ? 1 : 0);
     S.shader.setInt("uTex", 0);
+    S.shader.setInt("uLit", lit ? 1 : 0);
+    S.shader.setVec3("uLightPos", S.lightPos[0], S.lightPos[1], S.lightPos[2]);
+    S.shader.setFloat("uAmbient", S.ambient);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex ? tex : S.whiteTex);  // всегда валидная текстура
 }
@@ -92,14 +120,16 @@ static void drawVbo(GLuint vbo, GLenum mode, int vertCount) {
     glEnableVertexAttribArray(ATTR_POS);
     glEnableVertexAttribArray(ATTR_UV);
     glEnableVertexAttribArray(ATTR_COLOR);
+    glEnableVertexAttribArray(ATTR_NORMAL);
     glVertexAttribPointer(ATTR_POS, 3, GL_FLOAT, GL_FALSE, STRIDE, (void*)0);
     glVertexAttribPointer(ATTR_UV, 2, GL_FLOAT, GL_FALSE, STRIDE, (void*)(3 * sizeof(float)));
     glVertexAttribPointer(ATTR_COLOR, 4, GL_FLOAT, GL_FALSE, STRIDE, (void*)(5 * sizeof(float)));
+    glVertexAttribPointer(ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, STRIDE, (void*)(OFF_NORMAL * sizeof(float)));
     glDrawArrays(mode, 0, vertCount);
-    // Возврат состояния, чтобы не мешать оставшемуся fixed-function коду
     glDisableVertexAttribArray(ATTR_POS);
     glDisableVertexAttribArray(ATTR_UV);
     glDisableVertexAttribArray(ATTR_COLOR);
+    glDisableVertexAttribArray(ATTR_NORMAL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
@@ -132,7 +162,7 @@ static void expandThickLines(const std::vector<float>& in, const Mat4& mvp,
     };
     auto emit = [&](const float* n, float ox, float oy, const float* col) {
         out.insert(out.end(), {n[0] + ox, n[1] + oy, n[2], 0.f, 0.f,
-                               col[0], col[1], col[2], col[3]});
+                               col[0], col[1], col[2], col[3], 0.f, 0.f, 1.f});
     };
     for (int i = 0; i + 1 < verts; i += 2) {
         const float* a = &in[i * FLOATS];
@@ -162,13 +192,11 @@ void imBegin(GLenum mode) {
 void imColor3f(float r, float g, float b) { S.r = r; S.g = g; S.b = b; S.a = 1.0f; }
 void imColor4f(float r, float g, float b, float a) { S.r = r; S.g = g; S.b = b; S.a = a; }
 void imTexCoord2f(float u, float v) { S.u = u; S.v = v; }
-void imNormal3f(float, float, float) {}  // зарезервировано
+void imNormal3f(float x, float y, float z) { S.nx = x; S.ny = y; S.nz = z; }
 void imTexture(GLuint tex) { S.tex = tex; }
 
 void imVertex3f(float x, float y, float z) {
-    float* p = nullptr;
-    S.buf.insert(S.buf.end(), {x, y, z, S.u, S.v, S.r, S.g, S.b, S.a});
-    (void)p;
+    S.buf.insert(S.buf.end(), {x, y, z, S.u, S.v, S.r, S.g, S.b, S.a, S.nx, S.ny, S.nz});
 }
 void imVertex2f(float x, float y) { imVertex3f(x, y, 0.0f); }
 
@@ -208,7 +236,7 @@ void imEnd() {
     }
     int vertCount = (int)draw->size() / FLOATS;
 
-    setupShaderAndMVP(mvp, S.tex);
+    setupShaderAndMVP(mvp, S.tex, false);  // immediate-путь (UI/2D) — без освещения
     glBindBuffer(GL_ARRAY_BUFFER, S.vbo);
     glBufferData(GL_ARRAY_BUFFER, draw->size() * sizeof(float), draw->data(), GL_STREAM_DRAW);
     // Размер точки берётся из gl_PointSize шейдера (нужно включить program point size)
@@ -248,7 +276,7 @@ void GpuMesh::upload(const float* interleaved, int vertexCount) {
 
 void GpuMesh::draw(GLuint tex) const {
     if (!vbo_ || count_ == 0 || !S.shader.valid()) return;
-    setupShaderAndMVP(projection() * modelview(), tex);
+    setupShaderAndMVP(projection() * modelview(), tex, lit_);
     drawVbo(vbo_, GL_TRIANGLES, count_);
     finishDraw();
 }

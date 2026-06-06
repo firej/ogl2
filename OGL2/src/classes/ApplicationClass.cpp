@@ -803,6 +803,7 @@ bool Application::Birth() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    glfwWindowHint(GLFW_DEPTH_BITS, 24);  // явно запрашиваем буфер глубины (без него z-test не работает)
 
     // Создание окна
     glfwWindow = glfwCreateWindow(Globals.VP.Width, Globals.VP.Height, "OGL2 Engine", NULL, NULL);
@@ -982,7 +983,10 @@ bool Application::ReshapeWindow(int width, int height) {
     gl::matrixMode(gl::PROJECTION);  // Матрица проэкций
     gl::loadIdentity();             // Загрузка единичной матрицы
     // Умное создание Frustum'a (или глупое - кому как)
-    gl::perspective(45.0f, (GLfloat)framebufferWidth / (GLfloat)framebufferHeight, 0.005f, 10000.0f);
+    // near нельзя ставить слишком близко: точность depth-буфера нелинейна и
+    // обратно пропорциональна near. При near=0.005 и far=10000 точности не хватает
+    // на расстоянии модели → z-fighting (дальние грани рисуются поверх ближних).
+    gl::perspective(45.0f, (GLfloat)framebufferWidth / (GLfloat)framebufferHeight, 0.1f, 10000.0f);
     // glFrustum(,,,,,);
 
     gl::matrixMode(gl::MODELVIEW);  // Видовая матрица

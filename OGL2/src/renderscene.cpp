@@ -4,6 +4,8 @@
 // macOS/Linux stubs for Windows-specific includes
 #endif
 
+#include <cmath>
+
 #include "./classes/ApplicationClass.h"
 #include "./classes/gl/immediate.h"
 #include "./classes/gl/glmat.h"
@@ -19,7 +21,16 @@ bool Application::RenderScene() {
     //	РИСОВАНИЕ
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    rm.SELECT_Mesh("someMesh")->Render();
+    // Точечный источник света, вращающийся вокруг машины: 1 оборот в минуту
+    {
+        meshPointer m = rm.SELECT_Mesh("someMesh");
+        float cx, cy, cz, rad;
+        m->GetBounds(cx, cy, cz, rad);
+        float ang = (float)GT.GetWorldTime() * (2.0f * 3.14159265f / 10.0f);
+        float orbit = rad * 1.8f + 0.01f;
+        gl::setLight(cx + orbit * cosf(ang), cy + rad * 1.2f, cz + orbit * sinf(ang), 0.3f);
+        m->Render();
+    }
 
     //   PS.DRAW();
 

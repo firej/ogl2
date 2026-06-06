@@ -26,6 +26,7 @@ class Shader {
     void setMat4(const char* name, const float* m16);
     void setInt(const char* name, int v);
     void setFloat(const char* name, float v);
+    void setVec3(const char* name, float x, float y, float z);
     void setVec4(const char* name, float x, float y, float z, float w);
 
    private:
