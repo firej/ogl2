@@ -379,36 +379,29 @@ void Mesh::LWOMesh::PostLoadProcessing(void) {
 void Mesh::LWOMesh::CompileList() {
     if (compiled) return;
     compiled = true;
-    list = glGenLists(1);
-    glNewList(list, GL_COMPILE);
-    DrawFromSource();
-    glEndList();
+    BuildGpuMesh();
 }
 
-void Mesh::LWOMesh::DrawFromSource(void) {  // Выправление системы координат
-    DWORD CurrentSurface;
-    CurrentSurface = 0xFFFFFFFF;
+// Один раз собираем геометрию в статический VBO: полигоны триангулируем веером,
+// цвет вершины = Diffuse сурфейса (освещение в движке выключено, нормали не нужны).
+void Mesh::LWOMesh::BuildGpuMesh(void) {
+    std::vector<float> verts;  // 9 float/вершина: pos(3) uv(2) color(4)
     for (DWORD ind = 0; ind < this->iLayers; ind++) {
         lwLayer_t *l = &Layers[ind];
         for (DWORD i = 0; i < l->iPols; i++) {
-            if (CurrentSurface != l->Pols[i].iSurf) {
-                CurrentSurface = l->Pols[i].iSurf;
-                glColor4fv(SurfList[CurrentSurface].Diffuse.d.v);
-                glMaterialfv(GL_FRONT, GL_AMBIENT, Color4f().d.v);
-                glMaterialfv(GL_FRONT, GL_DIFFUSE, SurfList[CurrentSurface].Diffuse.d.v);
-                glMaterialfv(GL_FRONT, GL_SPECULAR, SurfList[CurrentSurface].Specular.d.v);
+            const Poly_t &p = l->Pols[i];
+            const float *col = SurfList[p.iSurf].Diffuse.d.v;  // rgba
+            for (int k = 1; k + 1 < p.v; k++) {                // веер: (0, k, k+1)
+                const int idx[3] = {0, k, k + 1};
+                for (int t = 0; t < 3; t++) {
+                    const float *pos = l->Vertexes[p.vi[idx[t]]].v.d.v;
+                    verts.insert(verts.end(), {pos[0], pos[1], pos[2], 0.0f, 0.0f,
+                                               col[0], col[1], col[2], col[3]});
+                }
             }
-            glBegin(GL_POLYGON);
-            for (int j = 0; j < l->Pols[i].v; j++) {
-                if (l->Pols[i].ns[j])
-                    glNormal3fv(l->Vertexes[l->Pols[i].vi[j]].n.d.v);
-                else
-                    glNormal3fv(l->Pols[i].normal.d.v);
-                glVertex3fv(l->Vertexes[l->Pols[i].vi[j]].v.d.v);
-            }
-            glEnd();
         }
     }
+    gpuMesh.upload(verts.data(), (int)(verts.size() / 9));
 }
 
 void Mesh::LWOMesh::Render(void) {
@@ -431,9 +424,8 @@ void Mesh::LWOMesh::Render(void) {
             glDisable(GL_CULL_FACE);
         }
     }
-    // Проверяем, что display list был создан перед вызовом
-    if (compiled && list != 0) {
-        glCallList(list);
+    if (compiled) {
+        gpuMesh.draw();  // современный путь: VBO + шейдер
     }
     glPopAttrib();  // Возврат
 }

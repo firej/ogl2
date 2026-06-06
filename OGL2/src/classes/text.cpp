@@ -14,6 +14,7 @@ inline bool IsBadStringPtr(const char *ptr, size_t len) { return ptr == nullptr;
 #include "../../../ssrc/iff.h"
 #include "../Ex/IL/il.h"
 #include "./ResMan.h"
+#include "./gl/immediate.h"
 #include "./text.h"
 
 Font::Font(void) {
@@ -27,7 +28,7 @@ Font::Font(void) {
     alfa = 1.0f;
     Size = 1.0;
 }
-Font::~Font(void) { glDeleteLists(Base, 256); }
+Font::~Font(void) {}  // display lists больше не используются
 void Font::SetStyle(Text::Align halign, Text::Align valign, double size) {
     this->va = valign;
     this->ha = halign;
@@ -84,9 +85,31 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
         } break;
     }
     glScaled(Size * 30 / Globals.VP.ScreenStrings, Size * 30 / Globals.VP.ScreenStrings, 1.0);
-    glListBase(this->Base);  // Choose The Font Base
-    glCallLists((GLsizei)strlen(text), GL_UNSIGNED_BYTE,
-                text);            // Write The Text To The Screen
+
+    // Рисуем строку текстурированными квадами глифов через батчер (вместо display
+    // lists). Матрицы (ortho + позиция/выравнивание/масштаб) батчер снимет из GL,
+    // продвижение по строке (A/B) запекаем в координату x.
+    gl::imColor4f((float)Color.d.c.x, (float)Color.d.c.y, (float)Color.d.c.z, alfa);
+    gl::imTexture(T->Number);
+    gl::imBegin(GL_QUADS);
+    float x = 0.0f;
+    size_t len = strlen(text);
+    for (size_t n = 0; n < len; n++) {
+        unsigned char b = (unsigned char)text[n];
+        if (b == 0) continue;
+        int cell = b - 1;  // ячейка атласа 16x16, как при создании списков
+        int i = cell / 16, j = cell % 16;
+        float u0 = (float)(j * 0.0625), u1 = (float)((j + 15.0 / 16.0) * 0.0625);
+        float v0 = (float)(i * 0.0625), v1 = (float)((i + 15.0 / 16.0) * 0.0625);
+        x += lfg[b].A;
+        gl::imTexCoord2f(u0, v1); gl::imVertex2f(x + 0.0f, 15.0f);   // левая нижняя
+        gl::imTexCoord2f(u1, v1); gl::imVertex2f(x + 15.0f, 15.0f);  // правая нижняя
+        gl::imTexCoord2f(u1, v0); gl::imVertex2f(x + 15.0f, 0.0f);   // правая верхняя
+        gl::imTexCoord2f(u0, v0); gl::imVertex2f(x + 0.0f, 0.0f);    // левая верхняя
+        x += lfg[b].B;
+    }
+    gl::imEnd();
+
     glMatrixMode(GL_PROJECTION);  // Select The Projection Matrix
     glPopMatrix();                // Restore The Old Projection Matrix
     glMatrixMode(GL_MODELVIEW);   // Select The Modelview Matrix
@@ -134,33 +157,9 @@ Text::RESULT Font::LOAD(const char *FileName) {
         return Text::BAD_FORMAT;
     }
     delete[] texture;
-    // Создание дисплейных списков
-    Base = glGenLists(256);
-    int sym;
-    for (int i = 0; i < 16; i++) {
-        for (int j = 0; j < 16; j++) {
-            sym = i * 16 + j + 1;
-            glNewList(Base + sym, GL_COMPILE);
-            glTranslatef(lfg[sym].A, 0, 0);
-            glBegin(GL_QUADS);
-            glTexCoord2d((j) * 0.0625,
-                         (i + 15.0 / 16.0) * 0.0625f);  // Точка в текстуре (Левая нижняя)
-            glVertex2i(0, 15);                          // Координаты вершины (Левая нижняя)
-            glTexCoord2d((j + 15.0 / 16.0) * 0.0625,
-                         (i + 15.0 / 16.0) * 0.0625);  // Точка на текстуре (Правая нижняя)
-            glVertex2i(15, 15);                        // Координаты вершины (Правая нижняя)
-            glTexCoord2d((j + 15.0 / 16.0) * 0.0625,
-                         (i) * 0.0625);  // Точка текстуры (Верхняя правая)
-            glVertex2i(15, 0);           // Координаты вершины (Верхняя правая)
-            glTexCoord2d((j) * 0.0625,
-                         (i) * 0.0625);  // Точка текстуры (Верхняя левая)
-            glVertex2i(0, 0);            // Координаты вершины (Верхняя левая)
-            glEnd();
-            glTranslatef(lfg[sym].B, 0, 0);
-            // glTranslated(10.0,0.0,0.0);
-            glEndList();
-        };
-    };
+    // Display lists больше не нужны — строки рисуются батчером в Print()
+    // (метрики глифов уже загружены в lfg).
+    Base = 0;
     return Text::OK;
 };
 
@@ -173,10 +172,7 @@ float Font::GetStrWidth(const char *str) {
     return shift / (float)Font::scr_width * (float)Size * 30 / Globals.VP.ScreenStrings;
 }
 
-void Font::ULOAD(void) {
-    glDeleteLists(Base, 256);
-    delete T;
-}
+void Font::ULOAD(void) { delete T; }
 
 void Font::SetColor(Vector3f C) { Color = C; }
 void Font::SetColor(float r, float g, float b) {

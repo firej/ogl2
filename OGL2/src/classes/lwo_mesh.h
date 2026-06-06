@@ -4,6 +4,7 @@
 #include "./texture.h"
 #include "./globals.h"
 #include "./mesh_common.h"
+#include "./gl/immediate.h"
 // Вектор контейнер для слоёв
 #include <map>
 #include <set>
@@ -159,8 +160,9 @@ class LWOMesh {
     WORD ReadSURFSPECSubChunk(FILE *f);
     // Постобработка файла - сортировка сурфейсов, запоминание индексов и т. д. и т. п.
     void PostLoadProcessing(void);
-    void DrawFromSource(void);
+    void BuildGpuMesh(void);
     void CompileList(void);
+    gl::GpuMesh gpuMesh;  // статический VBO модели (современный путь)
 
    public:
     LWOMesh();

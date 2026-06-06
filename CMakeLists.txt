@@ -22,6 +22,8 @@ set(BASE_SOURCE_FILES
     OGL2/src/classes/cons/FuncsMap.cpp
     OGL2/src/classes/shared/assert.cpp
     OGL2/src/classes/shared/MyMath.cpp
+    OGL2/src/classes/gl/shader.cpp
+    OGL2/src/classes/gl/immediate.cpp
     OGL2/src/classes/Files.cpp
     OGL2/src/renderscene.cpp
     OGL2/src/main.cpp
@@ -40,7 +42,6 @@ if(WIN32)
         OGL2/src/classes/objects.cpp
         OGL2/src/classes/ParticleSystem.cpp
         OGL2/src/classes/resman.cpp
-        OGL2/src/classes/simple_mesh.cpp
         OGL2/src/classes/text.cpp
         OGL2/src/classes/texture.cpp
         OGL2/src/LocusAFX.cpp
@@ -58,7 +59,6 @@ else()
         OGL2/src/classes/objects.cpp
         OGL2/src/classes/ParticleSystem.cpp
         OGL2/src/classes/resman.cpp
-        OGL2/src/classes/simple_mesh.cpp
         OGL2/src/classes/text.cpp
         OGL2/src/classes/texture.cpp)
 endif()

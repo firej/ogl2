@@ -5,6 +5,7 @@
 #endif
 
 #include "./classes/ApplicationClass.h"
+#include "./classes/gl/immediate.h"
 #include "./classes/time.h"
 
 bool TextBenchmark = false;
@@ -31,52 +32,46 @@ bool Application::RenderScene() {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
     glLineWidth(8.0);
-    glColor3d(0.0, 1.0, 0.0);
-    glBegin(GL_LINES);
-    {
-        glVertex3d(0.00, 0.00, 0.00);
-        glVertex3d(4.00, 0.00, 0.00);
-        glVertex3d(4.00, 0.00, 0.00);
-        glVertex3d(3.50, 0.00, 0.25);
-        glVertex3d(3.50, 0.00, -0.25);
-        glVertex3d(4.00, 0.00, 0.00);
-        glVertex3d(4.00, 0.00, 0.00);
-        glVertex3d(3.50, 0.25, 0.00);
-        glVertex3d(3.50, -0.25, 0.00);
-        glVertex3d(4.00, 0.00, 0.00);
-    }
-    glEnd();
+    gl::imColor3f(0.0f, 1.0f, 0.0f);
+    gl::imBegin(GL_LINES);
+    gl::imVertex3f(0.00f, 0.00f, 0.00f);
+    gl::imVertex3f(4.00f, 0.00f, 0.00f);
+    gl::imVertex3f(4.00f, 0.00f, 0.00f);
+    gl::imVertex3f(3.50f, 0.00f, 0.25f);
+    gl::imVertex3f(3.50f, 0.00f, -0.25f);
+    gl::imVertex3f(4.00f, 0.00f, 0.00f);
+    gl::imVertex3f(4.00f, 0.00f, 0.00f);
+    gl::imVertex3f(3.50f, 0.25f, 0.00f);
+    gl::imVertex3f(3.50f, -0.25f, 0.00f);
+    gl::imVertex3f(4.00f, 0.00f, 0.00f);
+    gl::imEnd();
     // Ось Y
-    glColor3d(0.0, 0.0, 1.0);
-    glBegin(GL_LINES);
-    {
-        glVertex3d(0.00, 0.00, 0.00);
-        glVertex3d(0.00, 4.00, 0.00);
-        glVertex3d(0.00, 4.00, 0.00);
-        glVertex3d(0.00, 3.50, 0.25);
-        glVertex3d(0.00, 3.50, -0.25);
-        glVertex3d(0.00, 4.00, 0.00);
-        glVertex3d(0.00, 4.00, 0.00);
-        glVertex3d(0.25, 3.50, 0.00);
-        glVertex3d(-0.25, 3.50, 0.00);
-        glVertex3d(0.00, 4.00, 0.00);
-    }
-    glEnd();
-    glColor3d(1.0, 0.0, 0.0);
-    glBegin(GL_LINES);
-    {
-        glVertex3d(0.00, 0.00, 0.00);
-        glVertex3d(0.00, 0.00, 4.00);
-        glVertex3d(0.00, 0.00, 4.00);
-        glVertex3d(0.00, 0.25, 3.50);
-        glVertex3d(0.00, -0.25, 3.50);
-        glVertex3d(0.00, 0.00, 4.00);
-        glVertex3d(0.00, 0.00, 4.00);
-        glVertex3d(0.25, 0.00, 3.50);
-        glVertex3d(-0.25, 0.00, 3.50);
-        glVertex3d(0.00, 0.00, 4.00);
-    }
-    glEnd();
+    gl::imColor3f(0.0f, 0.0f, 1.0f);
+    gl::imBegin(GL_LINES);
+    gl::imVertex3f(0.00f, 0.00f, 0.00f);
+    gl::imVertex3f(0.00f, 4.00f, 0.00f);
+    gl::imVertex3f(0.00f, 4.00f, 0.00f);
+    gl::imVertex3f(0.00f, 3.50f, 0.25f);
+    gl::imVertex3f(0.00f, 3.50f, -0.25f);
+    gl::imVertex3f(0.00f, 4.00f, 0.00f);
+    gl::imVertex3f(0.00f, 4.00f, 0.00f);
+    gl::imVertex3f(0.25f, 3.50f, 0.00f);
+    gl::imVertex3f(-0.25f, 3.50f, 0.00f);
+    gl::imVertex3f(0.00f, 4.00f, 0.00f);
+    gl::imEnd();
+    gl::imColor3f(1.0f, 0.0f, 0.0f);
+    gl::imBegin(GL_LINES);
+    gl::imVertex3f(0.00f, 0.00f, 0.00f);
+    gl::imVertex3f(0.00f, 0.00f, 4.00f);
+    gl::imVertex3f(0.00f, 0.00f, 4.00f);
+    gl::imVertex3f(0.00f, 0.25f, 3.50f);
+    gl::imVertex3f(0.00f, -0.25f, 3.50f);
+    gl::imVertex3f(0.00f, 0.00f, 4.00f);
+    gl::imVertex3f(0.00f, 0.00f, 4.00f);
+    gl::imVertex3f(0.25f, 0.00f, 3.50f);
+    gl::imVertex3f(-0.25f, 0.00f, 3.50f);
+    gl::imVertex3f(0.00f, 0.00f, 4.00f);
+    gl::imEnd();
     glPopMatrix();
     glPopAttrib();
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
