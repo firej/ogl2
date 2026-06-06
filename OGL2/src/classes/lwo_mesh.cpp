@@ -2,7 +2,7 @@
 #include "LocusAFX.h"
 #else
 // macOS/Linux includes
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 
 #include <cstdio>
 #include <cstring>
@@ -405,18 +405,14 @@ void Mesh::LWOMesh::BuildGpuMesh(void) {
 }
 
 void Mesh::LWOMesh::Render(void) {
-    glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT);  // Сохранение настроек
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     if (Globals.ERS.m == ERS::Mesh::WIRE) {
-        glDisable(GL_TEXTURE_2D);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glLineWidth(1.0);
-        glDisable(GL_TEXTURE_2D);
         glDisable(GL_CULL_FACE);
     } else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glDisable(GL_TEXTURE_2D);
         if (Globals.EFl.LWOCullFace) {
             glCullFace(GL_BACK);
             glEnable(GL_CULL_FACE);
@@ -427,10 +423,9 @@ void Mesh::LWOMesh::Render(void) {
     if (compiled) {
         gpuMesh.draw();  // современный путь: VBO + шейдер
     }
-    glPopAttrib();  // Возврат
 }
 void Mesh::LWOMesh::ULoad(void) {
-    if (compiled) glDeleteLists(list, 1);
+    gpuMesh.destroy();  // освобождаем VBO модели
     compiled = false;
     for (DWORD j = 0; j < this->iLayers; j++) {
         lwLayer_t *l = &Layers[j];

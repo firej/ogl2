@@ -2,8 +2,7 @@
 #include "LocusAFX.h"
 #else
 // macOS/Linux includes
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <OpenGL/gl3.h>
 
 #include <cstdio>
 #include <cstring>
@@ -163,7 +162,7 @@ bool TextureClass::Load() {
 
     switch (Bpp) {  // переопределить тип для OpenGL
         case 1:
-            type = GL_RGB8;
+            type = GL_RGB;
             break;  // Картинка с палитрой
         case 3:
             type = GL_RGB;
@@ -185,14 +184,14 @@ bool TextureClass::Load() {
         case FJC_TEX_NO_FILTERING: {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
         } break;
 
             // простая билинейная фильтрация
         case FJC_TEX_BILINEAR_FILTERING: {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
 
         } break;
 
@@ -201,7 +200,8 @@ bool TextureClass::Load() {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             //--Делаем мипмапы
-            gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
 
         } break;
 
@@ -211,7 +211,8 @@ bool TextureClass::Load() {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, SysInfo.video.MaxAnisotropy);
             //--Делаем мипмапы
-            gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
         } break;
     }  // switch(filtermode)
     // Удаление ненужного массива
@@ -239,7 +240,7 @@ bool TextureClass::LoadL(ILenum Type, void *Lump, ILuint size) {
 
     switch (Bpp) {  // переопределить тип для OpenGL
         case 1:
-            type = GL_RGB8;
+            type = GL_RGB;
             break;  // Картинка с палитрой
         case 3:
             type = GL_RGB;
@@ -261,14 +262,14 @@ bool TextureClass::LoadL(ILenum Type, void *Lump, ILuint size) {
         case FJC_TEX_NO_FILTERING: {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
         } break;
 
             // простая билинейная фильтрация
         case FJC_TEX_BILINEAR_FILTERING: {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
 
         } break;
 
@@ -277,7 +278,8 @@ bool TextureClass::LoadL(ILenum Type, void *Lump, ILuint size) {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             //--Делаем мипмапы
-            gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
 
         } break;
 
@@ -287,12 +289,13 @@ bool TextureClass::LoadL(ILenum Type, void *Lump, ILuint size) {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, SysInfo.video.MaxAnisotropy);
             //--Делаем мипмапы
-            gluBuild2DMipmaps(GL_TEXTURE_2D, Bpp, iWidth, iHeight, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
         } break;
         default:
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexImage2D(GL_TEXTURE_2D, 0, Bpp, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, type, iWidth, iHeight, 0, type, GL_UNSIGNED_BYTE, data);
             break;
     }  // switch(filtermode)
     // Удаление ненужного массива
@@ -334,7 +337,7 @@ void FJCRendererTexture::Init() {
             {
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-                    glTexImage2D(GL_TEXTURE_2D, 0, 4, iWidth, iHeight, 0, GL_RGBA,
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA,
   GL_UNSIGNED_BYTE, data); }break;
 
             //простая билинейная фильтрация
@@ -342,7 +345,7 @@ void FJCRendererTexture::Init() {
             {
                     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
                     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-                    glTexImage2D(GL_TEXTURE_2D, 0, 4, iWidth, iHeight, 0, GL_RGBA,
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA,
   GL_UNSIGNED_BYTE, data); }break;
     }//switch(filtermode)*/
     // delete [] data;   // Удалить data

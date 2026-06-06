@@ -26,14 +26,12 @@ bool Application::RenderScene() {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //	Рисование осей координат :)
     //	Ось X
-    glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT);  // Сохранение настроек
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);  // оси теперь треугольники (толстые линии) — не отсекать
     gl::pushMatrix();
     gl::scale(1.0, 1.0, 1.0);
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
-    glLineWidth(8.0);
     gl::imColor3f(0.0f, 1.0f, 0.0f);
+    gl::imLineWidth(8.0f);
     gl::imBegin(GL_LINES);
     gl::imVertex3f(0.00f, 0.00f, 0.00f);
     gl::imVertex3f(4.00f, 0.00f, 0.00f);
@@ -48,6 +46,7 @@ bool Application::RenderScene() {
     gl::imEnd();
     // Ось Y
     gl::imColor3f(0.0f, 0.0f, 1.0f);
+    gl::imLineWidth(8.0f);
     gl::imBegin(GL_LINES);
     gl::imVertex3f(0.00f, 0.00f, 0.00f);
     gl::imVertex3f(0.00f, 4.00f, 0.00f);
@@ -61,6 +60,7 @@ bool Application::RenderScene() {
     gl::imVertex3f(0.00f, 4.00f, 0.00f);
     gl::imEnd();
     gl::imColor3f(1.0f, 0.0f, 0.0f);
+    gl::imLineWidth(8.0f);
     gl::imBegin(GL_LINES);
     gl::imVertex3f(0.00f, 0.00f, 0.00f);
     gl::imVertex3f(0.00f, 0.00f, 4.00f);
@@ -74,7 +74,6 @@ bool Application::RenderScene() {
     gl::imVertex3f(0.00f, 0.00f, 4.00f);
     gl::imEnd();
     gl::popMatrix();
-    glPopAttrib();
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //	ТЕКСТ
     // TODO: удалить енто после полной отладки текста

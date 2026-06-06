@@ -206,3 +206,26 @@ else()
     target_compile_options(OGL2 PRIVATE ${GLFW_CFLAGS_OTHER})
     add_definitions(-DUSE_GLFW)
 endif()
+
+# --- Регрессионный smoke-тест GL-бэкенда (offscreen, без движка) ---
+# Включается: cmake -S . -B build -DOGL2_BUILD_TESTS=ON
+option(OGL2_BUILD_TESTS "Собирать GL smoke-тест (OGL2/tests)" OFF)
+if(OGL2_BUILD_TESTS)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GLFW_TEST REQUIRED glfw3)
+    add_executable(gl_smoke
+        OGL2/tests/gl_smoke.cpp
+        OGL2/src/classes/gl/shader.cpp
+        OGL2/src/classes/gl/immediate.cpp
+        OGL2/src/classes/gl/glmat.cpp)
+    target_compile_definitions(gl_smoke PRIVATE GL_SILENCE_DEPRECATION)
+    target_include_directories(gl_smoke PRIVATE ${GLFW_TEST_INCLUDE_DIRS})
+    target_link_directories(gl_smoke PRIVATE ${GLFW_TEST_LIBRARY_DIRS})
+    if(APPLE)
+        find_library(OPENGL_LIB OpenGL)
+        target_link_libraries(gl_smoke PRIVATE ${OPENGL_LIB} ${GLFW_TEST_LIBRARIES})
+    else()
+        find_package(OpenGL REQUIRED)
+        target_link_libraries(gl_smoke PRIVATE OpenGL::GL ${GLFW_TEST_LIBRARIES})
+    endif()
+endif()

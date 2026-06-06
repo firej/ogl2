@@ -2,7 +2,7 @@
 #include "LocusAFX.h"
 #else
 // macOS/Linux includes
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 
 #include <string>
 using namespace std;
@@ -78,39 +78,25 @@ void Echo(string s) {
 void Lighting(string s) {
     s = upcase_string(s);
     if (s == string("TRUE") || s == string("ON") || s == string("1")) {
-        glEnable(GL_LIGHTING);
         MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение включено");
     } else if (s == string("FALSE") || s == string("OFF") || s == string("0")) {
-        glDisable(GL_LIGHTING);
         MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение выключено");
     } else {
         MainCon->OUT_STRING(CONCOL_HELP, "Вывод или изменение состояния освещения");
         MainCon->OUT_STRING(CONCOL_HELP, "Использование - lighting [true|ON|1|false|OFF|0]");
-        if (glIsEnabled(GL_LIGHTING)) {
-            MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение включено");
-        } else {
-            MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение выключено");
-        }
+        MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение отключено (Core 3.3, фикс-функция убрана)");
     }
 }
 
 void Lighting2Side(string s) {
     s = upcase_string(s);
     if (s == string("TRUE") || s == string("ON") || s == string("1")) {
-        glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, 1.0);
         MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение c 2х сторон включено");
     } else if (s == string("FALSE") || s == string("OFF") || s == string("0")) {
-        glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, 0.0);
         MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение c 2х сторон выключено");
     } else {
         MainCon->OUT_STRING(CONCOL_HELP, "Вывод или изменение состояния освещения (1 или 2 стороны полигонов)");
         MainCon->OUT_STRING(CONCOL_HELP, "Использование - Lighting2Side [true|ON|1|false|OFF|0]");
-        GLboolean boolean;
-        glGetBooleanv(GL_LIGHT_MODEL_TWO_SIDE, &boolean);
-        if (boolean) {
-            MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение c 2х сторон включено");
-        } else {
-            MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение c 2х сторон выключено");
-        }
+        MainCon->OUT_STRING(CONCOL_MESSAGE, "Освещение фикс-функции убрано (Core 3.3)");
     }
 }

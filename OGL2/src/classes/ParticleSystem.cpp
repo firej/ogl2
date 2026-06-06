@@ -2,7 +2,7 @@
 #include "LocusAFX.h"
 #else
 // macOS/Linux includes
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 
 #include <cstdlib>
 #endif

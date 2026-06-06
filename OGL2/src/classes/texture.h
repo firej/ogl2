@@ -8,11 +8,17 @@
 #include <limits.h>
 #define _MAX_PATH PATH_MAX
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <OpenGL/gl3.h>
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
+// EXT_texture_filter_anisotropic: константы есть в расширении, но не в gl3.h
+#ifndef GL_TEXTURE_MAX_ANISOTROPY_EXT
+#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+#endif
+#ifndef GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
+#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #endif
 // DevIL типы для macOS/Linux
 typedef unsigned int ILenum;

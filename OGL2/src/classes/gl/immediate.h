@@ -11,6 +11,11 @@
 // Вершина: pos(3) + uv(2) + color(4). GL_QUADS триангулируется автоматически.
 #include "../oGL.h"
 
+// GL_QUADS удалён в Core 3.3, но батчер принимает его и сам триангулирует.
+#ifndef GL_QUADS
+#define GL_QUADS 0x0007
+#endif
+
 namespace gl {
 
 void imBegin(GLenum mode);                       // GL_LINES, GL_TRIANGLES, GL_QUADS, ...
@@ -22,6 +27,7 @@ void imVertex3f(float x, float y, float z);
 void imVertex2f(float x, float y);
 void imTexture(GLuint tex);                       // 0 = без текстуры (только цвет вершин)
 void imPointSize(float size);                     // размер точек для GL_POINTS
+void imLineWidth(float px);                        // толщина GL_LINES в пикселях (через квады)
 void imEnd();                                     // снимает матрицы, заливает VBO, рисует
 
 // Статический меш в VBO (заливается один раз). Формат вершины тот же, что у

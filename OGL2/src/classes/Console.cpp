@@ -2,7 +2,7 @@
 #include "LocusAFX.h"
 #else
 // macOS/Linux includes
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 
 #include <cstdarg>
 #include <cstdio>
@@ -174,12 +174,9 @@ void CConsole::Draw() {
         lastTick -= Period;
         CurVisible = !CurVisible;
     }
-    glPushAttrib(GL_LIST_BIT | GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT);  // Сохранение настроек
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     // T->bind();
     glDisable(GL_DEPTH_TEST);  // Disables Depth Testing
-    // glEnable(GL_TEXTURE_2D);
-    glDisable(GL_TEXTURE_2D);
     gl::matrixMode(gl::PROJECTION);  // Select The Projection Matrix
     gl::pushMatrix();               // Store The Projection Matrix
     gl::loadIdentity();             // Reset The Projection Matrix
@@ -189,7 +186,6 @@ void CConsole::Draw() {
     gl::pushMatrix();                         // Store The Modelview Matrix
     gl::loadIdentity();                       // Reset The Modelview Matrix
 
-    glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -256,7 +252,6 @@ void CConsole::Draw() {
     gl::matrixMode(gl::MODELVIEW);   // Select The Modelview Matrix
     gl::popMatrix();                // Restore The Old Projection Matrix
     glEnable(GL_DEPTH_TEST);      // Enables Depth Testing
-    glPopAttrib();                // Возврат
 }
 
 void CConsole::ProcessChar(char c) {

@@ -2,7 +2,7 @@
 #include "LocusAFX.h"
 #else
 // macOS/Linux includes
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 #endif
 
 #include <iostream>
@@ -90,11 +90,8 @@ unsigned int loadCubemap(vector<string> faces) {
 
 void SkyBox::operator()() {
 
-    glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT);
     glDisable(GL_DEPTH_TEST);  // Выключаем тест глубины для того чтобы нарисовать небо
-    glDisable(GL_LIGHTING);
     glCullFace(GL_FRONT);
-    glEnable(GL_TEXTURE_2D);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     // Небо: текстурированные квады через батчер (вместо vertex-array + glDrawArrays).
     // SkyA — интерливед, по 5 float на вершину: u, v, x, y, z. Матрицы (камера)
@@ -109,6 +106,5 @@ void SkyBox::operator()() {
     }
     gl::imEnd();
 
-    glPopAttrib();
     glClear(GL_DEPTH_BUFFER_BIT);  // Очистка буфера глубины
 }

@@ -32,13 +32,6 @@ class TextureLogo {
     }
     void render_logo(float scale = 0.5, float alpha = 0.5, bool left = false, bool top = true) {
         GLint vp[4];
-        glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT);
-        glDisable(GL_LIGHTING);
-        glEnable(GL_TEXTURE_2D);
-        glDisable(GL_TEXTURE_GEN_S);
-        glDisable(GL_TEXTURE_GEN_T);
-        glDisable(GL_TEXTURE_GEN_R);
-        glDisable(GL_TEXTURE_GEN_Q);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -47,16 +40,6 @@ class TextureLogo {
         glDepthMask(false);
         glDisable(GL_DEPTH_TEST);
 
-#ifdef _WIN32
-        if (glActiveTextureARB)  // на Windows — указатель расширения, может быть NULL
-#endif
-        {
-            glActiveTextureARB(GL_TEXTURE1_ARB);
-            glDisable(GL_TEXTURE_2D);
-            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_NONE);
-            glActiveTextureARB(GL_TEXTURE0_ARB);
-        }
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         Logo.bind();
 
         glGetIntegerv(GL_VIEWPORT, vp);
@@ -82,7 +65,6 @@ class TextureLogo {
 
         glDepthMask(true);
 
-        glPopAttrib();
 
         gl::matrixMode(gl::PROJECTION);
         gl::popMatrix();
@@ -134,12 +116,6 @@ class StartUPLogo {
     void render_logo(unsigned char mode, int text_blocks = 0, TextBlock blocks = TextBlock(NULL, NULL, 0, 0), ...) {
         GLint vp[4];
 
-        glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT);
-        glDisable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_GEN_S);
-        glDisable(GL_TEXTURE_GEN_T);
-        glDisable(GL_TEXTURE_GEN_R);
-        glDisable(GL_TEXTURE_GEN_Q);
         glEnable(GL_BLEND);
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  // Чёрный фон
@@ -151,16 +127,6 @@ class StartUPLogo {
         glDepthMask(false);
         glDisable(GL_DEPTH_TEST);
 
-#ifdef _WIN32
-        if (glActiveTextureARB)  // на Windows — указатель расширения, может быть NULL
-#endif
-        {
-            glActiveTextureARB(GL_TEXTURE1_ARB);
-            glDisable(GL_TEXTURE_2D);
-            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_NONE);
-            glActiveTextureARB(GL_TEXTURE0_ARB);
-        }
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         Logo.bind();
 
         glGetIntegerv(GL_VIEWPORT, vp);
@@ -214,7 +180,6 @@ class StartUPLogo {
                 SBFunc();
                 break;
         }
-        glPopAttrib();
 
         gl::matrixMode(gl::PROJECTION);
         gl::popMatrix();

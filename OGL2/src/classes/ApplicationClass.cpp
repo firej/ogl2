@@ -5,8 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <OpenGL/gl3.h>
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -368,28 +367,10 @@ bool Application::InitOpenGL() {
     glClearDepth(1.0);        // Разрешить очистку буфера глубины
     glDepthFunc(GL_LESS);     // Тип теста глубины (рисуется всё что ближе)
     glEnable(GL_DEPTH_TEST);  // разрешить тест глубины
-    glShadeModel(GL_SMOOTH);  // разрешить плавное цветовое сглаживание
     ReshapeWindow(Globals.VP.Width, Globals.VP.Height);
-    glEnable(GL_TEXTURE_2D);  // Разрешение наложения текстур
     glClearDepth(1.0f);       // Установка буфера глубины
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT,
-           GL_NICEST);  // Улучшенные вычисления перспективы
-    glDisable(GL_POLYGON_SMOOTH);
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_DITHER);
-    // glEnable(GL_CULL_FACE);
-    //==== Свет
-    //==========================================================================//
-    glEnable(GL_LIGHT1);                               // Разрешение источника света номер один
-    glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);    // Установка Фонового Света
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);    // Установка Диффузного Света
-    glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);  // Позиция света
-    glEnable(GL_LIGHTING);
-    glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, 0.0);
-    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    //=== /Свет
-    //==========================================================================//
+    // Фикс-функция хинты качества и освещение удалены (Core 3.3 их не имеет).
+    // Освещение в движке и так не использовалось — цвет берётся из вершин/текстур.
 
     return NO_ERROR;
 }
@@ -816,9 +797,11 @@ bool Application::Birth() {
         return FJC_ERROR;
     }
 
-    // Настройка GLFW
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    // Настройка GLFW — OpenGL 3.3 Core (forward-compatible, как требует macOS)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
     // Создание окна
@@ -1159,13 +1142,10 @@ void SwapBuffersEXT() {
 
 void Application::RenderTexture() {
     // Сохраняем текущее состояние OpenGL
-    glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Отключаем ненужные функции
-    glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
-    glEnable(GL_TEXTURE_2D);
 
     // Очищаем экран
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -1208,7 +1188,6 @@ void Application::RenderTexture() {
     gl::popMatrix();
 
     // Восстанавливаем состояние OpenGL
-    glPopAttrib();
 }
 
 void Application::ShowMovie(bool CanBreak) {
