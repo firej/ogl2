@@ -12,6 +12,7 @@
 #endif
 
 #include "./camera.h"
+#include "./gl/glmat.h"
 #include "./sound/sound.h"
 #include "./time.h"
 
@@ -52,15 +53,15 @@ void Camera::Init(void) {
 void Camera::Look(void) {
     GetDirection();
     GetStrafeLeft();
-    glLoadIdentity();
+    gl::loadIdentity();
     MouseLook();
-    glRotated(Angles.d.c.x, 1.0f, 0.0f, 0.0f);
-    glRotated(-Angles.d.c.y, 0.0f, 1.0f, 0.0f);  // Упрощаем формулу поворота
-    glRotated(Angles.d.c.z, 0.0f, 0.0f, 1.0f);
+    gl::rotate(Angles.d.c.x, 1.0f, 0.0f, 0.0f);
+    gl::rotate(-Angles.d.c.y, 0.0f, 1.0f, 0.0f);  // Упрощаем формулу поворота
+    gl::rotate(Angles.d.c.z, 0.0f, 0.0f, 1.0f);
 
     MSB();  // Отрисовка неба
 
-    glTranslated(Position.d.c.x, Position.d.c.y,
+    gl::translate(Position.d.c.x, Position.d.c.y,
                  Position.d.c.z);  // Перемещает камеру в точку Position
 
     Sound.SetLPosition(Point3f((float)Position.d.c.x, (float)Position.d.c.y, (float)Position.d.c.z));
@@ -186,12 +187,12 @@ void Camera::RecalculateStrafe(void)  // Пересчёт вектора нап�
 }
 void Camera::MoveModelViewMatrix(void)  // Перемещение системы координат для рендеринга
 {
-    glTranslated(Position.d.c.x, Position.d.c.y,
+    gl::translate(Position.d.c.x, Position.d.c.y,
                  Position.d.c.z);  // Перемещает камеру в точку Position
 }
 void Camera::RotateModelViewMatrix(void)  // Поворот системы координат
 {
-    glRotated(Angles.d.c.x, 1.0f, 0.0f, 0.0f);
-    glRotated(-Angles.d.c.y, 0.0f, 1.0f, 0.0f);  // Упрощаем формулу поворота
-    glRotated(Angles.d.c.z, 0.0f, 0.0f, 1.0f);
+    gl::rotate(Angles.d.c.x, 1.0f, 0.0f, 0.0f);
+    gl::rotate(-Angles.d.c.y, 0.0f, 1.0f, 0.0f);  // Упрощаем формулу поворота
+    gl::rotate(Angles.d.c.z, 0.0f, 0.0f, 1.0f);
 }

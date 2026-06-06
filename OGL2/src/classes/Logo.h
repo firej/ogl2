@@ -2,6 +2,7 @@
 #include "./text.h"
 #include "./texture.h"
 #include "./gl/immediate.h"
+#include "./gl/glmat.h"
 
 #ifndef WIN32
 // DevIL константы для macOS/Linux
@@ -58,17 +59,14 @@ class TextureLogo {
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         Logo.bind();
 
-        glMatrixMode(GL_TEXTURE);
-        glPushMatrix();
-        glLoadIdentity();
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
         glGetIntegerv(GL_VIEWPORT, vp);
-        glLoadIdentity();
-        gluOrtho2D(vp[0], vp[2], vp[1], vp[3]);
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
+        gl::matrixMode(gl::PROJECTION);
+        gl::pushMatrix();
+        gl::loadIdentity();
+        gl::ortho(vp[0], vp[2], vp[1], vp[3], -1, 1);
+        gl::matrixMode(gl::MODELVIEW);
+        gl::pushMatrix();
+        gl::loadIdentity();
 
         float x, y;
         x = left ? 0 : vp[2] - m_w * scale;
@@ -86,12 +84,10 @@ class TextureLogo {
 
         glPopAttrib();
 
-        glMatrixMode(GL_TEXTURE);
-        glPopMatrix();
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
+        gl::matrixMode(gl::PROJECTION);
+        gl::popMatrix();
+        gl::matrixMode(gl::MODELVIEW);
+        gl::popMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 };
@@ -167,17 +163,14 @@ class StartUPLogo {
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         Logo.bind();
 
-        glMatrixMode(GL_TEXTURE);
-        glPushMatrix();
-        glLoadIdentity();
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glLoadIdentity();
         glGetIntegerv(GL_VIEWPORT, vp);
-        gluOrtho2D(vp[0], vp[2], vp[1], vp[3]);
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
+        gl::matrixMode(gl::PROJECTION);
+        gl::pushMatrix();
+        gl::loadIdentity();
+        gl::ortho(vp[0], vp[2], vp[1], vp[3], -1, 1);
+        gl::matrixMode(gl::MODELVIEW);
+        gl::pushMatrix();
+        gl::loadIdentity();
 
         // Полноэкранный квад логотипа через батчер (вместо vertex-array + glDrawArrays).
         // Матрицы (ortho по viewport) батчер снимет из GL.
@@ -223,12 +216,10 @@ class StartUPLogo {
         }
         glPopAttrib();
 
-        glMatrixMode(GL_TEXTURE);
-        glPopMatrix();
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
+        gl::matrixMode(gl::PROJECTION);
+        gl::popMatrix();
+        gl::matrixMode(gl::MODELVIEW);
+        gl::popMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 };

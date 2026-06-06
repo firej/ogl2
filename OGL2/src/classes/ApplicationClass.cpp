@@ -14,6 +14,7 @@
 #endif
 #include "./ApplicationClass.h"
 #include "./gl/immediate.h"
+#include "./gl/glmat.h"
 #include "./time.h"
 
 #ifndef WIN32
@@ -995,14 +996,14 @@ bool Application::ReshapeWindow(int width, int height) {
     Globals.VP.Width = width;  // Сохраняем размер окна в точках
     Globals.VP.Height = height;
 
-    glMatrixMode(GL_PROJECTION);  // Матрица проэкций
-    glLoadIdentity();             // Загрузка единичной матрицы
+    gl::matrixMode(gl::PROJECTION);  // Матрица проэкций
+    gl::loadIdentity();             // Загрузка единичной матрицы
     // Умное создание Frustum'a (или глупое - кому как)
-    gluPerspective(45.0f, (GLfloat)framebufferWidth / (GLfloat)framebufferHeight, 0.005f, 10000.0f);
+    gl::perspective(45.0f, (GLfloat)framebufferWidth / (GLfloat)framebufferHeight, 0.005f, 10000.0f);
     // glFrustum(,,,,,);
 
-    glMatrixMode(GL_MODELVIEW);  // Видовая матрица
-    glLoadIdentity();            // Загрузка единичной матрицы
+    gl::matrixMode(gl::MODELVIEW);  // Видовая матрица
+    gl::loadIdentity();            // Загрузка единичной матрицы
     return NO_ERROR;
 };
 
@@ -1171,14 +1172,14 @@ void Application::RenderTexture() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Настраиваем ортогональную проекцию для 2D
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+    gl::matrixMode(gl::PROJECTION);
+    gl::pushMatrix();
+    gl::loadIdentity();
+    gl::ortho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
 
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
+    gl::matrixMode(gl::MODELVIEW);
+    gl::pushMatrix();
+    gl::loadIdentity();
 
     // Привязываем текстуру видеоплеера
     GLuint texID = AVIp.GetTextureID();
@@ -1201,10 +1202,10 @@ void Application::RenderTexture() {
     gl::imEnd();
 
     // Восстанавливаем матрицы
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
+    gl::matrixMode(gl::MODELVIEW);
+    gl::popMatrix();
+    gl::matrixMode(gl::PROJECTION);
+    gl::popMatrix();
 
     // Восстанавливаем состояние OpenGL
     glPopAttrib();

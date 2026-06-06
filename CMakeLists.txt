@@ -24,6 +24,7 @@ set(BASE_SOURCE_FILES
     OGL2/src/classes/shared/MyMath.cpp
     OGL2/src/classes/gl/shader.cpp
     OGL2/src/classes/gl/immediate.cpp
+    OGL2/src/classes/gl/glmat.cpp
     OGL2/src/classes/Files.cpp
     OGL2/src/renderscene.cpp
     OGL2/src/main.cpp

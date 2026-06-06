@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "./glmat.h"
 #include "./mat4.h"
 #include "./shader.h"
 
@@ -72,10 +73,7 @@ static void ensureShader() {
 
 // Общая draw-логика для imEnd и GpuMesh.
 static void setupShaderAndMVP(GLuint tex) {
-    Mat4 P, M;  // MVP из текущего состояния GL (column-major)
-    glGetFloatv(GL_PROJECTION_MATRIX, P.m);
-    glGetFloatv(GL_MODELVIEW_MATRIX, M.m);
-    Mat4 mvp = P * M;
+    Mat4 mvp = projection() * modelview();  // из CPU матричного стека (gl::glmat)
     S.shader.use();
     S.shader.setMat4("uMVP", mvp.m);
     S.shader.setFloat("uPointSize", S.pointSize);

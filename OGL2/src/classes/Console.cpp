@@ -26,6 +26,7 @@ inline bool IsBadStringPtr(const char *ptr, size_t size) { return ptr == nullptr
 #include "./Console.h"
 #include "./ConsoleFunctions.h"
 #include "./gl/immediate.h"
+#include "./gl/glmat.h"
 #include "./ResMan.h"
 #include "./time.h"
 // #include "./Application.h"
@@ -179,14 +180,14 @@ void CConsole::Draw() {
     glDisable(GL_DEPTH_TEST);  // Disables Depth Testing
     // glEnable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_2D);
-    glMatrixMode(GL_PROJECTION);  // Select The Projection Matrix
-    glPushMatrix();               // Store The Projection Matrix
-    glLoadIdentity();             // Reset The Projection Matrix
+    gl::matrixMode(gl::PROJECTION);  // Select The Projection Matrix
+    gl::pushMatrix();               // Store The Projection Matrix
+    gl::loadIdentity();             // Reset The Projection Matrix
 
-    glOrtho(0, 1, 1.0 / height, 0, -1, 1);  // Set Up An Ortho Screen
-    glMatrixMode(GL_MODELVIEW);             // Select The Modelview Matrix
-    glPushMatrix();                         // Store The Modelview Matrix
-    glLoadIdentity();                       // Reset The Modelview Matrix
+    gl::ortho(0, 1, 1.0 / height, 0, -1, 1);  // Set Up An Ortho Screen
+    gl::matrixMode(gl::MODELVIEW);             // Select The Modelview Matrix
+    gl::pushMatrix();                         // Store The Modelview Matrix
+    gl::loadIdentity();                       // Reset The Modelview Matrix
 
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
@@ -250,10 +251,10 @@ void CConsole::Draw() {
         gl::imEnd();
     }
     // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   КОНЕЦ
-    glMatrixMode(GL_PROJECTION);  // Select The Projection Matrix
-    glPopMatrix();                // Restore The Old Projection Matrix
-    glMatrixMode(GL_MODELVIEW);   // Select The Modelview Matrix
-    glPopMatrix();                // Restore The Old Projection Matrix
+    gl::matrixMode(gl::PROJECTION);  // Select The Projection Matrix
+    gl::popMatrix();                // Restore The Old Projection Matrix
+    gl::matrixMode(gl::MODELVIEW);   // Select The Modelview Matrix
+    gl::popMatrix();                // Restore The Old Projection Matrix
     glEnable(GL_DEPTH_TEST);      // Enables Depth Testing
     glPopAttrib();                // Возврат
 }

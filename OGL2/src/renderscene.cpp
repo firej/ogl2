@@ -6,6 +6,7 @@
 
 #include "./classes/ApplicationClass.h"
 #include "./classes/gl/immediate.h"
+#include "./classes/gl/glmat.h"
 #include "./classes/time.h"
 
 bool TextBenchmark = false;
@@ -27,8 +28,8 @@ bool Application::RenderScene() {
     //	Ось X
     glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT);  // Сохранение настроек
     glDisable(GL_DEPTH_TEST);
-    glPushMatrix();
-    glScaled(1.0, 1.0, 1.0);
+    gl::pushMatrix();
+    gl::scale(1.0, 1.0, 1.0);
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
     glLineWidth(8.0);
@@ -72,7 +73,7 @@ bool Application::RenderScene() {
     gl::imVertex3f(-0.25f, 0.00f, 3.50f);
     gl::imVertex3f(0.00f, 0.00f, 4.00f);
     gl::imEnd();
-    glPopMatrix();
+    gl::popMatrix();
     glPopAttrib();
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //	ТЕКСТ

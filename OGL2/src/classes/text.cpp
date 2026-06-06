@@ -15,6 +15,7 @@ inline bool IsBadStringPtr(const char *ptr, size_t len) { return ptr == nullptr;
 #include "../Ex/IL/il.h"
 #include "./ResMan.h"
 #include "./gl/immediate.h"
+#include "./gl/glmat.h"
 #include "./text.h"
 
 Font::Font(void) {
@@ -49,21 +50,21 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
     T->bind();
     glDisable(GL_DEPTH_TEST);  // Disables Depth Testing
     glEnable(GL_TEXTURE_2D);
-    glMatrixMode(GL_PROJECTION);  // Select The Projection Matrix
-    glPushMatrix();               // Store The Projection Matrix
-    glLoadIdentity();             // Reset The Projection Matrix
+    gl::matrixMode(gl::PROJECTION);  // Select The Projection Matrix
+    gl::pushMatrix();               // Store The Projection Matrix
+    gl::loadIdentity();             // Reset The Projection Matrix
 
-    glOrtho(0, Font::scr_width, 480, 0, -1, 1);  // Set Up An Ortho Screen
-    glMatrixMode(GL_MODELVIEW);                  // Select The Modelview Matrix
-    glPushMatrix();                              // Store The Modelview Matrix
-    glLoadIdentity();                            // Reset The Modelview Matrix
+    gl::ortho(0, Font::scr_width, 480, 0, -1, 1);  // Set Up An Ortho Screen
+    gl::matrixMode(gl::MODELVIEW);                  // Select The Modelview Matrix
+    gl::pushMatrix();                              // Store The Modelview Matrix
+    gl::loadIdentity();                            // Reset The Modelview Matrix
 
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // цвет шрифта задаётся в батчере (imColor4f ниже)
-    glTranslated(X * Font::scr_width, Y * 480.0,
+    gl::translate(X * Font::scr_width, Y * 480.0,
                  0);  // Position The Text (0,0 - Bottom Left)
     switch (this->ha) {
         case Text::center: {
@@ -72,7 +73,7 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
             for (size_t i = 0; i < strl; i++) {
                 shift += lfg[(unsigned char)text[i]].A + lfg[(unsigned char)text[i]].B;
             }
-            glTranslated(-shift / 2 * (float)Size * 30 / Globals.VP.ScreenStrings, 0.0, 0.0);
+            gl::translate(-shift / 2 * (float)Size * 30 / Globals.VP.ScreenStrings, 0.0, 0.0);
         } break;
         case Text::right: {
             size_t strl = strlen(text);
@@ -80,10 +81,10 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
             for (size_t i = 0; i < strl; i++) {
                 shift += lfg[(unsigned char)text[i]].A + lfg[(unsigned char)text[i]].B;
             }
-            glTranslated(-shift * (float)Size * 30 / Globals.VP.ScreenStrings, 0.0, 0.0);
+            gl::translate(-shift * (float)Size * 30 / Globals.VP.ScreenStrings, 0.0, 0.0);
         } break;
     }
-    glScaled(Size * 30 / Globals.VP.ScreenStrings, Size * 30 / Globals.VP.ScreenStrings, 1.0);
+    gl::scale(Size * 30 / Globals.VP.ScreenStrings, Size * 30 / Globals.VP.ScreenStrings, 1.0);
 
     // Рисуем строку текстурированными квадами глифов через батчер (вместо display
     // lists). Матрицы (ortho + позиция/выравнивание/масштаб) батчер снимет из GL,
@@ -109,10 +110,10 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
     }
     gl::imEnd();
 
-    glMatrixMode(GL_PROJECTION);  // Select The Projection Matrix
-    glPopMatrix();                // Restore The Old Projection Matrix
-    glMatrixMode(GL_MODELVIEW);   // Select The Modelview Matrix
-    glPopMatrix();                // Restore The Old Projection Matrix
+    gl::matrixMode(gl::PROJECTION);  // Select The Projection Matrix
+    gl::popMatrix();                // Restore The Old Projection Matrix
+    gl::matrixMode(gl::MODELVIEW);   // Select The Modelview Matrix
+    gl::popMatrix();                // Restore The Old Projection Matrix
     glEnable(GL_DEPTH_TEST);      // Enables Depth Testing
     glPopAttrib();                // Возврат
 }
