@@ -25,6 +25,7 @@ inline bool IsBadStringPtr(const char *ptr, size_t size) { return ptr == nullptr
 
 #include "./Console.h"
 #include "./ConsoleFunctions.h"
+#include "./gl/immediate.h"
 #include "./ResMan.h"
 #include "./time.h"
 // #include "./Application.h"
@@ -193,22 +194,23 @@ void CConsole::Draw() {
 
     // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   РИСОВАНИЕ КОНСОЛИ
     // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ФОН
-    glColor4d(Colors[CONCOL_BACKGROUND].d.c.x, Colors[CONCOL_BACKGROUND].d.c.y, Colors[CONCOL_BACKGROUND].d.c.z,
-              persent);
-    glBegin(GL_TRIANGLE_STRIP);
-    glVertex2d(0.0, 0.0);
-    glVertex2d(0.0, 1.0 - 1.0 / ListElements);
-    glVertex2d(1.0, 0.0);
-    glVertex2d(1.0, 1.0 - 1.0 / ListElements);
-    glEnd();
+    gl::imColor4f((float)Colors[CONCOL_BACKGROUND].d.c.x, (float)Colors[CONCOL_BACKGROUND].d.c.y,
+                  (float)Colors[CONCOL_BACKGROUND].d.c.z, (float)persent);
+    gl::imBegin(GL_TRIANGLE_STRIP);
+    gl::imVertex2f(0.0f, 0.0f);
+    gl::imVertex2f(0.0f, (float)(1.0 - 1.0 / ListElements));
+    gl::imVertex2f(1.0f, 0.0f);
+    gl::imVertex2f(1.0f, (float)(1.0 - 1.0 / ListElements));
+    gl::imEnd();
     // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Строка ввода
-    glColor4d(Colors[CONCOL_INPUTLINE].d.c.x, Colors[CONCOL_INPUTLINE].d.c.y, Colors[CONCOL_INPUTLINE].d.c.z, persent);
-    glBegin(GL_TRIANGLE_STRIP);
-    glVertex2d(0.0, 1.0 - 1.0 / ListElements);
-    glVertex2d(0.0, 1.0);
-    glVertex2d(1.0, 1.0 - 1.0 / ListElements);
-    glVertex2d(1.0, 1.0);
-    glEnd();
+    gl::imColor4f((float)Colors[CONCOL_INPUTLINE].d.c.x, (float)Colors[CONCOL_INPUTLINE].d.c.y,
+                  (float)Colors[CONCOL_INPUTLINE].d.c.z, (float)persent);
+    gl::imBegin(GL_TRIANGLE_STRIP);
+    gl::imVertex2f(0.0f, (float)(1.0 - 1.0 / ListElements));
+    gl::imVertex2f(0.0f, 1.0f);
+    gl::imVertex2f(1.0f, (float)(1.0 - 1.0 / ListElements));
+    gl::imVertex2f(1.0f, 1.0f);
+    gl::imEnd();
     // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Текст вводимый
     ConsoleFont->SetStyle(Text::left, Text::top, height);
     ConsoleFont->SetColor(Colors[CONCOL_DEFAULT], (float)persent / (float)transparency);
@@ -239,13 +241,13 @@ void CConsole::Draw() {
         string tmp;
         tmp = list->data.s.substr(0, cursor);
         float offset = ConsoleFont->GetStrWidth(tmp.c_str());
-        glColor4f(Colors[CONCOL_CURSOR].d.c.x, Colors[CONCOL_CURSOR].d.c.y, Colors[CONCOL_CURSOR].d.c.z,
-                  (float)persent / (float)transparency);
+        gl::imColor4f(Colors[CONCOL_CURSOR].d.c.x, Colors[CONCOL_CURSOR].d.c.y, Colors[CONCOL_CURSOR].d.c.z,
+                      (float)persent / (float)transparency);
         glLineWidth(1.0f);
-        glBegin(GL_LINES);
-        glVertex2f(offset, 1.0f - 1.0f / ListElements);
-        glVertex2f(offset, 1.0f);
-        glEnd();
+        gl::imBegin(GL_LINES);
+        gl::imVertex2f(offset, 1.0f - 1.0f / ListElements);
+        gl::imVertex2f(offset, 1.0f);
+        gl::imEnd();
     }
     // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   КОНЕЦ
     glMatrixMode(GL_PROJECTION);  // Select The Projection Matrix

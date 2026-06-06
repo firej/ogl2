@@ -1,6 +1,7 @@
 #pragma once
 #include "./text.h"
 #include "./texture.h"
+#include "./gl/immediate.h"
 
 #ifndef WIN32
 // DevIL константы для macOS/Linux
@@ -72,18 +73,14 @@ class TextureLogo {
         float x, y;
         x = left ? 0 : vp[2] - m_w * scale;
         y = top ? vp[3] - m_h * scale : 0;
-        glColor4f(1.0f, 1.0f, 1.0f, alpha);
-
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 1);
-        glVertex3f(x, y, 0);
-        glTexCoord2f(1, 1);
-        glVertex3f(x + m_w * scale, y, 0);
-        glTexCoord2f(1, 0);
-        glVertex3f(x + m_w * scale, y + m_h * scale, 0);
-        glTexCoord2f(0, 0);
-        glVertex3f(x + 0, y + m_h * scale, 0);
-        glEnd();
+        gl::imColor4f(1.0f, 1.0f, 1.0f, alpha);
+        gl::imTexture(Logo.Number);
+        gl::imBegin(GL_QUADS);
+        gl::imTexCoord2f(0, 1); gl::imVertex3f(x, y, 0);
+        gl::imTexCoord2f(1, 1); gl::imVertex3f(x + m_w * scale, y, 0);
+        gl::imTexCoord2f(1, 0); gl::imVertex3f(x + m_w * scale, y + m_h * scale, 0);
+        gl::imTexCoord2f(0, 0); gl::imVertex3f(x + 0, y + m_h * scale, 0);
+        gl::imEnd();
 
         glDepthMask(true);
 
@@ -182,48 +179,48 @@ class StartUPLogo {
         glPushMatrix();
         glLoadIdentity();
 
-        static int PointsArray[12] = {vp[0], vp[1], 0, vp[2], vp[1], 0, vp[2], vp[3], 0, vp[0], vp[3], 0};
-        static int TexCoordArray[8] = {0, 1, 1, 1, 1, 0, 0, 0};
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glVertexPointer(3, GL_INT, 12, PointsArray);
-        glTexCoordPointer(2, GL_INT, 8, TexCoordArray);
+        // Полноэкранный квад логотипа через батчер (вместо vertex-array + glDrawArrays).
+        // Матрицы (ortho по viewport) батчер снимет из GL.
+        auto drawLogoQuad = [&](float alpha) {
+            gl::imColor4f(1.0f, 1.0f, 1.0f, alpha);
+            gl::imTexture(Logo.Number);
+            gl::imBegin(GL_QUADS);
+            gl::imTexCoord2f(0, 1); gl::imVertex2f((float)vp[0], (float)vp[1]);
+            gl::imTexCoord2f(1, 1); gl::imVertex2f((float)vp[2], (float)vp[1]);
+            gl::imTexCoord2f(1, 0); gl::imVertex2f((float)vp[2], (float)vp[3]);
+            gl::imTexCoord2f(0, 0); gl::imVertex2f((float)vp[0], (float)vp[3]);
+            gl::imEnd();
+        };
 
         switch (mode) {
             case FJC_STARTUP_LOGO_MODE_BEGIN:
                 for (int i = 0; i < FJC_STARTUP_LOGO_STEPS_TO_BLEND; i++) {
                     glClear(GL_COLOR_BUFFER_BIT);  // Очистка буфера цвета
-                    glColor4f(1.0f, 1.0f, 1.0f, float(i) / (float)FJC_STARTUP_LOGO_STEPS_TO_BLEND);
-                    glDrawArrays(GL_QUADS, 0, 4);
+                    drawLogoQuad(float(i) / (float)FJC_STARTUP_LOGO_STEPS_TO_BLEND);
                     SBFunc();
                 };
                 break;
             case FJC_STARTUP_LOGO_MODE_END:
                 for (int i = FJC_STARTUP_LOGO_STEPS_TO_BLEND; i > 0; i--) {
                     glClear(GL_COLOR_BUFFER_BIT);  // Очистка буфера цвета
-                    glColor4f(1.0f, 1.0f, 1.0f, float(i) / (float)FJC_STARTUP_LOGO_STEPS_TO_BLEND);
-                    glDrawArrays(GL_QUADS, 0, 4);
+                    drawLogoQuad(float(i) / (float)FJC_STARTUP_LOGO_STEPS_TO_BLEND);
                     SBFunc();
                 };
                 break;
             case FJC_STARTUP_LOGO_MODE_PROCEED:
                 glClear(GL_COLOR_BUFFER_BIT);  // Очистка буфера цвета
-                glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                glDrawArrays(GL_QUADS, 0, 4);
+                drawLogoQuad(1.0f);
                 SBFunc();
                 break;
             case FJC_STARTUP_LOGO_MODE_PROCEED_WITH_TEXT:
                 glClear(GL_COLOR_BUFFER_BIT);  // Очистка буфера цвета
-                glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                glDrawArrays(GL_QUADS, 0, 4);
+                drawLogoQuad(1.0f);
                 for (int i = 0, p_shift = 0; i < text_blocks; i++, p_shift = i * sizeof(TextBlock))
                     (&blocks + p_shift)
                         ->font->Print((&blocks + p_shift)->x, (&blocks + p_shift)->y, (&blocks + p_shift)->text);
                 SBFunc();
                 break;
         }
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glPopAttrib();
 
         glMatrixMode(GL_TEXTURE);

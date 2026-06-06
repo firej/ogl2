@@ -62,8 +62,7 @@ void Font::Print(GLdouble X, GLdouble Y, const char *fmt, ...) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glColor4f(Color.d.c.x, Color.d.c.y, Color.d.c.z,
-              alfa);  // Установка цвета шрифта
+    // цвет шрифта задаётся в батчере (imColor4f ниже)
     glTranslated(X * Font::scr_width, Y * 480.0,
                  0);  // Position The Text (0,0 - Bottom Left)
     switch (this->ha) {

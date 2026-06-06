@@ -8,6 +8,7 @@
 #endif
 
 #include "./ParticleSystem.h"
+#include "./gl/immediate.h"
 #include "./time.h"
 
 ParticleSystem::ParticleSystem() {
@@ -63,13 +64,12 @@ void ParticleSystem::ANIM() {
 }
 void ParticleSystem::DRAW() {
     ANIM();
-    glPointSize(5.0);
-    glDisable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
-    glColor4d(1.0, 1.0, 1.0, 0.95);
-    glBegin(GL_POINTS);
+    gl::imPointSize(5.0f);
+    gl::imColor4f(1.0f, 1.0f, 1.0f, 0.95f);
+    gl::imBegin(GL_POINTS);
     for (unsigned short i = 0; i < Particles; i++) {
-        glVertex3fv(Poss[i].d.v);
+        gl::imVertex3f(Poss[i].d.v[0], Poss[i].d.v[1], Poss[i].d.v[2]);
     }
-    glEnd();
+    gl::imEnd();
 }

@@ -25,6 +25,7 @@ class Shader {
     GLint uniform(const char* name);  // с кэшем
     void setMat4(const char* name, const float* m16);
     void setInt(const char* name, int v);
+    void setFloat(const char* name, float v);
     void setVec4(const char* name, float x, float y, float z, float w);
 
    private:

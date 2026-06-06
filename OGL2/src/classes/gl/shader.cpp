@@ -77,6 +77,7 @@ void Shader::setMat4(const char* name, const float* m16) {
     glUniformMatrix4fv(uniform(name), 1, GL_FALSE, m16);
 }
 void Shader::setInt(const char* name, int v) { glUniform1i(uniform(name), v); }
+void Shader::setFloat(const char* name, float v) { glUniform1f(uniform(name), v); }
 void Shader::setVec4(const char* name, float x, float y, float z, float w) {
     glUniform4f(uniform(name), x, y, z, w);
 }

@@ -21,6 +21,7 @@ void imNormal3f(float x, float y, float z);      // принимается, по
 void imVertex3f(float x, float y, float z);
 void imVertex2f(float x, float y);
 void imTexture(GLuint tex);                       // 0 = без текстуры (только цвет вершин)
+void imPointSize(float size);                     // размер точек для GL_POINTS
 void imEnd();                                     // снимает матрицы, заливает VBO, рисует
 
 // Статический меш в VBO (заливается один раз). Формат вершины тот же, что у

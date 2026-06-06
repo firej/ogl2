@@ -13,6 +13,7 @@
 #endif
 #endif
 #include "./ApplicationClass.h"
+#include "./gl/immediate.h"
 #include "./time.h"
 
 #ifndef WIN32
@@ -1181,7 +1182,6 @@ void Application::RenderTexture() {
 
     // Привязываем текстуру видеоплеера
     GLuint texID = AVIp.GetTextureID();
-    glBindTexture(GL_TEXTURE_2D, texID);
 
     // Отладочная информация
     static int renderCount = 0;
@@ -1190,17 +1190,15 @@ void Application::RenderTexture() {
         printf("[RenderTexture] Rendering video frame %d, textureID: %u\n", renderCount, texID);
     }
 
-    // Рисуем полноэкранный квад с текстурой (переворачиваем по Y)
-    glColor3f(1.0f, 1.0f, 1.0f);  // Белый цвет для правильного отображения текстуры
-    glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f, 0.0f);  // Нижний левый
-        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 0.0f);  // Нижний правый
-        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 1.0f);  // Верхний правый
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0f, 1.0f);  // Верхний левый
-    glEnd();
-
-    // Отвязываем текстуру
-    glBindTexture(GL_TEXTURE_2D, 0);
+    // Полноэкранный квад с текстурой видео через батчер (переворот по Y в texcoord)
+    gl::imColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    gl::imTexture(texID);
+    gl::imBegin(GL_QUADS);
+    gl::imTexCoord2f(0.0f, 1.0f); gl::imVertex2f(0.0f, 0.0f);  // нижний левый
+    gl::imTexCoord2f(1.0f, 1.0f); gl::imVertex2f(1.0f, 0.0f);  // нижний правый
+    gl::imTexCoord2f(1.0f, 0.0f); gl::imVertex2f(1.0f, 1.0f);  // верхний правый
+    gl::imTexCoord2f(0.0f, 0.0f); gl::imVertex2f(0.0f, 1.0f);  // верхний левый
+    gl::imEnd();
 
     // Восстанавливаем матрицы
     glMatrixMode(GL_MODELVIEW);

@@ -14,10 +14,12 @@ static const char* VS_SRC =
     "attribute vec2 aUV;\n"
     "attribute vec4 aColor;\n"
     "uniform mat4 uMVP;\n"
+    "uniform float uPointSize;\n"
     "varying vec2 vUV;\n"
     "varying vec4 vColor;\n"
     "void main() {\n"
     "    gl_Position = uMVP * vec4(aPos, 1.0);\n"
+    "    gl_PointSize = uPointSize;\n"
     "    vUV = aUV;\n"
     "    vColor = aColor;\n"
     "}\n";
@@ -39,6 +41,7 @@ struct State {
     GLenum mode = GL_TRIANGLES;
     float u = 0, v = 0;
     float r = 1, g = 1, b = 1, a = 1;
+    float pointSize = 1.0f;
     GLuint tex = 0;
     std::vector<float> buf;  // 9 float на вершину
     GLuint vbo = 0;
@@ -75,6 +78,7 @@ static void setupShaderAndMVP(GLuint tex) {
     Mat4 mvp = P * M;
     S.shader.use();
     S.shader.setMat4("uMVP", mvp.m);
+    S.shader.setFloat("uPointSize", S.pointSize);
     S.shader.setInt("uUseTexture", tex ? 1 : 0);
     S.shader.setInt("uTex", 0);
     glActiveTexture(GL_TEXTURE0);
@@ -151,12 +155,18 @@ void imEnd() {
     setupShaderAndMVP(S.tex);
     glBindBuffer(GL_ARRAY_BUFFER, S.vbo);
     glBufferData(GL_ARRAY_BUFFER, draw->size() * sizeof(float), draw->data(), GL_STREAM_DRAW);
+    // Размер точки берётся из gl_PointSize шейдера (нужно включить program point size)
+    if (mode == GL_POINTS) glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
     drawVbo(S.vbo, mode, vertCount);
+    if (mode == GL_POINTS) glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
     finishDraw();
 
     S.buf.clear();
     S.tex = 0;
+    S.pointSize = 1.0f;
 }
+
+void imPointSize(float size) { S.pointSize = size; }
 
 // --- GpuMesh -------------------------------------------------------------
 GpuMesh::~GpuMesh() { destroy(); }

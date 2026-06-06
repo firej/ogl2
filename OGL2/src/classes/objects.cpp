@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "../Ex/stb/stb_image.h"
+#include "./gl/immediate.h"
 #include "./objects.h"
 
 using namespace std;
@@ -95,25 +96,19 @@ void SkyBox::operator()() {
     glCullFace(GL_FRONT);
     glEnable(GL_TEXTURE_2D);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    t.bind();
-    glColor3d(1, 1, 1);
+    // Небо: текстурированные квады через батчер (вместо vertex-array + glDrawArrays).
+    // SkyA — интерливед, по 5 float на вершину: u, v, x, y, z. Матрицы (камера)
+    // батчер снимет из текущего состояния GL.
+    gl::imColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    gl::imTexture(t.Number);
+    gl::imBegin(GL_QUADS);
+    for (int v = 0; v < 24; v++) {
+        const float *p = SkyA + v * 5;
+        gl::imTexCoord2f(p[0], p[1]);
+        gl::imVertex3f(p[2], p[3], p[4]);
+    }
+    gl::imEnd();
 
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    glVertexPointer(3, GL_FLOAT, 5 * sizeof(float), SkyA + 2);
-    glTexCoordPointer(2, GL_FLOAT, 5 * sizeof(float), SkyA);
-
-    glDrawArrays(GL_QUADS, 0, 24);
-
-    // Рисуем жирные границы skybox'а - используем отдельную геометрию
-    glDisable(GL_TEXTURE_2D);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glLineWidth(40.0f);
-    glColor3d(0.0, 0.0, 0.0);  // Черные границы
-
-    // Возвращаем режим заливки
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glPopAttrib();
     glClear(GL_DEPTH_BUFFER_BIT);  // Очистка буфера глубины
 }
